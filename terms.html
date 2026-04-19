@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      try {
+        var s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
+        if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e) {}
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homefront &bull; Terms of Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --ink: #1F3D3A; --muted: #5A7D8C; --bg1: #EDE6E1; --bg2: #E7DFD9;
+      --card-bg: rgba(255,255,255,0.84); --card-border: rgba(255,255,255,0.72);
+    }
+    [data-theme="dark"] {
+      --ink: #E8F0EE; --muted: #A8C8D4; --bg1: #1A2826; --bg2: #141F1E;
+      --card-bg: rgba(255,255,255,0.07); --card-border: rgba(255,255,255,0.10);
+    }
+    [data-theme="dark"] body { background: linear-gradient(180deg,#1A2826 0%,#141F1E 100%) !important; color: #E8F0EE !important; }
+    [data-theme="dark"] .card { background: rgba(255,255,255,0.07) !important; border-color: rgba(255,255,255,0.10) !important; }
+    [data-theme="dark"] p, [data-theme="dark"] li { color: #A8C8D4 !important; }
+    [data-theme="dark"] h2 { color: #E8F0EE !important; }
+    [data-theme="dark"] .contact-link { color: #E8F0EE !important; }
+    [data-theme="dark"] .back-btn { background: rgba(255,255,255,0.10) !important; color: #E8F0EE !important; }
+    [data-theme="dark"] .warning-box { background: rgba(196,122,40,0.15) !important; border-color: rgba(196,122,40,0.30) !important; }
+    [data-theme="dark"] .warning-box p { color: #F0C878 !important; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--ink); min-height: 100dvh; -webkit-font-smoothing: antialiased;
+    }
+    .shell { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px; border: none;
+      background: rgba(255,255,255,0.6); border-radius: 12px; padding: 9px 14px;
+      font-family: inherit; font-size: 14px; font-weight: 600; color: var(--ink);
+      cursor: pointer; margin-bottom: 32px; box-shadow: 0 4px 10px rgba(31,61,58,0.08);
+    }
+    h1 { font-size: 32px; font-weight: 900; margin: 0 0 6px; letter-spacing: -0.5px; }
+    .updated { font-size: 13px; color: var(--muted); margin: 0 0 32px; }
+    .card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 24px; padding: 24px 28px; margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(31,61,58,0.06);
+    }
+    h2 { font-size: 17px; font-weight: 800; margin: 0 0 10px; color: var(--ink); }
+    p { font-size: 14px; line-height: 1.7; color: #3A5E5A; margin: 0 0 10px; }
+    p:last-child { margin-bottom: 0; }
+    ul { margin: 8px 0 10px; padding-left: 20px; }
+    ul:last-child { margin-bottom: 0; }
+    li { font-size: 14px; line-height: 1.7; color: #3A5E5A; margin-bottom: 4px; }
+    .highlight { background: rgba(227,184,108,0.14); border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
+    .highlight p { color: var(--ink); font-weight: 600; margin: 0; }
+    .warning-box {
+      background: rgba(196,122,40,0.08); border: 1px solid rgba(196,122,40,0.20);
+      border-radius: 14px; padding: 14px 16px; margin-bottom: 10px;
+    }
+    .warning-box p { color: #7A5A18; margin: 0; }
+    .contact-link { color: var(--ink); font-weight: 600; text-decoration: none; border-bottom: 1px solid rgba(31,61,58,0.3); }
+    .section-num { font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+    footer { text-align: center; font-size: 12px; color: var(--muted); margin-top: 32px; line-height: 1.8; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <button class="back-btn" onclick="history.back()">&larr; Back</button>
+
+  <h1>Terms of Service</h1>
+  <p class="updated">Last updated: April 2026 &bull; Effective immediately upon use</p>
+
+  <div class="card">
+    <div class="highlight">
+      <p>&#128214; Plain English summary: Homefront is a home maintenance tracking tool. Your data stays on your device. We charge $4.99/month for the Pro plan. You can cancel any time. We are not responsible for maintenance decisions you make based on app content.</p>
+    </div>
+    <p>These Terms of Service (&ldquo;Terms&rdquo;) govern your use of Homefront (&ldquo;the app,&rdquo; &ldquo;the service&rdquo;), operated by the Homefront developer (&ldquo;we,&rdquo; &ldquo;us,&rdquo; &ldquo;our&rdquo;). By using Homefront, you agree to these Terms. If you do not agree, please do not use the app.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 1</div>
+    <h2>What Homefront is</h2>
+    <p>Homefront is a home maintenance tracking application that helps homeowners schedule tasks, track appliances, log maintenance history, and monitor potential repair costs. The app operates entirely on your device using browser localStorage — we do not operate servers that store your personal data.</p>
+    <p>Homefront provides general maintenance guidance based on industry averages and common best practices. It is an organizational and informational tool, not a licensed home inspection service, contractor, or professional advisory service.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 2</div>
+    <h2>Eligibility</h2>
+    <p>You must be at least 18 years old to use Homefront. By using the app, you confirm that you meet this requirement. Homefront is intended for use by homeowners, renters, and property managers in the United States.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 3</div>
+    <h2>Free plan and Homefront Pro</h2>
+    <p>Homefront offers a free plan that allows tracking of up to 2 appliances. Homefront Pro is a paid subscription that unlocks unlimited appliances and all app features.</p>
+    <ul>
+      <li><strong>Price:</strong> $4.99 per month</li>
+      <li><strong>Billing:</strong> Charged monthly through Stripe, our payment processor</li>
+      <li><strong>Cancellation:</strong> You may cancel your subscription at any time through your Stripe billing portal or by emailing <a class="contact-link" href="mailto:hello&#64;homefrontapp.com">hello&#64;homefrontapp.com</a>. Cancellation takes effect at the end of the current billing period. You will not be charged again after cancellation.</li>
+      <li><strong>Refunds:</strong> We offer a full refund within 7 days of your first charge if you are not satisfied. After 7 days, charges are non-refundable. To request a refund, email us within 7 days of the charge.</li>
+      <li><strong>Price changes:</strong> We will give at least 30 days notice before any price increase, via email or in-app notice.</li>
+    </ul>
+    <p>Pro status is stored locally on your device. If you clear your browser data or switch devices, you may need to contact us to restore Pro access. We will verify your subscription and restore access promptly.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 4</div>
+    <h2>Your data</h2>
+    <p>All data you enter into Homefront &mdash; appliance details, maintenance history, home profile, contractor contacts, and notes &mdash; is stored exclusively in your browser&rsquo;s localStorage on your device. We do not have access to this data.</p>
+    <p><strong>Important:</strong> Clearing your browser&rsquo;s site data, uninstalling the app, or switching browsers will permanently delete your Homefront data. We strongly recommend using the export backup feature in Settings regularly. We cannot recover lost data because we do not have it.</p>
+    <p>You own your data. You can export it at any time and delete it at any time by clearing your browser storage.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 5</div>
+    <h2>Maintenance guidance disclaimer</h2>
+    <div class="warning-box">
+      <p>&#9888;&#65039; Homefront provides general maintenance information based on industry averages. It is not a substitute for professional inspection, licensed contractor advice, or manufacturer-specific guidance.</p>
+    </div>
+    <p>Task intervals, cost estimates, appliance lifespan data, and repair cost figures in Homefront are based on general industry averages and may not reflect conditions specific to your home, region, appliance model, or circumstances. Always consult a qualified professional before making significant maintenance or repair decisions.</p>
+    <p>We are not responsible for:</p>
+    <ul>
+      <li>Property damage resulting from following or not following app guidance</li>
+      <li>Inaccurate cost estimates for your specific situation</li>
+      <li>Missed maintenance tasks due to app errors, data loss, or notification failures</li>
+      <li>Decisions made based on appliance lifespan or health score data</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 6</div>
+    <h2>Acceptable use</h2>
+    <p>You agree to use Homefront only for its intended purpose &mdash; tracking home maintenance for properties you own, rent, or manage. You agree not to:</p>
+    <ul>
+      <li>Attempt to reverse engineer, copy, or redistribute the app</li>
+      <li>Use the app for any unlawful purpose</li>
+      <li>Misrepresent maintenance records generated by the app in any fraudulent context</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 7</div>
+    <h2>Intellectual property</h2>
+    <p>Homefront, including its design, task guides, maintenance content, and code, is our intellectual property. The maintenance guides, common issue descriptions, cost data, and inspection checklists within the app represent significant original work and may not be copied or reproduced without permission.</p>
+    <p>Your data &mdash; the appliances, notes, and history you enter &mdash; is yours.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 8</div>
+    <h2>Limitation of liability</h2>
+    <p>To the fullest extent permitted by law, Homefront and its developer are not liable for any indirect, incidental, special, or consequential damages arising from your use of the app, including but not limited to data loss, property damage, or reliance on maintenance guidance.</p>
+    <p>Our total liability to you for any claim arising from use of Homefront shall not exceed the amount you paid us in the 3 months prior to the claim.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 9</div>
+    <h2>Do not sell my data</h2>
+    <p>We do not sell, rent, share, or monetize your personal information. We do not have access to your personal information. This applies to all users including California residents under the California Consumer Privacy Act (CCPA).</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 10</div>
+    <h2>Governing law</h2>
+    <p>These Terms are governed by the laws of the United States. Any disputes shall be resolved through good-faith negotiation first. If legal action is necessary, it shall be brought in the jurisdiction where the developer is located.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 11</div>
+    <h2>Changes to these Terms</h2>
+    <p>We may update these Terms as the app evolves, particularly if we add features that involve data transmission or new payment structures. We will provide at least 14 days notice of material changes via in-app notice or email before they take effect. Continued use of the app after that period constitutes acceptance.</p>
+  </div>
+
+  <div class="card">
+    <div class="section-num">Section 12</div>
+    <h2>Contact</h2>
+    <p>Questions about these Terms, refund requests, or subscription issues:</p>
+    <p><a class="contact-link" href="mailto:hello&#64;homefrontapp.com">hello&#64;homefrontapp.com</a></p>
+    <p style="margin-top:10px;font-size:13px;color:var(--muted);">We aim to respond to all emails within 2 business days.</p>
+  </div>
+
+  <footer>
+    &copy; 2026 Homefront &bull;
+    <a href="privacy.html">Privacy Policy</a> &bull;
+    <a href="home.html">Back to app</a>
+  </footer>
+</div>
+</body>
+</html>
