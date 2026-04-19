@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function() {
+      if (sessionStorage.getItem('homefrontAccess') !== 'granted') {
+        location.replace('index.html');
+      }
+    })();
+  </script>
+  <script>
+    (function() {
+      try {
+        var s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
+        if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e) {}
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1F3D3A" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1A2826" media="(prefers-color-scheme: dark)" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Homefront" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>Homefront</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg1: #EDE6E1; --bg2: #E7DFD9;
+      --ink: #1F3D3A; --muted: #5A7D8C; --accent: #E3B86C;
+      --card-bg: rgba(255,255,255,0.84); --card-border: rgba(255,255,255,0.72);
+      --card-shadow: rgba(31,61,58,0.06);
+      --hero-bg: rgba(255,255,255,0.72); --hero-border: rgba(255,255,255,0.75);
+      --nav-bg: rgba(255,255,255,0.82); --nav-border: rgba(255,255,255,0.76);
+      --nav-active-bg: rgba(31,61,58,0.08);
+      --progress-track: #EEE8E4;
+      --badge-ok-bg: rgba(90,125,140,0.14); --badge-ok-color: #355763;
+      --badge-soon-bg: rgba(227,184,108,0.20); --badge-soon-color: #7A5A18;
+      --badge-due-bg: rgba(198,90,58,0.14); --badge-due-color: #8A3E28;
+      --toast-bg: #1F3D3A;
+      --savings-green: #2A7A4A; --savings-amber: #8A6010;
+      --why-bg: rgba(90,125,140,0.08); --why-color: #355763;
+      --status-bg: rgba(227,184,108,0.18);
+      --status-secondary-bg: rgba(90,125,140,0.12);
+    }
+    [data-theme="dark"] {
+      --bg1: #1A2826; --bg2: #141F1E;
+      --ink: #E8F0EE; --muted: #A8C8D4;
+      --card-bg: rgba(255,255,255,0.06); --card-border: rgba(255,255,255,0.08);
+      --card-shadow: rgba(0,0,0,0.28);
+      --hero-bg: rgba(255,255,255,0.06); --hero-border: rgba(255,255,255,0.08);
+      --nav-bg: rgba(20,31,30,0.95); --nav-border: rgba(255,255,255,0.08);
+      --nav-active-bg: rgba(255,255,255,0.08);
+      --progress-track: rgba(255,255,255,0.08);
+      --badge-ok-bg: rgba(255,255,255,0.10); --badge-ok-color: #A8C8D4;
+      --badge-soon-bg: rgba(227,184,108,0.22); --badge-soon-color: #F0C878;
+      --badge-due-bg: rgba(224,112,85,0.22); --badge-due-color: #F09070;
+      --toast-bg: #2A4A46;
+      --savings-green: #6FC98A; --savings-amber: #E3B86C;
+      --why-bg: rgba(255,255,255,0.07); --why-color: #C8E0E8;
+      --status-bg: rgba(227,184,108,0.16);
+      --status-secondary-bg: rgba(90,125,140,0.20);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: radial-gradient(circle at top, rgba(227,184,108,0.12), transparent 28%),
+                  linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--ink); min-height: 100dvh;
+      -webkit-font-smoothing: antialiased; padding-bottom: 80px;
+    }
+    .app-shell { max-width: 480px; margin: 0 auto; padding: 0 16px 16px; }
+    .app-status { display:flex; justify-content:space-between; align-items:center; padding:14px 0 10px; font-size:12px; color:var(--muted); font-weight:500; }
+    .hero { background:var(--hero-bg); border:1px solid var(--hero-border); border-radius:28px; padding:20px 18px; box-shadow:0 14px 28px var(--card-shadow); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); margin-bottom:14px; }
+    .eyebrow { font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); font-weight:700; margin-bottom:12px; }
+    .hero-inner { display:flex; align-items:center; gap:18px; }
+    .hero-text { flex:1; min-width:0; }
+    .hero-text h1 { font-size:22px; font-weight:700; line-height:1.2; margin-bottom:4px; color:var(--ink); }
+    .hero-text p { font-size:13px; color:var(--muted); margin-bottom:6px; }
+    .score-ring-wrap { position:relative; width:80px; height:80px; flex-shrink:0; }
+    .score-ring { width:80px; height:80px; }
+    .score-track { stroke:var(--progress-track); }
+    .score-fill { stroke:#4CAF7D; transition:stroke-dashoffset 1.2s cubic-bezier(0.34,1.56,0.64,1),stroke 0.6s ease; }
+    .score-inner { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; }
+    .score-number { font-size:20px; font-weight:800; color:var(--ink); line-height:1; letter-spacing:-0.5px; }
+    .score-grade { font-size:11px; font-weight:700; color:var(--muted); margin-top:1px; }
+    .motivation-line { font-size:12px; color:var(--muted); line-height:1.4; margin:4px 0 8px; font-style:italic; }
+    .status-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:4px; }
+    .status { font-size:12px; font-weight:700; color:var(--ink); background:var(--status-bg); border-radius:99px; padding:4px 10px; }
+    .status.secondary { background:var(--status-secondary-bg); color:var(--muted); }
+    .streak-bar { display:flex; align-items:center; gap:8px; margin-top:14px; padding:8px 14px; background:rgba(227,184,108,0.14); border-radius:14px; }
+    .streak-flame { font-size:18px; }
+    .streak-text { font-size:13px; font-weight:700; color:var(--ink); flex:1; }
+    .streak-badge { font-size:11px; font-weight:700; color:#7A5A18; background:rgba(227,184,108,0.3); padding:3px 8px; border-radius:99px; }
+    [data-theme="dark"] .streak-bar { background:rgba(227,184,108,0.10)!important; }
+    [data-theme="dark"] .streak-badge { color:#E3B86C!important; background:rgba(227,184,108,0.18)!important; }
+
+    /* Score explainer modal */
+    .score-explainer-overlay { position:fixed; inset:0; z-index:400; background:rgba(0,0,0,0.5); display:flex; align-items:flex-end; opacity:0; pointer-events:none; transition:opacity 0.3s ease; }
+    .score-explainer-overlay.open { opacity:1; pointer-events:all; }
+    .score-explainer-sheet { background:var(--card-bg); border-radius:28px 28px 0 0; padding:24px 20px 40px; width:100%; backdrop-filter:blur(20px); }
+    .score-explainer-sheet h3 { font-size:18px; font-weight:800; color:var(--ink); margin-bottom:4px; }
+    .score-explainer-sheet p { font-size:13px; color:var(--muted); margin-bottom:16px; line-height:1.5; }
+    .score-factor { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid rgba(90,125,140,0.08); }
+    .score-factor:last-child { border-bottom:none; }
+    .score-factor-label { font-size:13px; font-weight:600; color:var(--ink); }
+    .score-factor-weight { font-size:13px; font-weight:800; color:var(--muted); }
+    .score-close-btn { width:100%; border:none; border-radius:14px; padding:13px; font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; background:var(--ink); color:#E8F0EE; margin-top:16px; }
+    [data-theme="dark"] .score-explainer-sheet { background:#1A2826!important; }
+
+    .section-head { display:flex; justify-content:space-between; align-items:baseline; margin:18px 0 10px; }
+    .section-title { font-size:17px; font-weight:700; color:var(--ink); }
+    .section-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+    .section-action { font-size:12px; color:var(--muted); cursor:pointer; font-weight:600; }
+    .card-list { display:grid; gap:10px; margin-bottom:14px; }
+    .task-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:20px; padding:14px 16px; box-shadow:0 6px 16px var(--card-shadow); cursor:pointer; transition:transform 0.18s ease; }
+    .task-card:active { transform:scale(0.98); }
+    .task-card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:4px; }
+    .task-card-title { font-size:14px; font-weight:700; color:var(--ink); line-height:1.3; }
+    .task-card-meta { font-size:12px; color:var(--muted); margin-top:2px; }
+    .task-card-why { font-size:12px; color:var(--why-color); background:var(--why-bg); border-radius:10px; padding:6px 10px; margin-top:8px; line-height:1.4; }
+    .task-badge { flex-shrink:0; font-size:11px; font-weight:700; padding:4px 10px; border-radius:99px; }
+    .badge-ok   { background:var(--badge-ok-bg);   color:var(--badge-ok-color); }
+    .badge-soon { background:var(--badge-soon-bg);  color:var(--badge-soon-color); }
+    .badge-due  { background:var(--badge-due-bg);   color:var(--badge-due-color); }
+    .quick-done-home { margin-top:10px; width:100%; border:none; border-radius:12px; padding:9px; font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; background:#2A524F; color:#E8F0EE; transition:background 0.18s ease; }
+    .quick-done-home:hover { background:#3A6E6A; }
+    .summary-grid { display:grid; gap:10px; }
+    .summary-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:22px; padding:16px 18px; box-shadow:0 8px 20px var(--card-shadow); }
+    .summary-card h3 { font-size:14px; font-weight:700; color:var(--ink); margin-bottom:10px; }
+    .room-list { display:grid; gap:6px; }
+    .room-row { display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--ink); padding:4px 0; border-bottom:1px solid rgba(90,125,140,0.08); }
+    .room-row:last-child { border-bottom:none; }
+
+    /* Savings CTA */
+    .savings-cta-card { background:linear-gradient(135deg,#1F3D3A 0%,#2A524F 100%); border-radius:22px; padding:18px 20px; box-shadow:0 10px 24px rgba(31,61,58,0.22); cursor:pointer; transition:transform 0.18s ease; }
+    .savings-cta-card:active { transform:scale(0.98); }
+    .savings-cta-empty { background:linear-gradient(135deg,#3A1F1F 0%,#5A2A28 100%); }
+    .savings-cta-inner { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .savings-cta-left { flex:1; min-width:0; }
+    .savings-cta-eyebrow { font-size:10px; font-weight:800; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:4px; }
+    .savings-cta-amount { font-size:32px; font-weight:900; color:#fff; letter-spacing:-1px; line-height:1; }
+    .savings-cta-title { font-size:18px; font-weight:800; color:#fff; line-height:1.2; margin-bottom:4px; }
+    .savings-cta-label { font-size:12px; color:rgba(255,255,255,0.65); margin-top:3px; line-height:1.4; }
+    .savings-cta-ratio { font-size:12px; font-weight:700; color:#7FD4A0; margin-top:5px; }
+    .savings-cta-right { display:flex; flex-direction:column; align-items:flex-end; gap:10px; flex-shrink:0; }
+    .savings-risk-pill { font-size:11px; font-weight:800; padding:5px 12px; border-radius:99px; white-space:nowrap; }
+    .savings-risk-pill.safe   { background:rgba(127,212,160,0.22); color:#7FD4A0; }
+    .savings-risk-pill.danger { background:rgba(196,75,40,0.40); color:#FFB4A0; }
+    .savings-cta-arrow { font-size:20px; font-weight:700; color:rgba(255,255,255,0.5); }
+
+    /* Warranty alerts */
+    .warranty-alert-row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(90,125,140,0.08); gap:10px; }
+    .warranty-alert-row:last-child { border-bottom:none; }
+    .warranty-alert-name { font-size:13px; font-weight:700; color:var(--ink); }
+    .warranty-alert-provider { font-size:11px; color:var(--muted); }
+    .warranty-alert-msg { font-size:11px; font-weight:700; }
+    .warranty-row-expired .warranty-alert-msg { color:var(--badge-due-color); }
+    .warranty-row-expiring .warranty-alert-msg { color:var(--badge-soon-color); }
+
+    /* Weekly card */
+    .weekly-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:22px; padding:16px; box-shadow:0 10px 20px var(--card-shadow); margin-bottom:14px; }
+    .weekly-card-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .weekly-card-header h3 { margin:0; font-size:15px; color:var(--ink); font-weight:700; }
+    .weekly-dismiss { background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer; padding:2px 6px; border-radius:8px; }
+    .weekly-stat-row { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .weekly-stat-pill { padding:6px 12px; border-radius:999px; font-size:12px; font-weight:700; background:rgba(90,125,140,0.10); color:var(--ink); }
+    .weekly-stat-pill.alert { background:rgba(198,90,58,0.12); color:#8A3E28; }
+    .weekly-stat-pill.good  { background:rgba(42,122,74,0.12); color:#1A4A2A; }
+    [data-theme="dark"] .weekly-stat-pill { background:rgba(255,255,255,0.08)!important; color:#E8F0EE!important; }
+    [data-theme="dark"] .weekly-stat-pill.alert { background:rgba(224,112,85,0.18)!important; color:#F09070!important; }
+    [data-theme="dark"] .weekly-stat-pill.good  { background:rgba(111,201,138,0.16)!important; color:#7FD4A0!important; }
+
+    /* Empty state */
+    .empty-state { text-align:center; padding:32px 20px; color:var(--muted); }
+    .empty-state h3 { font-size:16px; color:var(--ink); margin-bottom:8px; }
+    .empty-state p { font-size:14px; line-height:1.6; }
+
+    /* Nav */
+    .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--nav-bg); border-top:1px solid var(--nav-border); display:flex; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); padding-bottom:env(safe-area-inset-bottom,0px); z-index:100; }
+    .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:10px 4px 8px; font-size:10px; font-weight:600; color:var(--muted); cursor:pointer; border-radius:14px; transition:color 0.18s ease,background 0.18s ease; text-decoration:none; }
+    .nav-item i { font-size:22px; display:block; line-height:1.1; color:inherit; }
+    .nav-item.active { color:var(--ink); background:var(--nav-active-bg); }
+
+    /* Toast */
+    .toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%) translateY(20px); background:var(--toast-bg); color:#E8F0EE; font-size:14px; font-weight:700; padding:10px 20px; border-radius:99px; opacity:0; transition:all 0.3s ease; pointer-events:none; z-index:999; white-space:nowrap; }
+    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+    /* Onboarding */
+    .onboard-overlay { position:fixed; inset:0; z-index:500; display:flex; align-items:flex-end; transition:opacity 0.3s ease; }
+    .onboard-overlay.hidden { display:none; }
+    .onboard-bg { position:absolute; inset:0; background:linear-gradient(160deg,#1F3D3A 0%,#2A524F 100%); transition:background 0.5s ease; }
+    .onboard-sheet { position:relative; z-index:1; width:100%; background:var(--card-bg); border-radius:32px 32px 0 0; padding:28px 24px 40px; max-height:90dvh; overflow-y:auto; }
+    [data-theme="dark"] .onboard-sheet { background:#1A2826!important; }
+    .onboard-progress { display:flex; gap:6px; justify-content:center; margin-bottom:24px; }
+    .onboard-dot { width:8px; height:8px; border-radius:99px; background:rgba(90,125,140,0.25); transition:all 0.3s ease; }
+    .onboard-dot.active { background:var(--ink); width:24px; }
+    .onboard-step { display:none; }
+    .onboard-step.active { display:block; }
+    .onboard-emoji { font-size:48px; display:block; text-align:center; margin-bottom:16px; }
+    .onboard-title { font-size:24px; font-weight:800; color:var(--ink); text-align:center; line-height:1.2; margin-bottom:10px; }
+    .onboard-sub { font-size:14px; color:var(--muted); text-align:center; line-height:1.6; margin-bottom:20px; }
+    .onboard-btn { width:100%; border:none; border-radius:16px; padding:14px; font-family:inherit; font-size:15px; font-weight:700; cursor:pointer; margin-bottom:10px; transition:all 0.18s ease; }
+    .onboard-btn.primary { background:var(--ink); color:#E8F0EE; }
+    .onboard-btn.primary:hover { background:#2A524F; }
+    .onboard-btn.ghost { background:rgba(90,125,140,0.10); color:var(--muted); }
+    .onboard-input { width:100%; border:2px solid rgba(90,125,140,0.2); border-radius:14px; padding:14px 16px; font-family:inherit; font-size:16px; background:rgba(90,125,140,0.06); color:var(--ink); outline:none; margin-bottom:16px; }
+    .onboard-input:focus { border-color:var(--ink); }
+    [data-theme="dark"] .onboard-input { background:rgba(255,255,255,0.06)!important; border-color:rgba(255,255,255,0.12)!important; color:#E8F0EE!important; }
+    .onboard-toggle-row { display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid rgba(90,125,140,0.10); }
+    .onboard-toggle-row:last-child { border-bottom:none; }
+    .onboard-toggle-label { font-size:14px; font-weight:600; color:var(--ink); }
+    .onboard-toggle-hint { font-size:12px; color:var(--muted); margin-top:2px; }
+    .onboard-feature-list { display:grid; gap:12px; margin-bottom:24px; }
+    .onboard-feature-item { display:flex; gap:12px; align-items:flex-start; }
+    .onboard-feature-icon { font-size:24px; flex-shrink:0; }
+    .onboard-feature-text strong { display:block; font-size:14px; font-weight:700; color:var(--ink); }
+    .onboard-feature-text span { font-size:13px; color:var(--muted); line-height:1.4; }
+    .quick-add-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:4px; }
+    .quick-add-btn { border:2px solid rgba(90,125,140,0.18); border-radius:14px; padding:10px 4px 8px; font-family:inherit; font-size:14px; cursor:pointer; background:rgba(90,125,140,0.07); color:var(--ink); transition:all 0.18s ease; display:flex; flex-direction:column; align-items:center; gap:5px; }
+    .quick-add-btn i { font-size:24px; color:var(--ink); line-height:1; }
+    .quick-add-btn span { font-size:10px; font-weight:700; color:var(--muted); line-height:1.2; text-align:center; }
+    .quick-add-btn.selected { border-color:var(--ink); background:var(--ink); }
+    .quick-add-btn.selected i, .quick-add-btn.selected span { color:rgba(255,255,255,0.8); }
+    [data-theme="dark"] .quick-add-btn { background:rgba(255,255,255,0.06)!important; border-color:rgba(255,255,255,0.12)!important; }
+    [data-theme="dark"] .quick-add-btn.selected { background:#2A524F!important; border-color:#A8C8D4!important; }
+    .quick-age-row { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; background:rgba(90,125,140,0.08); border-radius:14px; margin-bottom:8px; }
+    .quick-age-label { font-size:13px; font-weight:700; color:var(--ink); flex:1; }
+    .quick-age-select { border:1px solid rgba(90,125,140,0.18); border-radius:10px; padding:7px 10px; font:inherit; font-size:13px; background:rgba(90,125,140,0.06); color:var(--ink); outline:none; cursor:pointer; }
+    [data-theme="dark"] .quick-age-row { background:rgba(255,255,255,0.06)!important; }
+    [data-theme="dark"] .quick-age-select { background:rgba(255,255,255,0.08)!important; border-color:rgba(255,255,255,0.14)!important; color:#E8F0EE!important; color-scheme:dark; }
+    [data-theme="dark"] #onboardHouseholdSize,[data-theme="dark"] #onboardYearBuilt { background:rgba(255,255,255,0.08)!important; border-color:rgba(255,255,255,0.14)!important; color:#E8F0EE!important; }
+  </style>
+</head>
+<body>
+
+<!-- Score explainer modal -->
+<div class="score-explainer-overlay" id="scoreExplainerOverlay" onclick="if(event.target===this)closeScoreExplainer()">
+  <div class="score-explainer-sheet">
+    <h3>How your Home Health Score works</h3>
+    <p>Your score is calculated from three things that actually predict how well your home is being maintained.</p>
+    <div class="score-factor">
+      <div>
+        <div class="score-factor-label">Task freshness</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">How current are your maintenance tasks?</div>
+      </div>
+      <div class="score-factor-weight">50%</div>
+    </div>
+    <div class="score-factor">
+      <div>
+        <div class="score-factor-label">Appliance ages</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">How old are your appliances vs their lifespan?</div>
+      </div>
+      <div class="score-factor-weight">30%</div>
+    </div>
+    <div class="score-factor">
+      <div>
+        <div class="score-factor-label">Maintenance history</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:2px;">Do you have a track record of staying on top of things?</div>
+      </div>
+      <div class="score-factor-weight">20%</div>
+    </div>
+    <div style="margin-top:14px;padding:12px 14px;background:rgba(90,125,140,0.08);border-radius:12px;font-size:12px;color:var(--muted);line-height:1.5;">
+      The score goes up when you complete tasks and log maintenance. It goes down when tasks go overdue or appliances age past their average lifespan.
+    </div>
+    <button class="score-close-btn" onclick="closeScoreExplainer()">Got it</button>
+  </div>
+</div>
+
+<!-- Onboarding overlay -->
+<div class="onboard-overlay hidden" id="onboardOverlay">
+  <div class="onboard-bg" id="onboardBg"></div>
+  <div class="onboard-sheet">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <button id="onboardBackBtn" onclick="onboardBack()" style="border:none;background:rgba(90,125,140,0.12);border-radius:10px;padding:7px 14px;font-family:inherit;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;display:none;">&larr; Back</button>
+      <div style="flex:1;"></div>
+      <div class="onboard-progress" id="onboardProgress" style="margin-bottom:0;justify-content:flex-end;"></div>
+    </div>
+
+    <!-- Step 1: Welcome -->
+    <!-- Step 1: Situation selector -->
+    <div class="onboard-step active" id="onboardStep1">
+      <span class="onboard-emoji">&#127968;</span>
+      <h1 class="onboard-title">First, tell us where you're at.</h1>
+      <p class="onboard-sub">This helps us set up the right experience for you from the start.</p>
+      <div style="display:grid;gap:10px;margin-bottom:20px;">
+        <button class="situation-btn" onclick="selectSituation('movein')" id="sitBtn_movein">
+          <span class="sit-icon">&#128273;</span>
+          <div class="sit-text">
+            <strong>Just moved in</strong>
+            <span>I recently moved in and want to know what I'm dealing with.</span>
+          </div>
+        </button>
+        <button class="situation-btn" onclick="selectSituation('established')" id="sitBtn_established">
+          <span class="sit-icon">&#127968;</span>
+          <div class="sit-text">
+            <strong>I've lived here a while</strong>
+            <span>I want to get organized and stay on top of maintenance.</span>
+          </div>
+        </button>
+        <button class="situation-btn" onclick="selectSituation('selling')" id="sitBtn_selling">
+          <span class="sit-icon">&#128205;</span>
+          <div class="sit-text">
+            <strong>Getting ready to sell</strong>
+            <span>I want to fix issues and build a record buyers will trust.</span>
+          </div>
+        </button>
+      </div>
+      <button class="onboard-btn ghost" onclick="selectSituation('established')">Skip &#8212; just set it up</button>
+    </div>
+
+    <div class="onboard-step" id="onboardStep2">
+      <span class="onboard-emoji">&#127968;</span>
+      <h1 class="onboard-title">Your home works hard.<br>Now it has backup.</h1>
+      <p class="onboard-sub">Homefront keeps track of every appliance, system, and seasonal task so small problems stay small.</p>
+      <div class="onboard-feature-list">
+        <div class="onboard-feature-item"><span class="onboard-feature-icon">&#128295;</span><div class="onboard-feature-text"><strong>Smart maintenance schedules</strong><span>Built around your home, pets, hard water, household size, and more.</span></div></div>
+        <div class="onboard-feature-item"><span class="onboard-feature-icon">&#128203;</span><div class="onboard-feature-text"><strong>Step-by-step guides with supplies lists</strong><span>Everything you need before you start, not after something breaks.</span></div></div>
+        <div class="onboard-feature-item"><span class="onboard-feature-icon">&#128176;</span><div class="onboard-feature-text"><strong>See what you're protecting</strong><span>Track the repairs you're helping prevent. Most users save hundreds in year one.</span></div></div>
+      </div>
+      <button class="onboard-btn primary" onclick="onboardNext()">Get started &rarr;</button>
+    </div>
+
+    <!-- Step 2: Name -->
+    <div class="onboard-step" id="onboardStep3">
+      <span class="onboard-emoji">&#128075;</span>
+      <h2 class="onboard-title">What should we call you?</h2>
+      <p class="onboard-sub">Your name shows up on the home screen greeting. Only stored on this device.</p>
+      <input class="onboard-input" id="onboardNameInput" type="text" placeholder="First name" maxlength="40" autocomplete="given-name" />
+      <button class="onboard-btn primary" onclick="onboardSaveName()">Continue &rarr;</button>
+      <button class="onboard-btn ghost" onclick="onboardNext()">Skip</button>
+    </div>
+
+    <!-- Step 3: Home profile -->
+    <div class="onboard-step" id="onboardStep4">
+      <span class="onboard-emoji">&#127969;</span>
+      <h2 class="onboard-title">Tell us about your home</h2>
+      <p class="onboard-sub">This personalizes your maintenance schedule automatically.</p>
+      <div>
+        <div class="onboard-toggle-row"><div><span class="onboard-toggle-label">Pets in the home</span><div class="onboard-toggle-hint">Shortens air filter and vent intervals</div></div><input type="checkbox" id="onboardPets" /></div>
+        <div class="onboard-toggle-row"><div><span class="onboard-toggle-label">Allergies or air sensitivity</span><div class="onboard-toggle-hint">Makes air quality tasks more frequent</div></div><input type="checkbox" id="onboardAllergies" /></div>
+        <div class="onboard-toggle-row"><div><span class="onboard-toggle-label">Hard water</span><div class="onboard-toggle-hint">Shortens water appliance intervals</div></div><input type="checkbox" id="onboardHardWater" /></div>
+        <div class="onboard-toggle-row"><div><span class="onboard-toggle-label">Smoker household</span><div class="onboard-toggle-hint">Tightens air filter and vent tasks</div></div><input type="checkbox" id="onboardSmoker" /></div>
+        <div class="onboard-toggle-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <div><span class="onboard-toggle-label">People in your home</span><div class="onboard-toggle-hint">More people = more use = tighter intervals</div></div>
+          <select id="onboardHouseholdSize" style="width:100%;border:1px solid rgba(90,125,140,0.18);border-radius:12px;padding:10px 12px;font-family:inherit;font-size:14px;background:rgba(90,125,140,0.08);color:var(--ink);outline:none;">
+            <option value="1">1 &mdash; Just me</option><option value="2" selected>2 people</option><option value="3">3 people</option><option value="4">4 people</option><option value="5">5 or more</option>
+          </select>
+        </div>
+        <div class="onboard-toggle-row" style="flex-direction:column;align-items:flex-start;gap:8px;">
+          <div><span class="onboard-toggle-label">Year your home was built</span><div class="onboard-toggle-hint">Helps flag age-related risks specific to your home</div></div>
+          <input id="onboardYearBuilt" type="number" min="1900" max="2025" placeholder="e.g. 1998" style="width:100%;border:1px solid rgba(90,125,140,0.18);border-radius:12px;padding:10px 12px;font-family:inherit;font-size:14px;background:rgba(90,125,140,0.08);color:var(--ink);outline:none;" />
+        </div>
+      </div>
+      <button class="onboard-btn primary" onclick="onboardSaveProfile()" style="margin-top:20px;">Continue &rarr;</button>
+      <button class="onboard-btn ghost" onclick="onboardNext()">Skip for now</button>
+    </div>
+
+    <!-- Step 4: Quick-add appliances -->
+    <div class="onboard-step" id="onboardStep5">
+      <span class="onboard-emoji">&#127968;</span>
+      <h2 class="onboard-title">What's in your home?</h2>
+      <p class="onboard-sub">Tap everything you have &mdash; we'll build your full maintenance plan automatically.</p>
+      <div class="quick-add-grid" id="quickAddGrid">
+        <button class="quick-add-btn" data-type="HVAC" onclick="quickAddToggle(this)"><i class="ph ph-wind"></i><span>HVAC</span></button>
+        <button class="quick-add-btn" data-type="Refrigerator" onclick="quickAddToggle(this)"><i class="ph ph-snowflake"></i><span>Fridge</span></button>
+        <button class="quick-add-btn" data-type="Washer" onclick="quickAddToggle(this)"><i class="ph ph-washing-machine"></i><span>Washer</span></button>
+        <button class="quick-add-btn" data-type="Dryer" onclick="quickAddToggle(this)"><i class="ph ph-t-shirt"></i><span>Dryer</span></button>
+        <button class="quick-add-btn" data-type="Dishwasher" onclick="quickAddToggle(this)"><i class="ph ph-fork-knife"></i><span>Dishwasher</span></button>
+        <button class="quick-add-btn" data-type="Water Heater" onclick="quickAddToggle(this)"><i class="ph ph-flame"></i><span>Water Heater</span></button>
+        <button class="quick-add-btn" data-type="Range Hood" onclick="quickAddToggle(this)"><i class="ph ph-cooking-pot"></i><span>Range Hood</span></button>
+        <button class="quick-add-btn" data-type="OTR Microwave" onclick="quickAddToggle(this)"><i class="ph ph-cooking-pot"></i><span>OTR Micro</span></button>
+        <button class="quick-add-btn" data-type="Coffee Maker" onclick="quickAddToggle(this)"><i class="ph ph-coffee"></i><span>Coffee</span></button>
+        <button class="quick-add-btn" data-type="Air Purifier" onclick="quickAddToggle(this)"><i class="ph ph-leaf"></i><span>Air Purifier</span></button>
+        <button class="quick-add-btn" data-type="Humidifier" onclick="quickAddToggle(this)"><i class="ph ph-drop"></i><span>Humidifier</span></button>
+        <button class="quick-add-btn" data-type="Bathroom Exhaust Fan" onclick="quickAddToggle(this)"><i class="ph ph-fan"></i><span>Bath Fan</span></button>
+        <button class="quick-add-btn" data-type="Window AC Unit" onclick="quickAddToggle(this)"><i class="ph ph-thermometer-cold"></i><span>Window AC</span></button>
+        <button class="quick-add-btn" data-type="Portable AC Unit" onclick="quickAddToggle(this)"><i class="ph ph-thermometer-cold"></i><span>Portable AC</span></button>
+      </div>
+      <div id="quickAddAgeSection" style="display:none;margin-top:16px;">
+        <p style="font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;margin:0 0 10px;">How old are they?</p>
+        <div id="quickAddAgeRows"></div>
+      </div>
+      <div style="margin-top:16px;display:grid;gap:8px;position:sticky;bottom:0;background:var(--card-bg);padding:10px 0 4px;">
+        <button class="onboard-btn primary" id="quickAddDoneBtn" onclick="quickAddSaveAndContinue()" style="display:none;">Build my maintenance plan &rarr;</button>
+        <button class="onboard-btn ghost" onclick="onboardFinish()">Skip &mdash; I'll add appliances later</button>
+      </div>
+    </div>
+
+    <!-- Step 6: Done — tailored to situation -->
+    <div class="onboard-step" id="onboardStep6">
+      <span class="onboard-emoji">&#127881;</span>
+      <h2 class="onboard-title" id="onboardDoneTitle">Your home has a plan.</h2>
+      <p class="onboard-sub" id="onboardDoneSub">Here's what Homefront built for you:</p>
+      <div id="onboardSummaryStats" style="display:grid;gap:10px;margin-bottom:16px;"></div>
+      <div style="background:rgba(42,122,74,0.12);border-radius:16px;padding:14px 16px;margin-bottom:20px;">
+        <div style="font-size:13px;color:#2A7A4A;line-height:1.6;">
+          <strong style="display:block;margin-bottom:4px;">Your Home Health Score starts at 100.</strong>
+          Every completed task keeps it high. Every skipped task drops it. The goal: keep it green.
+        </div>
+      </div>
+      <div id="onboardDoneCta">
+        <button class="onboard-btn primary" onclick="onboardFinish()">Open my home &rarr;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="app-shell">
+  <div class="app-status"><span id="clockStatus">9:41</span><span>Homefront</span></div>
+
+  <div class="hero">
+    <div class="eyebrow">Homefront</div>
+    <div class="hero-inner">
+      <div class="score-ring-wrap">
+        <svg class="score-ring" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="37" fill="var(--hero-bg)" stroke="none"/>
+          <circle class="score-track" cx="40" cy="40" r="34" fill="none" stroke-width="6"/>
+          <circle class="score-fill" id="scoreArc" cx="40" cy="40" r="34" fill="none" stroke-width="6"
+            stroke-dasharray="213.6" stroke-dashoffset="213.6"
+            stroke-linecap="round" transform="rotate(-90 40 40)"/>
+        </svg>
+        <div class="score-inner" onclick="showScoreExplainer()">
+          <div class="score-number" id="scoreNumber">?</div>
+          <div class="score-grade" id="scoreGrade"></div>
+        </div>
+      </div>
+      <div class="hero-text">
+        <h1 id="greetingTitle"></h1>
+        <p id="greetingSub">Your home is in good hands.</p>
+        <div class="motivation-line" id="motivationLine"></div>
+        <div class="status-row">
+          <div class="status" id="homeStatus">Everything on track</div>
+          <div class="status secondary" id="applianceCountStatus">0 appliances</div>
+        </div>
+      </div>
+    </div>
+    <div class="streak-bar" id="streakBar" style="display:none;">
+      <span class="streak-flame">&#128293;</span>
+      <span class="streak-text" id="streakText">3-week streak</span>
+      <span class="streak-badge">Keep it up!</span>
+    </div>
+  </div>
+
+  <div class="section-head">
+    <div><h2 class="section-title">Coming up</h2><p class="section-sub">Your most urgent tasks across the house.</p></div>
+    <span class="section-action" id="showAllBtn" onclick="toggleShowAll()"></span>
+  </div>
+  <div class="card-list" id="upcomingTasks"></div>
+  <div class="summary-grid" id="homeSummary"></div>
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-item active" onclick="location.href='home.html'"><i class="ph ph-house"></i>Home</div>
+  <div class="nav-item" onclick="location.href='appliances.html'"><i class="ph ph-wrench"></i>Appliances</div>
+  <div class="nav-item" onclick="location.href='systems.html'"><i class="ph ph-buildings"></i>Systems</div>
+  <div class="nav-item" onclick="location.href='settings.html'"><i class="ph ph-gear"></i>Settings</div>
+</nav>
+
+<div class="toast" id="toast"></div>
+</body>
+</html>
+<script>
+/* ── Dark mode ── */
+function applyDarkMode() {
+  try {
+    var s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
+    if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme','dark');
+    else document.documentElement.removeAttribute('data-theme');
+  } catch(e) {}
+}
+applyDarkMode();
+window.addEventListener('storage', function(e) { if (e.key==='homefrontSettings') applyDarkMode(); });
+
+/* ── Storage ── */
+const STORAGE_KEYS = {
+  appliances:'homefrontAppliances', profile:'homefrontProfile',
+  settings:'homefrontSettings', userName:'homefrontUserName'
+};
+const DEFAULT_PROFILE  = { pets:false, allergies:false, hardWater:false, smoker:false, householdSize:2, yearBuilt:null };
+const DEFAULT_SETTINGS = { notificationsEnabled:true, darkModeEnabled:false };
+
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2400);
+}
+
+function getTodayDate() { return new Date().toISOString().split('T')[0]; }
+function addDays(d,n) { const x=new Date(d+'T00:00:00'); x.setDate(x.getDate()+n); return x.toISOString().split('T')[0]; }
+function daysBetween(a,b) { return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/(1000*60*60*24)); }
+function formatDate(d) { if(!d) return ''; const x=new Date(d+'T00:00:00'); return x.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+
+function getUserName() { return localStorage.getItem(STORAGE_KEYS.userName)||''; }
+function getStoredHomeProfile() {
+  try { return {...DEFAULT_PROFILE,...JSON.parse(localStorage.getItem(STORAGE_KEYS.profile)||'{}')}; } catch { return {...DEFAULT_PROFILE}; }
+}
+function getUserAppliances() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.appliances)||'[]'); } catch { return []; }
+}
+function setUserAppliances(a) { localStorage.setItem(STORAGE_KEYS.appliances, JSON.stringify(a)); }
+
+/* ── Lifespan data ── */
+const APPLIANCE_LIFESPANS = {
+  'HVAC':{avg:15,max:20},'Refrigerator':{avg:13,max:17},'Washer':{avg:11,max:14},
+  'Dryer':{avg:13,max:16},'Dishwasher':{avg:10,max:13},'Water Heater':{avg:11,max:13},
+  'Range Hood':{avg:14,max:18},'OTR Microwave':{avg:9,max:13},'Microwave':{avg:9,max:13},
+  'Coffee Maker':{avg:5,max:8},'Air Purifier':{avg:5,max:8},'Humidifier':{avg:5,max:8},
+  'Bathroom Exhaust Fan':{avg:10,max:15},'Whole House Fan':{avg:15,max:20},
+  'Window AC Unit':{avg:10,max:15},'Portable AC Unit':{avg:8,max:12},
+  'Air Fryer':{avg:3,max:5},'Stand Mixer':{avg:15,max:25},'Pressure Cooker':{avg:5,max:10}
+};
+
+function getApplianceAgeYears(a) {
+  if(!a.installedDate) return null;
+  return Math.max(0,(new Date()-new Date(a.installedDate))/(1000*60*60*24*365.25));
+}
+
+/* ── Home Health Score ── */
+function calcHomeHealthScore(appliances, tasks) {
+  if(!appliances.length) return null;
+  const overdue  = tasks.filter(function(t){return t.daysRemaining<0;}).length;
+  const dueSoon  = tasks.filter(function(t){return t.daysRemaining>=0&&t.daysRemaining<=7;}).length;
+  const taskScore = Math.max(0, 100-(overdue*8)-(dueSoon*2));
+  const ageScores = appliances.map(function(a) {
+    const age=getApplianceAgeYears(a); const ls=APPLIANCE_LIFESPANS[a.type];
+    if(!ls||age===null) return 100;
+    if(age>=ls.max) return 30; if(age>=ls.avg) return 60; if(age>=ls.avg*0.65) return 80; return 100;
+  });
+  const ageScore = ageScores.reduce(function(a,b){return a+b;},0)/ageScores.length;
+  const allHist=[];
+  appliances.forEach(function(a){(a.tasks||[]).forEach(function(t){allHist.push(...(t.history||[]));});});
+  const histScore = allHist.length>=10?100:allHist.length>=5?85:allHist.length>=1?70:60;
+  return Math.max(10,Math.min(100,Math.round((taskScore*0.5)+(ageScore*0.3)+(histScore*0.2))));
+}
+
+function getScoreGrade(score) {
+  if(score>=90) return {grade:'A+',color:'#2A7A4A'};
+  if(score>=80) return {grade:'A', color:'#2A7A4A'};
+  if(score>=70) return {grade:'B', color:'#4A8A6A'};
+  if(score>=60) return {grade:'C+',color:'#7A8A2A'};
+  if(score>=50) return {grade:'C', color:'#C47A28'};
+  if(score>=35) return {grade:'D', color:'#C44B28'};
+  return              {grade:'F', color:'#A02010'};
+}
+
+function getScoreMotivation(score, tasks) {
+  const overdue  = tasks.filter(function(t){return t.daysRemaining<0;}).length;
+  const dueSoon  = tasks.filter(function(t){return t.daysRemaining>=0&&t.daysRemaining<=7;}).length;
+  if(score>=95) return 'Elite home status. You are crushing it!';
+  if(score>=90) return 'Top tier. Just keep up the momentum.';
+  if(score>=80) return dueSoon?'Knock out '+dueSoon+' task'+(dueSoon===1?'':'s')+' this week and hit the A+ club!':'Almost at the top.';
+  if(score>=70) return 'A few quick tasks and you hit a B+.';
+  if(overdue>0) return overdue+' overdue task'+(overdue===1?'':'s')+' pulling your score down. Quick wins available!';
+  return 'Your home needs some love. Let\'s get it back on track.';
+}
+
+function getStreakCount() {
+  try { return JSON.parse(localStorage.getItem('homefrontScoreData')||'{}').streak||0; } catch{return 0;}
+}
+
+/* ── Score explainer ── */
+function showScoreExplainer() {
+  document.getElementById('scoreExplainerOverlay').classList.add('open');
+}
+function closeScoreExplainer() {
+  document.getElementById('scoreExplainerOverlay').classList.remove('open');
+}
+
+/* ── Adjustment factor ── */
+function getAdjustmentFactor(task, profile) {
+  let f=1;
+  const hhSize=Number(profile.householdSize||2);
+  if(hhSize>=5) f*=0.80; else if(hhSize>=4) f*=0.87; else if(hhSize>=3) f*=0.93;
+  const tags=task.adjustmentTags||[];
+  if(tags.includes('air'))   { if(profile.pets) f*=0.90; if(profile.allergies) f*=0.80; if(profile.smoker) f*=0.85; }
+  if(tags.includes('filter')){ if(profile.pets) f*=0.90; if(profile.allergies) f*=0.85; if(profile.smoker) f*=0.85; }
+  if(tags.includes('water')) { if(profile.hardWater) f*=0.75; }
+  if(tags.includes('usage')) { if(hhSize>=5) f*=0.90; else if(hhSize>=4) f*=0.95; else if(hhSize>=3) f*=0.97; }
+  return Math.min(1,Math.max(0.50,f));
+}
+
+function normalizeTask(task, installedDate, profile) {
+  const safe={...task};
+  const base=Number(safe.baseIntervalDays||safe.intervalDays||90);
+  const adj=Math.round(base*getAdjustmentFactor(safe,profile));
+  safe.intervalDays=Math.max(14,adj);
+  if(!safe.lastCompletedDate) safe.lastCompletedDate=installedDate||getTodayDate();
+  safe.nextDueDate=addDays(safe.lastCompletedDate,safe.intervalDays);
+  return safe;
+}
+
+function refreshStoredAppliances() {
+  const apps=getUserAppliances(); const profile=getStoredHomeProfile();
+  return apps.map(function(a) {
+    return {...a, tasks:(a.tasks||[]).map(function(t){ return normalizeTask(t,a.installedDate,profile); })};
+  });
+}
+
+/* ── Profile summary ── */
+function getHomeProfileSummary(profile) {
+  const p=[];
+  if(profile.pets)      p.push('pets');
+  if(profile.allergies) p.push('air sensitivity');
+  if(profile.hardWater) p.push('hard water');
+  if(profile.smoker)    p.push('smoker household');
+  const size=Number(profile.householdSize||2);
+  if(size>=3) p.push(size>=5?'5+ person household':size+' person household');
+  if(!p.length) return 'Standard timing is active.';
+  if(p.length===1) return 'Adjusted for '+p[0]+'.';
+  return 'Adjusted for '+p.slice(0,-1).join(', ')+' and '+p[p.length-1]+'.';
+}
+
+/* ── Build all tasks ── */
+function buildAllHouseTasks() {
+  const appliances=refreshStoredAppliances().filter(function(a){return !a.archived;});
+  const all=[];
+  appliances.forEach(function(a) {
+    (a.tasks||[]).forEach(function(task) {
+      all.push({
+        applianceId:a.id, applianceName:a.name, applianceType:a.type,
+        taskId:task.id, taskTitle:task.title, taskCategory:task.category,
+        intervalDays:task.intervalDays, lastCompletedDate:task.lastCompletedDate,
+        nextDueDate:task.nextDueDate, daysRemaining:daysBetween(getTodayDate(),task.nextDueDate),
+        why:task.why||''
+      });
+    });
+  });
+  all.sort(function(a,b){return a.daysRemaining-b.daysRemaining;});
+  return all;
+}
+
+/* ── Clock & greeting ── */
+function updateClockStatus() {
+  const el=document.getElementById('clockStatus'); if(!el) return;
+  el.textContent=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+}
+function getTimeGreeting() {
+  const h=new Date().getHours();
+  if(h<12) return 'Good morning'; if(h<18) return 'Good afternoon'; return 'Good evening';
+}
+function updateGreeting() {
+  const el=document.getElementById('greetingTitle'); if(!el) return;
+  const name=getUserName();
+  el.textContent=name?getTimeGreeting()+', '+name+' \uD83D\uDC4B':getTimeGreeting()+' \uD83D\uDC4B';
+}
+
+/* ── Header with score ring ── */
+function updateHeader(tasks, appliances) {
+  const greetingSub    = document.getElementById('greetingSub');
+  const homeStatus     = document.getElementById('homeStatus');
+  const applianceCount = document.getElementById('applianceCountStatus');
+  const scoreNumberEl  = document.getElementById('scoreNumber');
+  const scoreGradeEl   = document.getElementById('scoreGrade');
+  const scoreArc       = document.getElementById('scoreArc');
+  const motivationEl   = document.getElementById('motivationLine');
+  const streakBar      = document.getElementById('streakBar');
+  const streakText     = document.getElementById('streakText');
+
+  applianceCount.textContent = appliances.length+' appliance'+(appliances.length===1?'':'s')+' tracked';
+
+  if (!appliances.length) {
+    greetingSub.textContent='Add your appliances to unlock your Home Health Score.';
+    homeStatus.textContent='Get started';
+    applianceCount.textContent='Tap Appliances below to add yours';
+    if(scoreNumberEl) { scoreNumberEl.textContent='?'; }
+    if(scoreArc)      { scoreArc.style.strokeDashoffset='160'; scoreArc.style.stroke='#D4D0C8'; }
+    if(motivationEl)  motivationEl.textContent='Add your first appliance to unlock your score.';
+    if(streakBar)     streakBar.style.display='none';
+    return;
+  }
+
+  const score    = calcHomeHealthScore(appliances, tasks);
+  const gradeObj = getScoreGrade(score);
+  const offset   = 213.6 - (score/100)*213.6;
+
+  if(scoreNumberEl) scoreNumberEl.textContent=score;
+  if(scoreGradeEl)  scoreGradeEl.textContent=gradeObj.grade;
+  if(scoreArc) {
+    requestAnimationFrame(function(){
+      scoreArc.style.strokeDashoffset=offset;
+      scoreArc.style.stroke=gradeObj.color;
+    });
+  }
+  if(motivationEl) motivationEl.textContent=getScoreMotivation(score,tasks);
+
+  const streak=getStreakCount();
+  if(streakBar&&streak>=2) { streakBar.style.display='flex'; if(streakText) streakText.textContent=streak+'-week streak'; }
+  else if(streakBar) streakBar.style.display='none';
+
+  const dueNow  = tasks.filter(function(t){return t.daysRemaining<=0;}).length;
+  const dueSoon = tasks.filter(function(t){return t.daysRemaining>0&&t.daysRemaining<=7;}).length;
+  if(dueNow>0)       { greetingSub.textContent='A few things need your attention.'; homeStatus.textContent=dueNow+' task'+(dueNow===1?'':'s')+' due now'; }
+  else if(dueSoon>0) { greetingSub.textContent='A couple tasks are coming up soon.'; homeStatus.textContent=dueSoon+' task'+(dueSoon===1?'':'s')+' due soon'; }
+  else               { greetingSub.textContent='Your home is fully protected right now.'; homeStatus.textContent='All clear \uD83C\uDFC6'; }
+}
+
+/* ── Weekly card ── */
+const WEEKLY_DISMISS_KEY='homefrontWeeklyDismissed';
+function getWeeklyDismissed(){ try{return JSON.parse(localStorage.getItem(WEEKLY_DISMISS_KEY)||'{}');}catch{return{};} }
+function getISOWeek(d){ const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()+4-(x.getDay()||7)); const y=new Date(x.getFullYear(),0,1); return Math.ceil((((x-y)/86400000)+1)/7); }
+function shouldShowWeeklyCard(tasks){
+  const dismissed=getWeeklyDismissed(); const today=new Date();
+  const weekKey=today.getFullYear()+'-W'+getISOWeek(today);
+  if(dismissed[weekKey]||!tasks.length) return false;
+  const overdue=tasks.filter(function(t){return t.daysRemaining<=0;}).length;
+  return today.getDay()===1||overdue>=3;
+}
+function dismissWeeklyCard(){
+  const today=new Date(); const weekKey=today.getFullYear()+'-W'+getISOWeek(today);
+  const data=getWeeklyDismissed(); data[weekKey]=true;
+  localStorage.setItem(WEEKLY_DISMISS_KEY,JSON.stringify(data));
+  const card=document.getElementById('weeklyCard'); if(card) card.remove();
+}
+function buildWeeklyCard(tasks){
+  const overdue=tasks.filter(function(t){return t.daysRemaining<=0;});
+  const dueSoon=tasks.filter(function(t){return t.daysRemaining>0&&t.daysRemaining<=7;});
+  const onTrack=tasks.filter(function(t){return t.daysRemaining>7;});
+  const isMonday=new Date().getDay()===1;
+  const topTasks=overdue.slice(0,3).map(function(t){
+    return '<div style="font-size:12px;color:var(--muted);padding:5px 0;border-bottom:1px solid rgba(90,125,140,0.08);">'+
+      '<span style="font-weight:700;color:var(--ink);">'+t.taskTitle+'</span> &middot; '+t.applianceName+'</div>';
+  }).join('');
+  return '<div class="weekly-card" id="weeklyCard">'+
+    '<div class="weekly-card-header"><h3>'+(isMonday?'Your week ahead':'Tasks need attention')+'</h3>'+
+    '<button class="weekly-dismiss" onclick="dismissWeeklyCard()">&times;</button></div>'+
+    '<div class="weekly-stat-row">'+
+      (overdue.length?'<span class="weekly-stat-pill alert">'+overdue.length+' overdue</span>':'')+
+      (dueSoon.length?'<span class="weekly-stat-pill">'+dueSoon.length+' due this week</span>':'')+
+      (onTrack.length?'<span class="weekly-stat-pill good">'+onTrack.length+' on track</span>':'')+
+    '</div>'+(topTasks?'<div style="margin-bottom:10px;">'+topTasks+'</div>':'')+
+    '<button onclick="window._showAllTasks=true;renderUpcomingTasks();" '+
+      'style="width:100%;border:none;border-radius:12px;padding:11px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;background:var(--ink);color:#E8F0EE;">'+
+      'View all '+tasks.length+' tasks &rarr;</button></div>';
+}
+
+/* ── Task badge ── */
+window._showAllTasks = false;
+function toggleShowAll() { window._showAllTasks=!window._showAllTasks; renderUpcomingTasks(); }
+function getTaskBadge(days) {
+  if(days<=0)  return {text:'Due now',   cls:'badge-due'};
+  if(days<=7)  return {text:'This week', cls:'badge-soon'};
+  if(days<=30) return {text:'This month',cls:'badge-ok'};
+  return              {text:'On track',  cls:'badge-ok'};
+}
+
+/* ── Render upcoming tasks ── */
+function renderUpcomingTasks() {
+  const container=document.getElementById('upcomingTasks');
+  const appliances=refreshStoredAppliances().filter(function(a){return !a.archived;});
+  const tasks=buildAllHouseTasks();
+  const showAll=window._showAllTasks||false;
+  const topTasks=showAll?tasks:tasks.slice(0,3);
+  const showAllBtn=document.getElementById('showAllBtn');
+  if(showAllBtn) showAllBtn.textContent=tasks.length>3?(showAll?'Show less':'Show all '+tasks.length):'';
+  updateHeader(tasks,appliances);
+  const weeklyHtml=shouldShowWeeklyCard(tasks)?buildWeeklyCard(tasks):'';
+  if(!topTasks.length) {
+    container.innerHTML=weeklyHtml+'<div class="empty-state"><div style="font-size:48px;margin-bottom:12px;">&#127968;</div><h3>Your home is waiting</h3><p>Tap Appliances below to add your first appliance. We will build a complete maintenance plan in under 2 minutes.</p></div>';
+    return;
+  }
+  container.innerHTML=weeklyHtml+topTasks.map(function(task) {
+    const badge=getTaskBadge(task.daysRemaining);
+    const dueText=task.daysRemaining<=0?'Overdue by '+Math.abs(task.daysRemaining)+' day'+(Math.abs(task.daysRemaining)===1?'':'s'):
+                  task.daysRemaining===1?'Due tomorrow':'Due in '+task.daysRemaining+' days';
+    return '<div class="task-card" onclick="openApplianceFromTask(\''+task.applianceId+'\')">' +
+      '<div class="task-card-top"><div>'+
+        '<div class="task-card-title">'+task.taskTitle+'</div>'+
+        '<div class="task-card-meta">'+task.applianceName+' &middot; '+dueText+'</div>'+
+      '</div><span class="task-badge '+badge.cls+'">'+badge.text+'</span></div>'+
+      (task.why?'<div class="task-card-why">'+task.why+'</div>':'')+
+      '<button class="quick-done-home" onclick="event.stopPropagation();quickDoneFromHome(\''+task.applianceId+'\',\''+task.taskId+'\')">&#10003; Done</button>'+
+    '</div>';
+  }).join('');
+}
+
+function openApplianceFromTask(id) { window.location.href='appliances.html?focus='+encodeURIComponent(id); }
+
+function quickDoneFromHome(applianceId, taskId) {
+  const apps=getUserAppliances(); const today=getTodayDate(); let title='';
+  const updated=apps.map(function(a) {
+    if(a.id!==applianceId) return a;
+    const tasks=(a.tasks||[]).map(function(t) {
+      if(t.id!==taskId) return t;
+      title=t.title;
+      return {...t,lastCompletedDate:today,nextDueDate:addDays(today,t.intervalDays||90),
+        history:[{completedAt:today,cost:null,note:'',completedBy:'self'},...(t.history||[])].slice(0,50)};
+    });
+    return {...a,tasks};
+  });
+  setUserAppliances(updated);
+  try {
+    const sd=JSON.parse(localStorage.getItem('homefrontScoreData')||'{}');
+    const yesterday=addDays(today,-1);
+    if(sd.lastActivity!==today) {
+      sd.streak=(sd.lastActivity===yesterday)?(sd.streak||0)+1:1;
+      sd.lastActivity=today;
+      localStorage.setItem('homefrontScoreData',JSON.stringify(sd));
+      if(sd.streak>1) showToast('\uD83D\uDD25 '+sd.streak+'-week streak! +10 pts');
+      else showToast('\u2713 '+(title||'Task')+' done \u00B7 +10 pts');
+    } else { showToast('\u2713 '+(title||'Task')+' done \u00B7 +10 pts'); }
+  } catch(e) { showToast('\u2713 Done'); }
+  renderAll();
+}
+
+/* ── Savings estimates ── */
+const PRESET_SAVINGS_ESTIMATES = {
+  fridge_filter:150,fridge_coils:300,fridge_gasket:80,
+  dish_filter:150,dish_descale:80,dish_seals:250,
+  washer_clean:100,washer_hoses:1500,washer_inlet:120,
+  dryer_lint:400,dryer_vent:600,dryer_seals:200,
+  hvac_filter:500,hvac_service:800,hvac_vents:100,
+  wh_flush:400,wh_valve:800,wh_leaks:2000,
+  generic_clean:100,generic_inspect:150
+};
+function getEstimateHome(taskKey) {
+  try { const c=JSON.parse(localStorage.getItem('homefrontCustomEstimates')||'{}'); if(taskKey&&c[taskKey]!=null) return Number(c[taskKey]); } catch(e) {}
+  return (taskKey&&PRESET_SAVINGS_ESTIMATES[taskKey])?PRESET_SAVINGS_ESTIMATES[taskKey]:0;
+}
+
+/* ── Home summary ── */
+function renderHomeSummary() {
+  const container=document.getElementById('homeSummary');
+  const appliances=refreshStoredAppliances().filter(function(a){return !a.archived;});
+  const tasks=buildAllHouseTasks();
+  const profile=getStoredHomeProfile();
+
+  let totalSpent=0,totalSaved=0,tasksCompleted=0;
+  appliances.forEach(function(a){
+    (a.tasks||[]).forEach(function(task){
+      (task.history||[]).forEach(function(entry){
+        tasksCompleted++;
+        if(entry.cost!=null) totalSpent+=Number(entry.cost);
+        totalSaved+=getEstimateHome(task.key);
+      });
+    });
+  });
+
+  if(!appliances.length) {
+    container.innerHTML=
+      '<div class="savings-cta-card savings-cta-empty" onclick="location.href=\'savings.html\'">'+
+        '<div class="savings-cta-inner">'+
+          '<div class="savings-cta-left">'+
+            '<div class="savings-cta-eyebrow">Money &amp; risk</div>'+
+            '<div class="savings-cta-title">See what you\'re risking</div>'+
+            '<div class="savings-cta-label">Homeowners who skip maintenance spend 3-5x more on emergency repairs.</div>'+
+          '</div>'+
+          '<div class="savings-cta-right"><div class="savings-risk-pill danger">Check risks</div><div class="savings-cta-arrow">&rarr;</div></div>'+
+        '</div></div>'+
+      '<div class="summary-card"><h3>Home snapshot</h3><p style="font-size:13px;color:var(--muted);line-height:1.6;">Once you add appliances, this area will summarize what needs care first and how your settings are shaping reminders.</p></div>';
+    return;
+  }
+
+  const dueNowCount  = tasks.filter(function(t){return t.daysRemaining<=0;}).length;
+  const dueSoonCount = tasks.filter(function(t){return t.daysRemaining>0&&t.daysRemaining<=7;}).length;
+  const overdueRisk  = tasks.filter(function(t){return t.daysRemaining<0;}).length;
+  const multiplier   = totalSpent>0?(totalSaved/totalSpent).toFixed(1):null;
+
+  // Savings CTA card
+  const savingsCard = tasksCompleted>0
+    ? '<div class="savings-cta-card" onclick="location.href=\'savings.html\'">' +
+        '<div class="savings-cta-inner"><div class="savings-cta-left">'+
+          '<div class="savings-cta-eyebrow">Money &amp; risk</div>'+
+          '<div class="savings-cta-amount">$'+totalSaved.toLocaleString('en-US',{maximumFractionDigits:0})+'</div>'+
+          '<div class="savings-cta-label">in potential repairs prevented</div>'+
+          (multiplier&&parseFloat(multiplier)>=2?'<div class="savings-cta-ratio">Every $1 spent protected $'+multiplier+'</div>':'')+
+        '</div><div class="savings-cta-right">'+
+          (overdueRisk>0?'<div class="savings-risk-pill danger">'+overdueRisk+' at risk</div>':'<div class="savings-risk-pill safe">Protected</div>')+
+          '<div class="savings-cta-arrow">&rarr;</div>'+
+        '</div></div></div>'
+    : '<div class="savings-cta-card savings-cta-empty" onclick="location.href=\'savings.html\'">' +
+        '<div class="savings-cta-inner"><div class="savings-cta-left">'+
+          '<div class="savings-cta-eyebrow">Money &amp; risk</div>'+
+          '<div class="savings-cta-title">See what you\'re risking</div>'+
+          '<div class="savings-cta-label">Homeowners who skip maintenance spend 3-5x more on emergency repairs.</div>'+
+        '</div><div class="savings-cta-right">'+
+          '<div class="savings-risk-pill danger">Check risks</div><div class="savings-cta-arrow">&rarr;</div>'+
+        '</div></div></div>';
+
+  // Warranty alerts
+  const warrantyAlerts=[];
+  appliances.forEach(function(a){
+    (a.warranties||[]).forEach(function(w){
+      if(!w.expiryDate) return;
+      const dl=daysBetween(getTodayDate(),w.expiryDate);
+      if(dl<=90) warrantyAlerts.push({applianceName:a.name,provider:w.provider,expiryDate:w.expiryDate,daysLeft:dl});
+    });
+  });
+  warrantyAlerts.sort(function(a,b){return a.daysLeft-b.daysLeft;});
+  const warrantySection=warrantyAlerts.length?
+    '<div class="summary-card"><h3>Warranty alerts</h3>'+
+    warrantyAlerts.map(function(w){
+      const expired=w.daysLeft<0;
+      const cls=expired?'warranty-row-expired':'warranty-row-expiring';
+      const msg=expired?'Expired '+formatDate(w.expiryDate):w.daysLeft===0?'Expires today':'Expires in '+w.daysLeft+' day'+(w.daysLeft===1?'':'s');
+      return '<div class="warranty-alert-row '+cls+'"><div><div class="warranty-alert-name">'+w.applianceName+'</div><div class="warranty-alert-provider">'+w.provider+'</div></div><span class="warranty-alert-msg">'+msg+'</span></div>';
+    }).join('')+'</div>':'';
+
+  // Systems overdue
+  let systemsOverdue=0;
+  try {
+    const sd=JSON.parse(localStorage.getItem('homefrontSystemsData')||'{}');
+    Object.values(sd).forEach(function(r){ if(r.nextDate&&daysBetween(getTodayDate(),r.nextDate)<0) systemsOverdue++; });
+  } catch(e){}
+  const systemsAlert=systemsOverdue>0?
+    '<div class="summary-card" onclick="location.href=\'systems.html\'" style="cursor:pointer;">'+
+      '<h3>Home systems</h3><p style="color:var(--badge-due-color);font-size:13px;">'+systemsOverdue+' system task'+(systemsOverdue===1?'':'s')+' overdue &mdash; tap to review.</p>'+
+    '</div>':'';
+
+  // Past-lifespan appliances
+  const vets=appliances.filter(function(a){
+    const age=getApplianceAgeYears(a); const ls=APPLIANCE_LIFESPANS[a.type];
+    return ls&&age!==null&&age>=ls.avg;
+  });
+  const vetWarn=vets.length>0?
+    '<div style="margin-top:8px;padding:8px 10px;background:rgba(196,122,40,0.10);border-radius:10px;font-size:12px;color:#7A5A18;line-height:1.4;">'+
+      vets.length+' appliance'+(vets.length===1?' is':'s are')+' past average lifespan. Start budgeting for replacement.'+
+    '</div>':'';
+
+  // Home age warning
+  const yearBuilt=profile.yearBuilt;
+  const homeAge=yearBuilt?new Date().getFullYear()-yearBuilt:null;
+  const homeAgeWarn=homeAge&&homeAge>=20?
+    '<div style="margin-top:8px;padding:8px 10px;background:rgba(90,125,140,0.10);border-radius:10px;font-size:12px;color:var(--muted);line-height:1.4;">'+
+      'Your home is '+homeAge+' years old. Homes this age often need attention to plumbing, electrical, and roofing. Check your Systems tab.'+
+    '</div>':'';
+
+  // 12-month forecast
+  const forecast=Math.round(tasks.length*3*35/100)*100;
+  const forecastCard='<div class="summary-card" onclick="location.href=\'savings.html\'" style="cursor:pointer;">'+
+    '<h3>12-month forecast</h3>'+
+    '<div class="room-list" style="margin-top:8px;">'+
+      '<div class="room-row"><span>Est. annual maintenance</span><span style="font-weight:700;">'+(forecast>0?'~$'+forecast:'Log tasks to estimate')+'</span></div>'+
+      '<div class="room-row"><span>Tasks completed</span><span>'+tasksCompleted+'</span></div>'+
+    '</div>'+vetWarn+
+    '<p style="margin:10px 0 0;font-size:12px;color:var(--muted);text-align:right;">Full breakdown &rarr;</p>'+
+  '</div>';
+
+  // Quick nav cards - rendered separately to avoid string nesting
+  const quickLinksHtml = buildQuickLinks();
+
+  // Profile summary
+  const profileSummary=getHomeProfileSummary(profile);
+  const hhSize=Number(profile.householdSize||2);
+  const hhLabel=hhSize===1?'1 person':hhSize>=5?'5+ people':hhSize+' people';
+
+  container.innerHTML=
+    moveInBanner+savingsCard+warrantySection+systemsAlert+
+    '<div class="summary-card">'+
+      '<h3>Home snapshot</h3>'+
+      '<div class="room-list">'+
+        '<div class="room-row"><span>Appliances tracked</span><span>'+appliances.length+'</span></div>'+
+        '<div class="room-row"><span>Tasks due now</span><span style="'+(dueNowCount>0?'color:var(--badge-due-color);font-weight:700;':'')+'">'+dueNowCount+'</span></div>'+
+        '<div class="room-row"><span>Due this week</span><span style="'+(dueSoonCount>0?'color:var(--badge-soon-color);font-weight:700;':'')+'">'+dueSoonCount+'</span></div>'+
+        '<div class="room-row"><span>Household size</span><span>'+hhLabel+'</span></div>'+
+        (yearBuilt?'<div class="room-row"><span>Year built</span><span>'+yearBuilt+' &mdash; '+homeAge+' yrs old</span></div>':'')+
+        (profileSummary&&profileSummary!=='Standard timing is active.'?'<div class="room-row"><span>Schedule adjustments</span><span style="font-size:11px;text-align:right;max-width:55%;">'+profileSummary.replace('.','')+'</span></div>':'')+
+      '</div>'+
+      homeAgeWarn+
+      '<p style="margin:10px 0 0;font-size:12px;color:var(--muted);text-align:right;cursor:pointer;" onclick="location.href=\'settings.html\'">Edit profile &rarr;</p>'+
+    '</div>'+forecastCard+quickLinksHtml;
+}
+
+function buildQuickLinks() {
+  const div = document.createElement('div');
+  div.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:0;';
+
+  const timeline = document.createElement('div');
+  timeline.style.cssText = 'background:var(--card-bg);border:1px solid var(--card-border);border-radius:18px;padding:14px;box-shadow:0 4px 12px var(--card-shadow);cursor:pointer;text-align:center;';
+  timeline.innerHTML = '<div style="font-size:24px;margin-bottom:6px;">&#128336;</div><div style="font-size:13px;font-weight:700;color:var(--ink);">Timeline</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">Full home record</div>';
+  timeline.onclick = function(){ location.href='timeline.html'; };
+
+  const movein = document.createElement('div');
+  movein.style.cssText = 'background:var(--card-bg);border:1px solid var(--card-border);border-radius:18px;padding:14px;box-shadow:0 4px 12px var(--card-shadow);cursor:pointer;text-align:center;';
+  movein.innerHTML = '<div style="font-size:24px;margin-bottom:6px;">&#127968;</div><div style="font-size:13px;font-weight:700;color:var(--ink);">Move-in check</div><div style="font-size:11px;color:var(--muted);margin-top:2px;">35-point inspection</div>';
+  movein.onclick = function(){ location.href='movein.html'; };
+
+  div.appendChild(timeline);
+  div.appendChild(movein);
+  return div.outerHTML;
+}
+
+function renderAll() {
+  updateClockStatus(); updateGreeting();
+  renderUpcomingTasks(); renderHomeSummary();
+}
+
+window.addEventListener('storage', function(e) {
+  if([STORAGE_KEYS.appliances,STORAGE_KEYS.profile,STORAGE_KEYS.settings,STORAGE_KEYS.userName].includes(e.key)) renderAll();
+});
+
+/* ── Quick add ── */
+const QUICK_ADD_AGES=[
+  {value:'new',label:'Brand new',yearsAgo:0},{value:'1-3',label:'1-3 yrs',yearsAgo:2},
+  {value:'3-7',label:'3-7 yrs',yearsAgo:5},{value:'7-15',label:'7-15 yrs',yearsAgo:10},
+  {value:'15plus',label:'15+ yrs',yearsAgo:18}
+];
+const QUICK_ADD_ICONS={
+  'HVAC':'ph-wind','Refrigerator':'ph-snowflake','Washer':'ph-washing-machine','Dryer':'ph-t-shirt',
+  'Dishwasher':'ph-fork-knife','Water Heater':'ph-flame','Range Hood':'ph-cooking-pot',
+  'OTR Microwave':'ph-cooking-pot','Coffee Maker':'ph-coffee','Air Purifier':'ph-leaf',
+  'Humidifier':'ph-drop','Bathroom Exhaust Fan':'ph-fan',
+  'Window AC Unit':'ph-thermometer-cold','Portable AC Unit':'ph-thermometer-cold'
+};
+let quickAddSelected={};
+
+function quickAddToggle(btn) {
+  const type=btn.dataset.type;
+  if(quickAddSelected[type]!==undefined){ delete quickAddSelected[type]; btn.classList.remove('selected'); }
+  else { quickAddSelected[type]='1-3'; btn.classList.add('selected'); }
+  renderQuickAddAge();
+}
+
+function renderQuickAddAge() {
+  const types=Object.keys(quickAddSelected);
+  const section=document.getElementById('quickAddAgeSection');
+  const rows=document.getElementById('quickAddAgeRows');
+  const doneBtn=document.getElementById('quickAddDoneBtn');
+  if(!types.length){ if(section) section.style.display='none'; if(doneBtn) doneBtn.style.display='none'; return; }
+  if(section) section.style.display='block';
+  if(doneBtn) doneBtn.style.display='block';
+  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  const selStyle=isDark
+    ?'background:#1A2826;color:#E8F0EE;border:1px solid rgba(255,255,255,0.14);border-radius:10px;padding:7px 10px;font:inherit;font-size:13px;outline:none;cursor:pointer;color-scheme:dark;'
+    :'background:rgba(90,125,140,0.06);color:var(--ink);border:1px solid rgba(90,125,140,0.18);border-radius:10px;padding:7px 10px;font:inherit;font-size:13px;outline:none;cursor:pointer;';
+  rows.innerHTML=types.map(function(type,idx){
+    const icon=QUICK_ADD_ICONS[type]||'ph-wrench';
+    const current=quickAddSelected[type]||'1-3';
+    const opts=QUICK_ADD_AGES.map(function(a){ return '<option value="'+a.value+'"'+(a.value===current?' selected':'')+'>'+a.label+'</option>'; }).join('');
+    return '<div class="quick-age-row">'+
+      '<span class="quick-age-label"><i class="ph '+icon+'" style="font-size:16px;vertical-align:middle;margin-right:6px;"></i>'+type+'</span>'+
+      '<select style="'+selStyle+'" data-idx="'+idx+'" onchange="quickAddAgeChange(this)">'+opts+'</select>'+
+    '</div>';
+  }).join('');
+  window._quickAddTypes=types;
+}
+
+function quickAddAgeChange(sel) {
+  const idx=parseInt(sel.dataset.idx);
+  const type=(window._quickAddTypes||[])[idx];
+  if(type) quickAddSelected[type]=sel.value;
+}
+
+function ageValueToInstallDate(v) {
+  const def=QUICK_ADD_AGES.find(function(a){return a.value===v;})||QUICK_ADD_AGES[1];
+  const d=new Date(); d.setFullYear(d.getFullYear()-def.yearsAgo); return d.toISOString().split('T')[0];
+}
+
+function quickAddSaveAndContinue() {
+  // Guard against double-tap
+  if (window._quickAddSaving) return;
+  window._quickAddSaving = true;
+  setTimeout(function(){ window._quickAddSaving = false; }, 3000);
+
+  const selectedBtns=document.querySelectorAll('.quick-add-btn.selected');
+  if(selectedBtns.length>0) {
+    selectedBtns.forEach(function(btn){
+      const type=btn.dataset.type;
+      if(type&&quickAddSelected[type]===undefined) quickAddSelected[type]='1-3';
+    });
+  }
+  const types=Object.keys(quickAddSelected);
+  if(!types.length){ showToast('Tap at least one appliance first'); return; }
+  const today=getTodayDate();
+  const existing=JSON.parse(localStorage.getItem(STORAGE_KEYS.appliances)||'[]');
+  const newApps=types.map(function(type,i){
+    return {id:'app_'+(Date.now()+i)+'_'+Math.random().toString(36).slice(2,7),
+      name:type,type:type,location:'',model:'',serial:'',
+      installedDate:ageValueToInstallDate(quickAddSelected[type]||'1-3'),
+      lastMaintDate:today,tasks:[],warranties:[],contractors:[],
+      archived:false,addedAt:new Date().toISOString()};
+  });
+  localStorage.setItem(STORAGE_KEYS.appliances,JSON.stringify([...existing,...newApps]));
+  onboardMarkComplete();
+  quickAddSelected={};
+  onboardGoToStep(6);
+}
+
+
+/* ── Situation selector ── */
+let userSituation = localStorage.getItem('homefrontSituation') || null;
+
+function selectSituation(sit) {
+  userSituation = sit;
+  localStorage.setItem('homefrontSituation', sit);
+
+  // Highlight selected button
+  ['movein','established','selling'].forEach(function(s) {
+    const btn = document.getElementById('sitBtn_' + s);
+    if (btn) btn.classList.toggle('selected', s === sit);
+  });
+
+  // For move-in or selling, show a confirmation prompt
+  if (sit === 'movein' || sit === 'selling') {
+    showSituationConfirm(sit);
+  } else {
+    setTimeout(function() { onboardGoToStep(2); }, 280);
+  }
+}
+
+function showSituationConfirm(sit) {
+  const existing = document.getElementById('situationConfirm');
+  if (existing) existing.remove();
+
+  const isMovein = sit === 'movein';
+  const title    = isMovein ? 'Start your move-in inspection now?' : 'Start your pre-sale inspection now?';
+  const desc     = isMovein
+    ? 'A 35-point checklist covering safety, plumbing, HVAC, structure, and appliances. Know exactly what you are working with from day one.'
+    : 'A 30-point checklist of everything buyers and inspectors will check. Fix issues before they become negotiating points.';
+  const yesLabel = isMovein ? 'Yes, start inspection →' : 'Yes, start pre-sale check →';
+  const dest     = isMovein ? 'movein.html' : 'moveout.html';
+
+  const box = document.createElement('div');
+  box.id = 'situationConfirm';
+  box.style.cssText = 'margin-top:14px;background:rgba(90,125,140,0.08);border-radius:18px;padding:16px;animation:fadeIn 0.2s ease;';
+
+  const h = document.createElement('div');
+  h.style.cssText = 'font-size:15px;font-weight:800;color:var(--ink);margin-bottom:6px;';
+  h.textContent = title;
+
+  const p = document.createElement('div');
+  p.style.cssText = 'font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;';
+  p.textContent = desc;
+
+  const yesBtn = document.createElement('button');
+  yesBtn.className = 'onboard-btn primary';
+  yesBtn.style.cssText = 'margin-bottom:8px;';
+  yesBtn.textContent = yesLabel;
+  yesBtn.onclick = function() {
+    onboardMarkComplete();
+    document.getElementById('onboardOverlay').classList.add('hidden');
+    location.href = dest;
+  };
+
+  const noBtn = document.createElement('button');
+  noBtn.className = 'onboard-btn ghost';
+  noBtn.style.cssText = 'margin-bottom:0;';
+  noBtn.textContent = 'Not right now — continue setup';
+  noBtn.onclick = function() {
+    box.remove();
+    onboardGoToStep(2);
+  };
+
+  box.appendChild(h);
+  box.appendChild(p);
+  box.appendChild(yesBtn);
+  box.appendChild(noBtn);
+
+  // Insert after the situation buttons grid
+  const step1 = document.getElementById('onboardStep1');
+  if (step1) step1.appendChild(box);
+}
+
+function goToMoveIn()  { location.href = 'movein.html'; }
+function goToMoveOut() { location.href = 'moveout.html'; }
+
+function populateOnboardDone() {
+  const sit = userSituation || 'established';
+  const titleEl = document.getElementById('onboardDoneTitle');
+  const subEl   = document.getElementById('onboardDoneSub');
+  const ctaEl   = document.getElementById('onboardDoneCta');
+
+  if (sit === 'movein') {
+    if (titleEl) titleEl.textContent = 'Time to inspect your new home.';
+    if (subEl)   subEl.innerHTML = 'Your maintenance plan is ready. Now do the 35-point move-in inspection so you know exactly what you are working with from day one.';
+    if (ctaEl) {
+      ctaEl.innerHTML =
+        '<button class="onboard-btn primary" onclick="onboardFinish();goToMoveIn();">Start move-in inspection &rarr;</button>' +
+        '<button class="onboard-btn ghost" onclick="onboardFinish()">Skip to home screen</button>';
+    }
+  } else if (sit === 'selling') {
+    if (titleEl) titleEl.textContent = 'Show buyers what you have.';
+    if (subEl)   subEl.innerHTML = 'Your maintenance plan is ready. Start with the pre-sale inspection to find and fix anything buyers will flag, then use the printable report to prove your home was well cared for.';
+    if (ctaEl) {
+      ctaEl.innerHTML =
+        '<button class="onboard-btn primary" onclick="onboardFinish();goToMoveOut();">Start pre-sale inspection &rarr;</button>' +
+        '<button class="onboard-btn ghost" onclick="onboardFinish()">Skip to home screen</button>';
+    }
+  } else {
+    if (titleEl) titleEl.textContent = 'Your home has a plan.';
+    if (subEl)   subEl.innerHTML = 'Complete tasks to raise your Home Health Score and keep your home in top shape. Your first task is coming up.';
+    if (ctaEl) {
+      ctaEl.innerHTML = '<button class="onboard-btn primary" onclick="onboardFinish()">Open my home &rarr;</button>';
+    }
+  }
+}
+
+/* ── Onboarding ── */
+const ONBOARD_KEY='homefrontOnboardingDone';
+const TOTAL_STEPS=6;
+let onboardCurrentStep=1;
+const BG_COLORS={
+  1:'linear-gradient(160deg,#2A3D52 0%,#1F3D3A 100%)',
+  2:'linear-gradient(160deg,#1F3D3A 0%,#2A524F 100%)',
+  3:'linear-gradient(160deg,#2A3D52 0%,#1F3D3A 100%)',
+  4:'linear-gradient(160deg,#3A2A1F 0%,#1F3D3A 100%)',
+  5:'linear-gradient(160deg,#1F3A3D 0%,#2A3D2A 100%)',
+  6:'linear-gradient(160deg,#2A524F 0%,#3A4F2A 100%)'
+};
+
+function onboardIsComplete(){ return localStorage.getItem(ONBOARD_KEY)==='true'; }
+function onboardMarkComplete(){ localStorage.setItem(ONBOARD_KEY,'true'); }
+
+function populateOnboardSummary() {
+  const el=document.getElementById('onboardSummaryStats'); if(!el) return;
+  const apps=refreshStoredAppliances(); const profile=getStoredHomeProfile();
+  const allTasks=[];
+  apps.forEach(function(a){ allTasks.push(...(a.tasks||[])); });
+  const thisYear=new Date().getFullYear();
+  const tasksThisYear=allTasks.filter(function(t){
+    const due=new Date(t.nextDueDate||''); return due.getFullYear()===thisYear;
+  }).length;
+  const firstDue=allTasks.filter(function(t){return t.nextDueDate;})
+    .sort(function(a,b){return a.nextDueDate.localeCompare(b.nextDueDate);})[0];
+  const daysToFirst=firstDue?Math.max(0,Math.round((new Date(firstDue.nextDueDate)-new Date())/(1000*60*60*24))):null;
+  const yearBuilt=profile.yearBuilt;
+  const homeAge=yearBuilt?thisYear-yearBuilt:null;
+  const stats=[
+    {icon:'&#127968;',label:'Appliances tracked',value:apps.length||'0'},
+    {icon:'&#128203;',label:'Tasks scheduled',value:allTasks.length||'0'},
+    {icon:'&#128197;',label:'Tasks due this year',value:tasksThisYear||'0'},
+    ...(daysToFirst!==null?[{icon:'&#9200;',label:'First task due in',value:daysToFirst===0?'Today':daysToFirst+' days'}]:[]),
+    ...(homeAge?[{icon:'&#127959;',label:'Home age',value:homeAge+' years'}]:[]),
+  ];
+  el.innerHTML=stats.map(function(s){
+    return '<div style="display:flex;justify-content:space-between;align-items:center;background:rgba(90,125,140,0.08);border-radius:12px;padding:10px 14px;">'+
+      '<span style="font-size:13px;color:var(--muted);">'+s.icon+' '+s.label+'</span>'+
+      '<span style="font-size:14px;font-weight:800;color:var(--ink);">'+s.value+'</span>'+
+    '</div>';
+  }).join('');
+}
+
+function onboardGoToStep(step) {
+  onboardCurrentStep=step;
+  const bg=document.getElementById('onboardBg');
+  if(bg) bg.style.background=BG_COLORS[step]||BG_COLORS[1];
+  for(let i=1;i<=TOTAL_STEPS;i++){
+    const el=document.getElementById('onboardStep'+i);
+    if(el) el.classList.toggle('active',i===step);
+  }
+  const dots=document.getElementById('onboardProgress');
+  if(dots) dots.innerHTML=Array.from({length:TOTAL_STEPS},function(_,i){
+    return '<div class="onboard-dot'+(i+1===step?' active':'')+'"></div>';
+  }).join('');
+  if(step===3) setTimeout(function(){ const inp=document.getElementById('onboardNameInput'); if(inp) inp.focus(); },400);
+
+  // Show back button on all steps except step 1
+  const backBtn = document.getElementById('onboardBackBtn');
+  if(backBtn) backBtn.style.display = step > 1 ? 'block' : 'none';
+  if(step===2) {
+    // Tailor welcome screen to situation
+    const sit = localStorage.getItem('homefrontSituation') || 'established';
+    const t = document.querySelector('#onboardStep2 .onboard-title');
+    const s = document.querySelector('#onboardStep2 .onboard-sub');
+    const b = document.getElementById('step2Btn');
+    if (sit === 'movein') {
+      if (t) t.innerHTML = 'Smart home care,<br>from day one.';
+      if (s) s.textContent = 'Homefront builds your full maintenance plan, flags what needs attention now, and gives you a 35-point move-in inspection checklist.';
+      if (b) b.textContent = 'Set up my home \u2192';
+    } else if (sit === 'selling') {
+      if (t) t.innerHTML = 'Build the record<br>buyers trust.';
+      if (s) s.textContent = 'Every maintenance task you log creates a permanent record. Documented maintenance adds real value at resale.';
+      if (b) b.textContent = 'Start my record \u2192';
+    }
+  }
+  if(step===6) { populateOnboardSummary(); populateOnboardDone(); }
+}
+
+function onboardNext(){ if(onboardCurrentStep<TOTAL_STEPS) onboardGoToStep(onboardCurrentStep+1); else onboardFinish(); }
+
+function onboardBack(){
+  if(onboardCurrentStep > 1) onboardGoToStep(onboardCurrentStep - 1);
+}
+
+function onboardSaveName() {
+  const inp=document.getElementById('onboardNameInput');
+  if(inp&&inp.value.trim()) localStorage.setItem(STORAGE_KEYS.userName,inp.value.trim());
+  updateGreeting(); onboardNext();
+}
+
+function onboardSaveProfile() {
+  const yearEl=document.getElementById('onboardYearBuilt');
+  const yearVal=yearEl?parseInt(yearEl.value):null;
+  const profile={
+    pets:document.getElementById('onboardPets').checked,
+    allergies:document.getElementById('onboardAllergies').checked,
+    hardWater:document.getElementById('onboardHardWater').checked,
+    smoker:document.getElementById('onboardSmoker').checked,
+    householdSize:Number(document.getElementById('onboardHouseholdSize').value),
+    yearBuilt:(yearVal>=1900&&yearVal<=2025)?yearVal:null
+  };
+  localStorage.setItem(STORAGE_KEYS.profile,JSON.stringify(profile));
+  localStorage.setItem('homefrontProfileSetupComplete','true');
+  onboardNext();
+}
+
+function onboardFinish() {
+  onboardMarkComplete();
+  document.getElementById('onboardOverlay').classList.add('hidden');
+  renderAll();
+}
+
+function showOnboarding() {
+  if(onboardIsComplete()) return;
+  applyDarkMode();
+  document.getElementById('onboardOverlay').classList.remove('hidden');
+  onboardGoToStep(1);
+}
+
+document.getElementById('onboardNameInput').addEventListener('keydown',function(e){ if(e.key==='Enter') onboardSaveName(); });
+
+/* ── Init ── */
+renderAll();
+setInterval(updateClockStatus,30000);
+showOnboarding();
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  });
+}
+</script>

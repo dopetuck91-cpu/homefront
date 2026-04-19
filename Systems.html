@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    /* ── Access guard — redirect to lock if not authenticated ── */
+    (function() {
+      if (sessionStorage.getItem('homefrontAccess') !== 'granted') {
+        location.replace('index.html');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#1F3D3A" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1A2826" media="(prefers-color-scheme: dark)" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Homefront" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <title>Homefront • Savings</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg1: #EDE6E1; --bg2: #E7DFD9;
+      --ink: #1F3D3A; --muted: #5A7D8C;
+      --accent: #E3B86C; --danger: #8A3E28;
+      --card-bg: rgba(255,255,255,0.84);
+      --card-border: rgba(255,255,255,0.72);
+      --card-shadow: rgba(31,61,58,0.06);
+      --nav-bg: rgba(255,255,255,0.82);
+      --nav-border: rgba(255,255,255,0.76);
+      --progress-track: #EEE8E4;
+      --input-bg: rgba(90,125,140,0.06);
+    }
+
+    [data-theme="dark"] {
+      --bg1: #1A2826; --bg2: #141F1E;
+      --ink: #E8F0EE; --muted: #A8C8D4;
+      --card-bg: rgba(255,255,255,0.06);
+      --card-border: rgba(255,255,255,0.08);
+      --card-shadow: rgba(0,0,0,0.28);
+      --nav-bg: rgba(20,31,30,0.95);
+      --nav-border: rgba(255,255,255,0.08);
+      --progress-track: rgba(255,255,255,0.08);
+      --input-bg: rgba(255,255,255,0.07);
+    }
+
+    /* ── Risk section ── */
+    .risk-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .risk-header h2 { font-size: 17px; font-weight: 800; color: var(--ink); margin: 0; }
+    .risk-header .risk-count {
+      background: #C44B28; color: #fff;
+      font-size: 11px; font-weight: 800;
+      padding: 3px 8px; border-radius: 99px;
+    }
+    .risk-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 16px;
+      box-shadow: 0 6px 18px var(--card-shadow);
+      margin-bottom: 10px;
+      border-left: 4px solid #C44B28;
+    }
+    .risk-card.medium { border-left-color: #C47A28; }
+    .risk-card.low    { border-left-color: #7A8A2A; }
+    .risk-card-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 10px; margin-bottom: 8px;
+    }
+    .risk-appliance { font-size: 14px; font-weight: 800; color: var(--ink); }
+    .risk-task      { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .risk-badge {
+      flex-shrink: 0; font-size: 11px; font-weight: 800;
+      padding: 4px 10px; border-radius: 99px; white-space: nowrap;
+    }
+    .risk-badge.high   { background: rgba(196,75,40,0.14); color: #8A3E28; }
+    .risk-badge.medium { background: rgba(196,122,40,0.14); color: #7A5A18; }
+    .risk-badge.low    { background: rgba(122,138,42,0.12); color: #4A5A10; }
+    .risk-consequence {
+      font-size: 13px; color: var(--ink); line-height: 1.5;
+      background: rgba(196,75,40,0.06); border-radius: 10px;
+      padding: 8px 12px; margin-bottom: 8px;
+    }
+    .risk-consequence.medium { background: rgba(196,122,40,0.07); }
+    .risk-consequence.low    { background: rgba(90,125,140,0.08); }
+    .risk-cost {
+      display: flex; justify-content: space-between;
+      align-items: center; font-size: 12px;
+    }
+    .risk-cost-label { color: var(--muted); }
+    .risk-cost-amount { font-weight: 800; color: #C44B28; font-size: 16px; }
+    .risk-cost-amount.medium { color: #C47A28; }
+    .risk-cost-amount.low    { color: #7A8A2A; }
+    .risk-fix-btn {
+      width: 100%; border: none; border-radius: 12px;
+      padding: 10px; font-family: inherit; font-size: 13px;
+      font-weight: 700; cursor: pointer; margin-top: 10px;
+      background: #2A524F; color: #E8F0EE;
+      transition: background 0.18s ease;
+    }
+    .risk-fix-btn:hover { background: #3A6E6A; }
+    .risk-all-clear {
+      background: rgba(42,122,74,0.10); border-radius: 20px;
+      padding: 20px; text-align: center; margin-bottom: 14px;
+    }
+    .risk-all-clear h3 { font-size: 16px; color: #2A7A4A; margin-bottom: 6px; }
+    .risk-all-clear p  { font-size: 13px; color: #4A8A6A; margin: 0; }
+
+    [data-theme="dark"] .risk-card        { background: rgba(255,255,255,0.05) !important; }
+    [data-theme="dark"] .risk-consequence { background: rgba(196,75,40,0.12) !important; }
+    [data-theme="dark"] .risk-consequence.medium { background: rgba(196,122,40,0.12) !important; }
+    [data-theme="dark"] .risk-consequence.low    { background: rgba(90,125,140,0.10) !important; }
+    [data-theme="dark"] .risk-all-clear { background: rgba(42,122,74,0.14) !important; }
+
+    /* Urgent at-risk total banner */
+    .at-risk-banner {
+      border-radius: 20px; padding: 18px 20px;
+      background: #1F1208; color: #fff;
+      margin-bottom: 14px; position: relative; overflow: hidden;
+    }
+    [data-theme="dark"] .at-risk-banner { background: #2A1A0A !important; }
+    .at-risk-banner::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(196,75,40,0.6), rgba(196,122,40,0.3));
+    }
+    .at-risk-inner { position: relative; z-index: 1; }
+    .at-risk-label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; margin-bottom: 4px; }
+    .at-risk-amount { font-size: 36px; font-weight: 900; letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
+    .at-risk-sub { font-size: 13px; opacity: 0.85; line-height: 1.4; }
+
+    [data-theme="dark"] body {
+      background:
+        radial-gradient(circle at top, rgba(227,184,108,0.07), transparent 28%),
+        linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%) !important;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(227,184,108,0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--ink);
+      min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-shell {
+      max-width: 460px;
+      margin: 0 auto;
+      padding: 14px 20px 110px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      position: sticky; top: 0; z-index: 20;
+      padding: 10px 0 12px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .back-btn {
+      width: 42px; height: 42px; border: none;
+      border-radius: 14px; background: rgba(255,255,255,0.5);
+      color: var(--ink); font-size: 18px; cursor: pointer;
+      box-shadow: 0 6px 14px rgba(31,61,58,0.08);
+      transition: transform 0.18s ease;
+    }
+    .back-btn:hover { transform: translateY(-1px); }
+
+    [data-theme="dark"] .back-btn {
+      background: rgba(255,255,255,0.08) !important;
+    }
+
+    .app-status {
+      font-size: 12px; font-weight: 700; color: var(--muted);
+      margin: 2px 0 10px;
+      display: flex; justify-content: space-between;
+    }
+
+    .eyebrow {
+      font-size: 12px; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted);
+      margin-bottom: 6px; font-weight: 700;
+    }
+
+    .page-title { margin: 0; font-size: 28px; line-height: 1.1; color: var(--ink); }
+    .page-sub   { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    /* ── Hero stats ── */
+    .stats-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 18px 16px;
+      box-shadow: 0 10px 20px var(--card-shadow);
+      text-align: center;
+    }
+
+    .stat-card.wide {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .stat-value {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-value.green  { color: #2A7A4A; }
+    .stat-value.amber  { color: #8A6010; }
+
+    [data-theme="dark"] .stat-value.green { color: #6FC98A !important; }
+    [data-theme="dark"] .stat-value.amber { color: #E3B86C !important; }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    /* ── Section ── */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 24px 0 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 10px 20px var(--card-shadow);
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 15px; font-weight: 700;
+      color: var(--ink); margin: 0 0 4px;
+    }
+
+    .card-sub {
+      font-size: 13px; color: var(--muted);
+      margin: 0 0 12px; line-height: 1.45;
+    }
+
+    /* ── Savings breakdown rows ── */
+    .breakdown-list { display: grid; gap: 10px; }
+
+    .breakdown-item {
+      background: rgba(90,125,140,0.08);
+      border-radius: 16px;
+      padding: 12px 14px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: start;
+    }
+
+    [data-theme="dark"] .breakdown-item {
+      background: rgba(255,255,255,0.06) !important;
+    }
+
+    .breakdown-task { font-size: 14px; font-weight: 600; color: var(--ink); margin: 0 0 2px; }
+    .breakdown-appliance { font-size: 12px; color: var(--muted); margin: 0; }
+
+    .breakdown-amounts { text-align: right; }
+    .breakdown-saved {
+      font-size: 13px; font-weight: 700;
+      color: #2A7A4A; white-space: nowrap;
+    }
+    [data-theme="dark"] .breakdown-saved { color: #6FC98A !important; }
+
+    .breakdown-spent {
+      font-size: 12px; color: var(--muted); white-space: nowrap;
+    }
+
+    /* ── Custom savings editor ── */
+    .savings-edit-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 10px 20px var(--card-shadow);
+      margin-bottom: 12px;
+    }
+
+    .savings-edit-section h3 {
+      margin: 0 0 4px; font-size: 15px; color: var(--ink);
+    }
+
+    .savings-edit-section p {
+      margin: 0 0 14px; font-size: 13px; color: var(--muted); line-height: 1.45;
+    }
+
+    .savings-edit-list { display: grid; gap: 8px; }
+
+    .savings-edit-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: rgba(90,125,140,0.08);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    [data-theme="dark"] .savings-edit-row {
+      background: rgba(255,255,255,0.06) !important;
+    }
+
+    .savings-edit-label {
+      font-size: 13px; font-weight: 600; color: var(--ink);
+      display: block; margin-bottom: 2px;
+    }
+
+    .savings-edit-hint {
+      font-size: 11px; color: var(--muted);
+    }
+
+    .savings-edit-input {
+      width: 80px;
+      border: 1px solid rgba(90,125,140,0.18);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit; font-size: 14px; font-weight: 700;
+      background: var(--input-bg);
+      color: var(--ink); outline: none;
+      text-align: right;
+    }
+
+    .savings-edit-input:focus {
+      border-color: rgba(31,61,58,0.35);
+      box-shadow: 0 0 0 3px rgba(227,184,108,0.14);
+    }
+
+    [data-theme="dark"] .savings-edit-input {
+      background: rgba(255,255,255,0.07) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: #E8F0EE !important;
+    }
+
+    .save-estimates-btn {
+      width: 100%; border: none;
+      border-radius: 14px; padding: 13px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; margin-top: 12px;
+      background: var(--ink); color: #fff;
+      box-shadow: 0 8px 16px rgba(31,61,58,0.10);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .save-estimates-btn:hover { transform: translateY(-1px); background: #28524F; }
+
+    /* ── Missing cost entry ── */
+    .missing-cost-list { display: grid; gap: 8px; }
+
+    .missing-cost-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: rgba(90,125,140,0.08);
+      border-radius: 14px;
+      padding: 10px 12px;
+    }
+
+    [data-theme="dark"] .missing-cost-item {
+      background: rgba(255,255,255,0.06) !important;
+    }
+
+    .missing-cost-input {
+      width: 80px;
+      border: 1px solid rgba(90,125,140,0.18);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font: inherit; font-size: 14px; font-weight: 700;
+      background: var(--input-bg);
+      color: var(--ink); outline: none;
+      text-align: right;
+    }
+
+    .missing-cost-input:focus {
+      border-color: rgba(31,61,58,0.35);
+      box-shadow: 0 0 0 3px rgba(227,184,108,0.14);
+    }
+
+    [data-theme="dark"] .missing-cost-input {
+      background: rgba(255,255,255,0.07) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: #E8F0EE !important;
+    }
+
+    .save-costs-btn {
+      width: 100%; border: none;
+      border-radius: 14px; padding: 13px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; margin-top: 12px;
+      background: rgba(90,125,140,0.14); color: var(--ink);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .save-costs-btn:hover { transform: translateY(-1px); background: rgba(90,125,140,0.22); }
+
+    /* ── Bottom nav ── */
+    .bottom-nav {
+      position: fixed; left: 50%; bottom: 18px;
+      transform: translateX(-50%);
+      width: min(420px, calc(100% - 24px));
+      background: var(--nav-bg);
+      border: 1px solid var(--nav-border);
+      box-shadow: 0 16px 30px var(--card-shadow);
+      border-radius: 24px;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      padding: 10px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-item {
+      text-align: center; color: var(--muted);
+      font-size: 11px; font-weight: 600;
+      padding: 8px 4px; border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
+    .nav-item.active { background: rgba(31,61,58,0.08); color: var(--ink); }
+    .nav-item:hover  { transform: translateY(-1px); }
+
+    [data-theme="dark"] .nav-item.active {
+      background: rgba(255,255,255,0.08) !important;
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; left: 50%; bottom: 104px;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--ink); color: #fff;
+      padding: 12px 16px; border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(31,61,58,0.18);
+      font-size: 13px; font-weight: 600;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 60; white-space: nowrap;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    .empty-state {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 22px; padding: 20px;
+      box-shadow: 0 10px 20px var(--card-shadow);
+      text-align: center;
+    }
+    .empty-state h3 { margin: 0 0 8px; font-size: 16px; color: var(--ink); }
+    .empty-state p  { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+    @media (max-width: 380px) {
+      .stats-hero { grid-template-columns: 1fr; }
+      .stat-card.wide { flex-direction: column; gap: 16px; }
+    }
+
+  /* ── Dark mode button + toast fixes ── */
+  [data-theme="dark"] .action-btn.primary,
+  [data-theme="dark"] .add-appliance-btn,
+  [data-theme="dark"] .save-appliance-btn,
+  [data-theme="dark"] .save-btn.primary,
+  [data-theme="dark"] .save-reminder-btn,
+  [data-theme="dark"] .save-estimates-btn,
+  [data-theme="dark"] .save-costs-btn,
+  [data-theme="dark"] .save-interval-btn,
+  [data-theme="dark"] .onboard-btn.primary,
+  [data-theme="dark"] .export-btn.primary,
+  [data-theme="dark"] .view-guide-btn,
+  [data-theme="dark"] #saveApplianceBtn,
+  [data-theme="dark"] #confirmLogBtn,
+  [data-theme="dark"] #confirmDeleteBtn,
+  [data-theme="dark"] #saveNewTaskBtn,
+  [data-theme="dark"] #taskManagerDoneBtn,
+  [data-theme="dark"] #saveWarrantyBtn,
+  [data-theme="dark"] #taskDetailCompleteBtn,
+  [data-theme="dark"] #saveIntervalBtn {
+    background: #2A524F !important;
+    color: #E8F0EE !important;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.32) !important;
+  }
+
+  [data-theme="dark"] .action-btn.primary:hover,
+  [data-theme="dark"] .add-appliance-btn:hover,
+  [data-theme="dark"] .save-btn.primary:hover,
+  [data-theme="dark"] .save-reminder-btn:hover,
+  [data-theme="dark"] .save-estimates-btn:hover,
+  [data-theme="dark"] .onboard-btn.primary:hover,
+  [data-theme="dark"] .export-btn.primary:hover {
+    background: #3A6E6A !important;
+  }
+
+  /* Toast — was using var(--ink) which goes white in dark mode */
+  [data-theme="dark"] .toast {
+    background: #2A524F !important;
+    color: #E8F0EE !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.40) !important;
+  }
+
+  /* Carousel arrows */
+  [data-theme="dark"] .carousel-arrow {
+    background: rgba(255,255,255,0.08) !important;
+    color: #E8F0EE !important;
+  }
+
+  /* Archive toggle */
+  [data-theme="dark"] .archive-toggle {
+    background: rgba(255,255,255,0.08) !important;
+    color: #E8F0EE !important;
+  }
+
+
+  /* Force select dropdowns dark — prevents white popup in dark mode */
+  [data-theme="dark"] select {
+    background: #1A2826 !important;
+    color: #E8F0EE !important;
+    color-scheme: dark;
+  }
+  [data-theme="dark"] select option {
+    background: #1A2826 !important;
+    color: #E8F0EE !important;
+  }
+  [data-theme="dark"] select optgroup {
+    background: #141F1E !important;
+    color: #A8C8D4 !important;
+  }
+
+  </style>
+  <script>
+    /* ── Dark mode — apply before paint to prevent flash ── */
+    (function() {
+      try {
+        var s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
+        if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+<div class="app-shell">
+
+  <div class="top-bar">
+    <button class="back-btn" onclick="goBack()">←</button>
+  </div>
+
+  <div class="app-status"><span id="pageClock">9:41</span><span>• Connected</span></div>
+
+  <div class="eyebrow">Money & Risk</div>
+  <h1 class="page-title">The real cost of your home</h1>
+  <p class="page-sub">What you've spent. What you've protected. And what could go wrong if you stop.</p>
+
+  <!-- Hero stats -->
+  <div class="stats-hero" id="statsHero"></div>
+
+  <!-- Risk section -->
+  <div id="riskSection"></div>
+
+  <!-- Breakdown by task -->
+  <div class="section-head" style="margin-top:28px;">
+    <h2 class="section-title">Savings breakdown</h2>
+  </div>
+  <p class="section-sub" style="margin:-8px 0 12px;">Each completed task with its logged cost and estimated repair avoided.</p>
+  <div id="breakdownList"></div>
+
+  <!-- Missing costs entry -->
+  <div class="section-head">
+    <div>
+      <h2 class="section-title">Fill in missing costs</h2>
+      <p class="section-sub">Completions without a logged cost — add them to get a full picture.</p>
+    </div>
+  </div>
+  <div id="missingCostSection"></div>
+
+  <!-- Customise savings estimates -->
+  <div class="section-head">
+    <h2 class="section-title">Customise estimates</h2>
+  </div>
+  <div class="savings-edit-section">
+    <h3>Estimated repair costs avoided</h3>
+    <p>Preset values based on industry averages. Adjust to match your area or appliance age.</p>
+    <div class="savings-edit-list" id="savingsEditList"></div>
+    <button class="save-estimates-btn" onclick="saveCustomEstimates()">Save estimates</button>
+  </div>
+
+</div>
+
+<nav class="bottom-nav">
+  <div class="nav-item" onclick="location.href='home.html'"><i class="ph ph-house"></i>Home</div>
+  <div class="nav-item" onclick="location.href='appliances.html'"><i class="ph ph-wrench"></i>Appliances</div>
+  <div class="nav-item" onclick="location.href='systems.html'"><i class="ph ph-buildings"></i>Systems</div>
+  <div class="nav-item active" onclick="location.href='settings.html'"><i class="ph ph-gear"></i>Settings</div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Dark mode ── */
+function applyDarkMode() {
+  try {
+    const s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
+    if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme', 'dark');
+    else document.documentElement.removeAttribute('data-theme');
+  } catch(e) {}
+}
+applyDarkMode();
+window.addEventListener('storage', function(e) {
+  if (e.key === 'homefrontSettings') applyDarkMode();
+});
+
+/* ── Storage ── */
+const STORAGE_KEYS = {
+  appliances:       'homefrontAppliances',
+  customEstimates:  'homefrontCustomEstimates',
+  missingCosts:     'homefrontMissingCosts'
+};
+
+function getUserAppliances() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.appliances) || '[]'); }
+  catch { return []; }
+}
+
+function getCustomEstimates() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.customEstimates) || '{}'); }
+  catch { return {}; }
+}
+
+function getMissingCosts() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.missingCosts) || '{}'); }
+  catch { return {}; }
+}
+
+/* ── Preset savings estimates per task key ── */
+// Based on real-world average repair/replacement costs when maintenance is skipped
+const PRESET_SAVINGS = {
+  fridge_filter:  { label: 'Fridge water filter',         estimate: 150,  reason: 'Water/ice system repair avg. $100–200' },
+  fridge_coils:   { label: 'Fridge condenser coils',      estimate: 300,  reason: 'Compressor repair avg. $200–400' },
+  fridge_gasket:  { label: 'Fridge door seals',           estimate: 80,   reason: 'Gasket replacement avg. $50–100' },
+  dish_filter:    { label: 'Dishwasher filter',           estimate: 150,  reason: 'Pump repair avg. $150–200' },
+  dish_descale:   { label: 'Dishwasher descale',          estimate: 80,   reason: 'Spray arm replacement avg. $40–80' },
+  dish_seals:     { label: 'Dishwasher seals',            estimate: 250,  reason: 'Water leak + cabinet damage avg. $200–400' },
+  washer_clean:   { label: 'Washer tub clean',            estimate: 100,  reason: 'Mold remediation avg. $75–150' },
+  washer_hoses:   { label: 'Washer hose inspection',      estimate: 1500, reason: 'Burst hose flood damage avg. $1,000–3,000' },
+  washer_inlet:   { label: 'Washer inlet screens',        estimate: 120,  reason: 'Inlet valve replacement avg. $80–150' },
+  dryer_lint:     { label: 'Dryer lint trap',             estimate: 400,  reason: 'Heating element repair avg. $200–400' },
+  dryer_vent:     { label: 'Dryer vent line',             estimate: 600,  reason: 'Motor burnout + fire risk avg. $300–500+' },
+  dryer_seals:    { label: 'Dryer drum seals',            estimate: 200,  reason: 'Seal + bearing repair avg. $150–250' },
+  hvac_filter:    { label: 'HVAC air filter',             estimate: 500,  reason: 'Blower motor + coil freeze avg. $400–600' },
+  hvac_service:   { label: 'HVAC seasonal service',       estimate: 800,  reason: 'Compressor failure avg. $1,200–2,000 (conservative est.)' },
+  hvac_vents:     { label: 'HVAC vents check',            estimate: 100,  reason: 'Efficiency loss and system imbalance' },
+  wh_flush:       { label: 'Water heater flush',          estimate: 400,  reason: 'Element failure avg. $200–400' },
+  wh_valve:       { label: 'Pressure relief valve',       estimate: 800,  reason: 'Tank replacement avg. $800–1,500 (conservative est.)' },
+  wh_leaks:       { label: 'Water heater leak check',     estimate: 2000, reason: 'Water damage remediation avg. $1,500–3,000' },
+  generic_clean:  { label: 'General cleaning',            estimate: 100,  reason: 'Preventing buildup and early wear' },
+  generic_inspect:{ label: 'General inspection',          estimate: 150,  reason: 'Catching problems early' }
+};
+
+/* ── Build flat history rows ── */
+function buildAllHistory() {
+  const appliances = getUserAppliances();
+  const rows = [];
+
+  appliances.forEach(function(appliance) {
+    (appliance.tasks || []).forEach(function(task) {
+      (task.history || []).forEach(function(entry, entryIdx) {
+        rows.push({
+          applianceId:   appliance.id,
+          applianceName: appliance.name,
+          applianceType: appliance.type,
+          taskId:        task.id,
+          taskKey:       task.key || null,
+          taskTitle:     task.title,
+          taskCategory:  task.category || 'maintenance',
+          completedAt:   entry.completedAt || '',
+          cost:          entry.cost != null ? Number(entry.cost) : null,
+          entryIdx:      entryIdx
+        });
+      });
+    });
+  });
+
+  rows.sort(function(a,b) { return (b.completedAt||'').localeCompare(a.completedAt||''); });
+  return rows;
+}
+
+/* ── Get effective estimate for a task ── */
+function getEstimate(taskKey) {
+  const custom = getCustomEstimates();
+  if (taskKey && custom[taskKey] != null) return Number(custom[taskKey]);
+  if (taskKey && PRESET_SAVINGS[taskKey]) return PRESET_SAVINGS[taskKey].estimate;
+  return 0;
+}
+
+/* ── Format currency ── */
+function fmt(n) {
+  if (n == null || isNaN(n)) return '—';
+  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+}
+
+/* ── Render hero stats ── */
+function renderStats(rows) {
+  const missing = getMissingCosts();
+
+  const totalSpent = rows.reduce(function(s, r) {
+    const cost = r.cost != null ? r.cost : (missing[r.taskId + '_' + r.entryIdx] != null ? Number(missing[r.taskId + '_' + r.entryIdx]) : null);
+    return s + (cost || 0);
+  }, 0);
+
+  const totalSaved = rows.reduce(function(s, r) {
+    return s + getEstimate(r.taskKey);
+  }, 0);
+
+  const tasksLogged = rows.length;
+  const roi = totalSpent > 0 ? Math.round((totalSaved - totalSpent) / totalSpent * 100) : null;
+  const multiplier = totalSpent > 0 ? (totalSaved / totalSpent).toFixed(1) : null;
+
+  // Protection ratio message
+  let protectionMsg = '';
+  if (multiplier && parseFloat(multiplier) >= 2) {
+    protectionMsg = `<div style="background:rgba(42,122,74,0.12);border-radius:14px;padding:12px 16px;margin-top:12px;font-size:13px;line-height:1.5;color:#1A4A2A;">
+      <strong>Every $1 you spent on maintenance protected $${multiplier} in potential repairs.</strong>
+      That ratio keeps growing the longer you stay on top of it.
+    </div>`;
+  } else if (!rows.length) {
+    protectionMsg = `<div style="background:rgba(196,75,40,0.08);border:1px solid rgba(196,75,40,0.2);border-radius:14px;padding:12px 16px;margin-top:0;font-size:13px;line-height:1.5;color:#8A3E28;">
+      <strong>You have not logged any maintenance yet.</strong>
+      Homeowners who skip regular maintenance spend an average of 3-5x more on emergency repairs than those who stay on top of it.
+    </div>`;
+  }
+
+  document.getElementById('statsHero').innerHTML = (rows.length ? `
+    <div class="stat-card">
+      <div class="stat-value amber">${fmt(totalSpent)}</div>
+      <div class="stat-label">Spent on maintenance</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value green">${fmt(totalSaved)}</div>
+      <div class="stat-label">Potential repairs prevented</div>
+    </div>
+    <div class="stat-card wide">
+      <div>
+        <div class="stat-value">${tasksLogged}</div>
+        <div class="stat-label">Tasks completed</div>
+      </div>
+      <div>
+        <div class="stat-value green">${fmt(totalSaved - totalSpent)}</div>
+        <div class="stat-label">Net protection</div>
+      </div>
+      ${roi != null ? `<div>
+        <div class="stat-value green">${roi}%</div>
+        <div class="stat-label">Return on maintenance</div>
+      </div>` : ''}
+    </div>` : '') + protectionMsg;
+}
+
+/* ── Render breakdown list ── */
+function renderBreakdown(rows) {
+  const container = document.getElementById('breakdownList');
+  const missing   = getMissingCosts();
+
+  if (!rows.length) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <h3>Nothing tracked yet</h3>
+        <p>Start logging your maintenance and this page builds your home's financial record — what you spent, what you prevented, and what you're currently risking. Homeowners who track nothing average $3,200 more in unexpected repairs per year.</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `<div class="breakdown-list">` +
+    rows.map(function(r) {
+      const cost = r.cost != null
+        ? r.cost
+        : (missing[r.taskId + '_' + r.entryIdx] != null ? Number(missing[r.taskId + '_' + r.entryIdx]) : null);
+      const estimate = getEstimate(r.taskKey);
+      const dateStr  = r.completedAt
+        ? new Date(r.completedAt + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+        : '';
+
+      return `
+        <div class="breakdown-item">
+          <div>
+            <p class="breakdown-task">${escHtml(r.taskTitle)}</p>
+            <p class="breakdown-appliance">${escHtml(r.applianceName)} • ${dateStr}</p>
+          </div>
+          <div class="breakdown-amounts">
+            ${estimate > 0 ? `<div class="breakdown-saved">~${fmt(estimate)} saved</div>` : ''}
+            <div class="breakdown-spent">${cost != null ? fmt(cost) + ' spent' : 'Cost not logged'}</div>
+          </div>
+        </div>
+      `;
+    }).join('') + `</div>`;
+}
+
+/* ── Render missing cost entry ── */
+function renderMissingCosts(rows) {
+  const container = document.getElementById('missingCostSection');
+  const missing   = getMissingCosts();
+
+  const noLog = rows.filter(function(r) {
+    return r.cost == null && missing[r.taskId + '_' + r.entryIdx] == null;
+  });
+
+  if (!noLog.length) {
+    container.innerHTML = `
+      <div class="card">
+        <p style="margin:0; font-size:13px; color:var(--muted);">✓ All completions have a cost logged. Great record keeping!</p>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = `
+    <div class="card">
+      <h3 class="card-title">Missing costs</h3>
+      <p class="card-sub">${noLog.length} completion${noLog.length === 1 ? '' : 's'} without a cost. Enter what you spent to get accurate totals.</p>
+      <div class="missing-cost-list">
+        ${noLog.map(function(r) {
+          const key = r.taskId + '_' + r.entryIdx;
+          const dateStr = r.completedAt
+            ? new Date(r.completedAt + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+            : '';
+          return `
+            <div class="missing-cost-item">
+              <div>
+                <span style="font-size:13px; font-weight:600; color:var(--ink); display:block; margin-bottom:2px;">${escHtml(r.taskTitle)}</span>
+                <span style="font-size:11px; color:var(--muted);">${escHtml(r.applianceName)} • ${dateStr}</span>
+              </div>
+              <input class="missing-cost-input" type="number" min="0" step="0.01"
+                     placeholder="$0" data-key="${key}"
+                     value="${missing[key] != null ? missing[key] : ''}" />
+            </div>
+          `;
+        }).join('')}
+      </div>
+      <button class="save-costs-btn" onclick="saveMissingCosts()">Save costs</button>
+    </div>`;
+}
+
+function saveMissingCosts() {
+  const missing = getMissingCosts();
+  document.querySelectorAll('.missing-cost-input').forEach(function(input) {
+    const key = input.dataset.key;
+    const val = input.value.trim();
+    if (val !== '' && !isNaN(Number(val))) {
+      missing[key] = Number(val);
+    }
+  });
+  localStorage.setItem(STORAGE_KEYS.missingCosts, JSON.stringify(missing));
+  showToast('Costs saved ✓');
+  renderAll();
+}
+
+/* ── Render custom estimates editor ── */
+function renderEstimatesEditor() {
+  const custom = getCustomEstimates();
+  const list   = document.getElementById('savingsEditList');
+
+  list.innerHTML = Object.entries(PRESET_SAVINGS).map(function(entry) {
+    const key  = entry[0];
+    const data = entry[1];
+    const val  = custom[key] != null ? custom[key] : data.estimate;
+
+    return `
+      <div class="savings-edit-row">
+        <div>
+          <span class="savings-edit-label">${escHtml(data.label)}</span>
+          <span class="savings-edit-hint">${escHtml(data.reason)}</span>
+        </div>
+        <input class="savings-edit-input" type="number" min="0" step="1"
+               value="${val}" data-key="${key}" />
+      </div>
+    `;
+  }).join('');
+}
+
+function saveCustomEstimates() {
+  const custom = {};
+  document.querySelectorAll('.savings-edit-input').forEach(function(input) {
+    const val = Number(input.value);
+    if (!isNaN(val) && val >= 0) {
+      custom[input.dataset.key] = val;
+    }
+  });
+  localStorage.setItem(STORAGE_KEYS.customEstimates, JSON.stringify(custom));
+  showToast('Estimates saved ✓');
+  renderAll();
+}
+
+/* ── Helpers ── */
+function escHtml(v) {
+  return String(v ?? '')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2400);
+}
+
+function updateClock() {
+  const el = document.getElementById('pageClock');
+  if (el) el.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+}
+
+function goBack() {
+  if (document.referrer) { history.back(); } else { location.href = 'home.html'; }
+}
+
+/* ── Main render ── */
+/* ── Risk consequence data ── */
+const RISK_DATA = {
+  // Key: task key → { level, consequence, avgRepair, urgency }
+  washer_hoses:   { level:'high',   consequence: 'A burst washing machine hose is one of the most common causes of catastrophic home flooding. Water pours at full mains pressure — typically 50+ gallons before anyone notices.', avgRepair: 3500,  urgency: 'Can happen without warning. Hoses over 5 years old should be replaced now.' },
+  wh_leaks:       { level:'high',   consequence: 'A failing water heater can crack, corrode, or burst — releasing 40-80 gallons of water into your home instantly. Drywall, flooring, and structural damage follows.', avgRepair: 4500,  urgency: 'Units over 10 years old are in the danger zone. No warning signs required.' },
+  dryer_vent:     { level:'high',   consequence: 'Clogged dryer vents are the #1 cause of home appliance fires in the US — 15,000+ per year. Lint is highly flammable and accumulates invisibly inside the duct.', avgRepair: 8000,  urgency: 'Fire risk increases with every load. No smoke alarm will help if it starts in the wall.' },
+  hvac_service:   { level:'high',   consequence: 'A skipped annual service leaves refrigerant leaks, cracked heat exchangers, and failing capacitors undetected. Compressor failure means full system replacement.', avgRepair: 5500,  urgency: 'One missed season can turn a $150 repair into a $6,000 replacement.' },
+  wh_valve:       { level:'high',   consequence: 'The pressure relief valve is the only safety device preventing your water heater from building dangerous pressure. A failed valve can cause tank rupture.', avgRepair: 1500,  urgency: 'If this valve has never been tested, it may be seized. Test it now.' },
+  hvac_filter:    { level:'medium', consequence: 'A completely blocked filter causes the evaporator coil to freeze solid, restricting all airflow. The blower motor then overheats trying to push air through — burning out the motor.', avgRepair: 800,   urgency: 'Happens within weeks of a completely blocked filter in summer.' },
+  dish_seals:     { level:'medium', consequence: 'Failed door gaskets allow water to escape under the dishwasher on every cycle — invisibly rotting the cabinet floor and subfloor underneath.', avgRepair: 900,   urgency: 'Silent damage. By the time you see it, the floor may already need replacing.' },
+  dryer_lint:     { level:'medium', consequence: 'A clogged lint trap makes the dryer overheat, burning out the heating element and thermostats. More critically, it increases fire risk in the drum itself.', avgRepair: 350,   urgency: 'Should be cleared after every load. If you have not in months, do it today.' },
+  fridge_coils:   { level:'medium', consequence: 'Dust-covered condenser coils cannot release heat — the compressor runs constantly trying to compensate. Compressors that run hot fail early and cost more to replace than the fridge.', avgRepair: 700,   urgency: 'Most people never clean these. Your fridge lifespan depends on it.' },
+  washer_clean:   { level:'medium', consequence: 'Mold and bacteria grow in the drum seal and tub — getting on your clothes with every wash. Severe mold infestations require professional remediation.', avgRepair: 400,   urgency: 'Front-loaders are especially prone. If it smells musty, the mold is already there.' },
+  wh_flush:       { level:'medium', consequence: 'Sediment builds up in the tank insulating the heating element from water. The element has to work harder, consumes more energy, and eventually burns out.', avgRepair: 600,   urgency: 'Hard water areas can accumulate inches of sediment in just a few years.' },
+  fridge_filter:  { level:'low',    consequence: 'An expired water filter stops removing contaminants and can actually release trapped bacteria back into your water. Ice and water quality degrades significantly.', avgRepair: 200,   urgency: 'Easy fix — but most people forget until they notice the taste.' },
+  dish_filter:    { level:'low',    consequence: 'A clogged filter recirculates dirty water over your dishes, leaving residue and breeding bacteria. The pump works harder and wears out faster.', avgRepair: 250,   urgency: 'Monthly clean takes 2 minutes. Ignoring it for a year risks the pump.' },
+  generic_inspect:{ level:'low',    consequence: 'Small problems caught early are cheap. The same problem found 6 months later — after a freeze, a leak, or another season of wear — is almost always 5-10x more expensive.', avgRepair: 400, urgency: 'Inspection is free. Finding nothing is still worth it.' },
+};
+
+function getOverdueRiskTasks() {
+  const appliances = getUserAppliances();
+  const today = new Date().toISOString().split('T')[0];
+  const risks = [];
+
+  appliances.forEach(function(appliance) {
+    (appliance.tasks || []).forEach(function(task) {
+      if (!task.nextDueDate) return;
+      const daysOverdue = Math.round((new Date(today) - new Date(task.nextDueDate)) / (1000*60*60*24));
+      if (daysOverdue < -7) return; // only show tasks due within a week or already overdue
+      const riskInfo = RISK_DATA[task.key];
+      if (!riskInfo) return;
+      risks.push({
+        appliance: appliance.name,
+        applianceId: appliance.id,
+        task: task.title,
+        taskKey: task.key,
+        daysOverdue,
+        riskInfo
+      });
+    });
+  });
+
+  // Sort: high risk first, then by days overdue
+  const levelOrder = { high: 0, medium: 1, low: 2 };
+  risks.sort(function(a, b) {
+    const lvlDiff = levelOrder[a.riskInfo.level] - levelOrder[b.riskInfo.level];
+    return lvlDiff !== 0 ? lvlDiff : b.daysOverdue - a.daysOverdue;
+  });
+
+  return risks;
+}
+
+function renderRiskSection() {
+  const container = document.getElementById('riskSection');
+  if (!container) return;
+
+  const risks = getOverdueRiskTasks();
+  const allAppliances = getUserAppliances();
+
+  if (!allAppliances.length) {
+    container.innerHTML = '';
+    return;
+  }
+
+  // Calculate total at-risk dollars from high+medium overdue tasks
+  const atRisk = risks
+    .filter(function(r) { return r.daysOverdue >= 0 && (r.riskInfo.level === 'high' || r.riskInfo.level === 'medium'); })
+    .reduce(function(sum, r) { return sum + r.riskInfo.avgRepair; }, 0);
+
+  const highCount = risks.filter(function(r) { return r.riskInfo.level === 'high' && r.daysOverdue >= 0; }).length;
+
+  let html = '';
+
+  // At-risk banner — only show if real overdue risks exist
+  if (atRisk > 0) {
+    const overdueCount = risks.filter(function(r){return r.daysOverdue>=0;}).length;
+    const highRisks = risks.filter(function(r){return r.riskInfo.level==='high' && r.daysOverdue>=0;});
+    html += `
+      <div class="at-risk-banner">
+        <div class="at-risk-inner">
+          <div class="at-risk-label">&#9888; POTENTIAL COST OF INACTION</div>
+          <div class="at-risk-amount">$${atRisk.toLocaleString('en-US')}</div>
+          <div class="at-risk-sub" style="margin-bottom:10px;">${overdueCount} overdue task${overdueCount===1?'':'s'} currently putting your home at risk. These are real average repair costs — not estimates.</div>
+          ${highRisks.length > 0 ? `<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:8px 12px;font-size:12px;line-height:1.5;">
+            <strong>&#128293; ${highRisks.length} HIGH RISK:</strong> ${highRisks.map(function(r){return r.appliance+' &mdash; '+r.task;}).join(' &bull; ')}
+          </div>` : ''}
+        </div>
+      </div>`;
+  } else if (allAppliances.length > 0) {
+    // Show what they WOULD be at risk for if they stop — proactive warning
+    const wouldBeAtRisk = Object.values(RISK_DATA)
+      .filter(function(r){return r.level==='high';})
+      .reduce(function(s,r){return s+r.avgRepair;},0);
+    html += `
+      <div style="background:rgba(196,75,40,0.06);border:1px solid rgba(196,75,40,0.18);border-radius:20px;padding:16px 20px;margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#8A3E28;margin-bottom:6px;">What stops protecting you if you stop</div>
+        <div style="font-size:28px;font-weight:900;color:#C44B28;letter-spacing:-1px;margin-bottom:6px;">$${wouldBeAtRisk.toLocaleString('en-US')}+</div>
+        <div style="font-size:13px;color:#8A3E28;line-height:1.5;">in high-risk repairs that regular maintenance is actively preventing. Homeowners who stop tracking for 6+ months report emergency repair bills averaging $2,800.</div>
+      </div>`;
+  }
+
+  const overdueNow = risks.filter(function(r){return r.daysOverdue>=0;}).length;
+  html += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+    <h2 style="font-size:17px;font-weight:800;color:var(--ink);margin:0;">Risk monitor</h2>
+    ${overdueNow > 0 
+      ? '<span style="background:#C44B28;color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;">' + overdueNow + ' overdue</span>'
+      : '<span style="background:rgba(42,122,74,0.14);color:#2A7A4A;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;">&#10003; Protected</span>'}
+  </div>`;
+
+  if (!risks.length) {
+    html += `<div class="risk-all-clear">
+      <h3>&#10003; All high-risk tasks are current</h3>
+      <p>Your home is protected right now. The moment any of these tasks go overdue, they will appear here with real repair cost consequences.</p>
+    </div>
+    <div style="background:rgba(90,125,140,0.06);border-radius:16px;padding:14px 16px;font-size:13px;color:var(--muted);line-height:1.6;">
+      <strong style="color:var(--ink);display:block;margin-bottom:6px;">Stay protected by staying current.</strong>
+      The homeowners who end up with $5,000+ emergency repair bills aren't unlucky — they're the ones who thought "I'll do it next month" for 18 months in a row.
+    </div>`;
+  } else {
+    html += risks.map(function(r) {
+      const lvl = r.riskInfo.level;
+      const overdueTxt = r.daysOverdue > 0
+        ? r.daysOverdue + ' day' + (r.daysOverdue === 1 ? '' : 's') + ' overdue'
+        : r.daysOverdue === 0 ? 'Due today' : 'Due in ' + Math.abs(r.daysOverdue) + ' day' + (Math.abs(r.daysOverdue) === 1 ? '' : 's');
+      const badgeLabel = lvl === 'high' ? 'High risk' : lvl === 'medium' ? 'Medium risk' : 'Low risk';
+
+      return `<div class="risk-card ${lvl === 'medium' ? 'medium' : lvl === 'low' ? 'low' : ''}">
+        <div class="risk-card-top">
+          <div>
+            <div class="risk-appliance">${escapeHtml(r.appliance)}</div>
+            <div class="risk-task">${escapeHtml(r.task)} &middot; ${overdueTxt}</div>
+          </div>
+          <span class="risk-badge ${lvl}">${badgeLabel}</span>
+        </div>
+        <div class="risk-consequence ${lvl === 'medium' ? 'medium' : lvl === 'low' ? 'low' : ''}">
+          <strong>${lvl === 'high' ? '&#128293; If skipped:' : lvl === 'medium' ? '&#9888; If skipped:' : 'If skipped:'}</strong> ${r.riskInfo.consequence}
+        </div>
+        <div style="font-size:12px;font-weight:700;color:${lvl==='high'?'#8A3E28':lvl==='medium'?'#7A5A18':'var(--muted)'};line-height:1.4;margin-bottom:10px;padding:4px 0;">
+          ${r.riskInfo.urgency}
+        </div>
+        <div class="risk-cost" style="background:rgba(196,75,40,0.06);border-radius:10px;padding:10px 12px;">
+          <div>
+            <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Avg repair cost if this fails</div>
+            <div class="risk-cost-amount ${lvl}" style="font-size:22px;margin-top:2px;">$${r.riskInfo.avgRepair.toLocaleString('en-US')}</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">vs cost to prevent</div>
+            <div style="font-size:22px;font-weight:800;color:#2A7A4A;margin-top:2px;">~$${Math.round(r.riskInfo.avgRepair * 0.02 / 5) * 5 || 15}</div>
+          </div>
+        </div>
+        <button class="risk-fix-btn" onclick="location.href='appliances.html?focus=${encodeURIComponent(r.applianceId)}'">
+          Fix this now &mdash; before it costs you &rarr;
+        </button>
+      </div>`;
+    }).join('');
+  }
+
+  // Disclaimer at the bottom — not blocking the urgency
+  html += `<p style="font-size:11px;color:var(--muted);line-height:1.5;padding:10px 12px;background:rgba(90,125,140,0.06);border-radius:10px;margin-top:4px;">
+    Repair costs are US averages based on contractor data. Actual costs vary by region and severity. 
+    Homefront does not guarantee outcomes &mdash; but the consequence descriptions above are real failure modes, not hypotheticals.
+  </p>`;
+
+  container.innerHTML = html;
+}
+
+function renderAll() {
+  const rows = buildAllHistory();
+  renderStats(rows);
+  renderRiskSection();
+  renderBreakdown(rows);
+  renderMissingCosts(rows);
+  renderEstimatesEditor();
+}
+
+renderAll();
+updateClock();
+setInterval(updateClock, 30000);
+</script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
+  </script>
+</body>
+</html>

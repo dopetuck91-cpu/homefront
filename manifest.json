@@ -1,0 +1,62 @@
+{
+  "name": "Homefront",
+  "short_name": "Homefront",
+  "description": "Keep your home protected and well maintained. Smart reminders, task guides, and savings tracking for every homeowner.",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#1F3D3A",
+  "theme_color": "#1F3D3A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screenshot-home.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": [
+    "lifestyle",
+    "utilities"
+  ],
+  "shortcuts": [
+    {
+      "name": "Appliances",
+      "short_name": "Appliances",
+      "description": "View and manage your appliances",
+      "url": "/appliances.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Home Systems",
+      "short_name": "Systems",
+      "description": "Safety, exterior, plumbing and lawn checks",
+      "url": "/systems.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

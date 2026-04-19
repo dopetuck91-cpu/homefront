@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home Care • Settings</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(227,184,108,0.12), transparent 28%),
+        linear-gradient(180deg, #EDE6E1 0%, #E7DFD9 100%);
+      color: #1F3D3A;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app-shell {
+      max-width: 460px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 14px 20px 110px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      padding: 10px 0 12px;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .back-btn,
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: none;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.5);
+      color: #1F3D3A;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(31,61,58,0.08);
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .back-btn:hover,
+    .icon-btn:hover,
+    .save-btn:hover,
+    .nav-item:hover {
+      transform: translateY(-1px);
+    }
+
+    .app-status {
+      font-size: 12px;
+      font-weight: 700;
+      color: #5A7D8C;
+      margin: 2px 0 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #5A7D8C;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .title-block h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .title-block p {
+      margin: 8px 0 0;
+      color: #5A7D8C;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(255,255,255,0.72);
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 10px 20px rgba(31,61,58,0.06);
+    }
+
+    .section h2 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+
+    .section-sub {
+      margin: 0 0 14px;
+      color: #5A7D8C;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .option-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option-card {
+      background: rgba(90,125,140,0.08);
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .option-copy label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #5A7D8C;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .option-copy p {
+      margin: 0;
+      font-size: 12px;
+      color: #5A7D8C;
+      line-height: 1.4;
+    }
+
+    .option-card input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #1F3D3A;
+      cursor: pointer;
+      margin: 0;
+      flex-shrink: 0;
+    }
+
+    .summary-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(227,184,108,0.16);
+      color: #1F3D3A;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .save-wrap {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .save-btn {
+      width: 100%;
+      border: none;
+      border-radius: 18px;
+      padding: 15px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .save-btn.primary {
+      background: #1F3D3A;
+      color: #fff;
+      box-shadow: 0 10px 18px rgba(31,61,58,0.12);
+    }
+
+    .save-btn.secondary {
+      background: rgba(90,125,140,0.14);
+      color: #1F3D3A;
+    }
+
+    .save-btn:hover {
+      background: #28524F;
+      color: #fff;
+    }
+
+    .save-btn.secondary:hover {
+      background: rgba(90,125,140,0.22);
+      color: #1F3D3A;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 104px;
+      transform: translateX(-50%) translateY(20px);
+      background: #1F3D3A;
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(31,61,58,0.18);
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 60;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(420px, calc(100% - 24px));
+      background: rgba(255,255,255,0.82);
+      border: 1px solid rgba(255,255,255,0.76);
+      box-shadow: 0 16px 30px rgba(31,61,58,0.14);
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-item {
+      text-align: center;
+      color: #5A7D8C;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 8px 4px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+
+    .nav-item .icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .nav-item.active {
+      background: rgba(31,61,58,0.08);
+      color: #1F3D3A;
+    }
+
+    @media (max-width: 420px) {
+      .toggle-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    [data-theme="dark"] {
+      --bg1: #1A2826; --bg2: #141F1E; --ink: #E8F0EE; --muted: #A8C8D4;
+      --card-bg: rgba(255,255,255,0.06); --card-border: rgba(255,255,255,0.08);
+      --card-shadow: rgba(0,0,0,0.28); --accent: #E3B86C;
+    }
+    [data-theme="dark"] body { background: linear-gradient(180deg,#1A2826 0%,#141F1E 100%) !important; }
+    [data-theme="dark"] .section { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.08) !important; }
+    [data-theme="dark"] .option-card { background: rgba(255,255,255,0.06) !important; border-color: rgba(255,255,255,0.08) !important; }
+    [data-theme="dark"] .summary-box { background: rgba(255,255,255,0.06) !important; }
+    [data-theme="dark"] .save-btn { background: rgba(255,255,255,0.08) !important; color: #E8F0EE !important; }
+    [data-theme="dark"] .save-btn.primary { background: #2A524F !important; }
+    [data-theme="dark"] input[type="text"], [data-theme="dark"] select { background: rgba(255,255,255,0.08) !important; color: #E8F0EE !important; border-color: rgba(255,255,255,0.14) !important; }
+
+  </style>
+    <script>
+    (function() {
+      if (sessionStorage.getItem('homefrontAccess') !== 'granted') location.replace('index.html');
+    })();
+  </script>
+<script>
+    (function() {
+      try {
+        var s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
+        if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme', 'dark');
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="top-bar">
+      <button class="back-btn" onclick="goBack()">←</button>
+      <button class="icon-btn" onclick="showToast('More settings coming soon')">⋯</button>
+    </div>
+
+    <div class="app-status"><span id="pageClock">9:41</span> <span>• Connected</span></div>
+
+    <div class="eyebrow">Settings</div>
+    <div class="title-block">
+      <h1>App settings</h1>
+
+      <!-- Plan status -->
+      <div id="planStatusCard" style="border-radius:18px;padding:14px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;"></div>
+      <p>Your home profile and app preferences live here now, in one clean place.</p>
+    </div>
+
+    <section class="section">
+      <h2>Home profile</h2>
+      <p class="section-sub">These settings help the app automatically tighten maintenance timing when it makes sense.</p>
+
+      <div class="option-list">
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="profilePets">Pets in the home</label>
+              <p>Shortens some air and filter-related intervals.</p>
+            </div>
+            <input id="profilePets" type="checkbox" />
+          </div>
+        </div>
+
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="profileAllergies">Allergies / air sensitivity</label>
+              <p>Makes air quality and filter care more frequent.</p>
+            </div>
+            <input id="profileAllergies" type="checkbox" />
+          </div>
+        </div>
+
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="profileHardWater">Hard water</label>
+              <p>Shortens some water appliance and mineral buildup tasks.</p>
+            </div>
+            <input id="profileHardWater" type="checkbox" />
+          </div>
+        </div>
+
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="profileSmoker">Smoker household</label>
+              <p>Can tighten air filter and vent-related maintenance.</p>
+            </div>
+            <input id="profileSmoker" type="checkbox" />
+          </div>
+        </div>
+
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="profileHighUsage">High appliance usage</label>
+              <p>Shortens general recurring maintenance intervals.</p>
+            </div>
+            <input id="profileHighUsage" type="checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-box" id="profileSummaryText">Standard timing is active.</div>
+    </section>
+
+    <section class="section">
+      <h2>Notifications</h2>
+      <p class="section-sub">These are app-level preferences for how reminders should behave later.</p>
+
+      <div class="option-list">
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="notificationsEnabled">Maintenance reminders</label>
+              <p>Master toggle for reminder notifications.</p>
+            </div>
+            <input id="notificationsEnabled" type="checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <button id="requestPushBtn" onclick="requestPushPermission()" style="width:100%;border:none;border-radius:14px;padding:13px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;background:var(--ink);color:#E8F0EE;margin-top:10px;display:none;">
+        Enable push notifications
+      </button>
+      <div id="pushStatusMsg" style="font-size:12px;color:var(--muted);margin-top:8px;line-height:1.5;"></div>
+      <div class="summary-box" id="notificationSummaryText">Notifications are enabled.</div>
+    </section>
+
+    <section class="section">
+      <h2>Appearance</h2>
+      <p class="section-sub">Dark mode is UI-ready here as a saved preference, even if the full theme system comes later.</p>
+
+      <div class="option-list">
+        <div class="option-card">
+          <div class="toggle-row">
+            <div class="option-copy">
+              <label for="darkModeEnabled">Dark mode</label>
+              <p>Saved now as a preference placeholder for the full theme system.</p>
+            </div>
+            <input id="darkModeEnabled" type="checkbox" />
+          </div>
+        </div>
+      </div>
+
+      <div class="summary-box" id="appearanceSummaryText">Dark mode is off.</div>
+    </section>
+
+
+    <!-- Data & Reports -->
+    <section class="section">
+      <h2>Data &amp; reports</h2>
+      <p class="section-sub">Export your data, view reports, and access inspection checklists.</p>
+
+      <div class="option-card" style="margin-bottom:8px;cursor:pointer;" onclick="location.href='report.html'">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:14px;font-weight:700;color:var(--ink);">&#128438; Home maintenance report</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Full printable summary &mdash; great for resale or insurance records.</div></div>
+          <div style="font-size:18px;color:var(--muted);">&rarr;</div>
+        </div>
+      </div>
+      <div class="option-card" style="margin-bottom:8px;cursor:pointer;" onclick="location.href='timeline.html'">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:14px;font-weight:700;color:var(--ink);">&#128336; Home timeline</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Every task, appliance, and checklist in chronological order.</div></div>
+          <div style="font-size:18px;color:var(--muted);">&rarr;</div>
+        </div>
+      </div>
+      <div class="option-card" style="margin-bottom:8px;cursor:pointer;" onclick="location.href='movein.html'">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:14px;font-weight:700;color:var(--ink);">&#127968; Move-in inspection</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">35-point checklist covering safety, plumbing, HVAC, and structure.</div></div>
+          <div style="font-size:18px;color:var(--muted);">&rarr;</div>
+        </div>
+      </div>
+      <div class="option-card" style="margin-bottom:14px;cursor:pointer;" onclick="location.href='moveout.html'">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:14px;font-weight:700;color:var(--ink);">&#128205; Pre-sale inspection</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Fix what buyers find before they find it.</div></div>
+          <div style="font-size:18px;color:var(--muted);">&rarr;</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <button class="save-btn" onclick="exportToFile()">&#128229; Export backup</button>
+        <button class="save-btn" onclick="document.getElementById('importInput').click()">&#128228; Import backup</button>
+      </div>
+      <input type="file" id="importInput" accept=".json" style="display:none;" onchange="handleImportFile(this.files[0])"/>
+      <div id="importResult" style="margin-top:8px;font-size:12px;"></div>
+    </section>
+
+    <div class="save-wrap">
+      <button class="save-btn primary" onclick="saveAllSettings()">Save settings</button>
+      <button class="save-btn secondary" onclick="resetSettings()">Reset to defaults</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;padding:8px 0 20px;display:flex;justify-content:center;gap:20px;">
+    <a href="privacy.html" style="font-size:12px;color:var(--muted);text-decoration:none;">Privacy Policy</a>
+    <a href="terms.html" style="font-size:12px;color:var(--muted);text-decoration:none;">Terms of Service</a>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item" onclick="location.href='home.html'"><i class="ph ph-house"></i>Home</div>
+    <div class="nav-item" onclick="location.href='appliances.html'"><i class="ph ph-wrench"></i>Appliances</div>
+    <div class="nav-item" onclick="location.href='systems.html'"><i class="ph ph-buildings"></i>Systems</div>
+    <div class="nav-item active" onclick="location.href='settings.html'"><i class="ph ph-gear"></i>Settings</div>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEYS = {
+      appliances: 'homeCareAppliances',
+      profile: 'homeCareProfile',
+      profileSetupComplete: 'homeCareProfileSetupComplete',
+      settings: 'homeCareSettings'
+    };
+
+    const DEFAULT_HOME_PROFILE = {
+      pets: false,
+      allergies: false,
+      hardWater: false,
+      smoker: false,
+      highUsage: false
+    };
+
+    const DEFAULT_SETTINGS = {
+      notificationsEnabled: true,
+      darkModeEnabled: false
+    };
+
+    let toastTimer = null;
+
+    function getTodayDate() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    function parseDate(dateString) {
+      return new Date((dateString || getTodayDate()) + 'T00:00:00');
+    }
+
+    function addDays(dateString, days) {
+      const date = parseDate(dateString);
+      date.setDate(date.getDate() + Number(days || 0));
+      return date.toISOString().split('T')[0];
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function getStoredHomeProfile() {
+      try {
+        return {
+          ...DEFAULT_HOME_PROFILE,
+          ...JSON.parse(localStorage.getItem(STORAGE_KEYS.profile) || '{}')
+        };
+      } catch {
+        return { ...DEFAULT_HOME_PROFILE };
+      }
+    }
+
+    function setHomeProfile(profile) {
+      localStorage.setItem(STORAGE_KEYS.profile, JSON.stringify({
+        ...DEFAULT_HOME_PROFILE,
+        ...profile
+      }));
+      localStorage.setItem(STORAGE_KEYS.profileSetupComplete, 'true');
+    }
+
+    function getStoredSettings() {
+      try {
+        return {
+          ...DEFAULT_SETTINGS,
+          ...JSON.parse(localStorage.getItem(STORAGE_KEYS.settings) || '{}')
+        };
+      } catch {
+        return { ...DEFAULT_SETTINGS };
+      }
+    }
+
+    function setStoredSettings(settings) {
+      localStorage.setItem(STORAGE_KEYS.settings, JSON.stringify({
+        ...DEFAULT_SETTINGS,
+        ...settings
+      }));
+    }
+
+    function getAdjustmentFactor(task, profile) {
+      let factor = 1;
+
+      if (profile.highUsage) factor *= 0.85;
+
+      if ((task.adjustmentTags || []).includes('air')) {
+        if (profile.pets) factor *= 0.9;
+        if (profile.allergies) factor *= 0.8;
+        if (profile.smoker) factor *= 0.85;
+      }
+
+      if ((task.adjustmentTags || []).includes('filter')) {
+        if (profile.pets) factor *= 0.9;
+        if (profile.allergies) factor *= 0.85;
+        if (profile.smoker) factor *= 0.85;
+      }
+
+      if ((task.adjustmentTags || []).includes('water')) {
+        if (profile.hardWater) factor *= 0.75;
+      }
+
+      if ((task.adjustmentTags || []).includes('usage')) {
+        if (profile.highUsage) factor *= 0.9;
+      }
+
+      return clamp(factor, 0.55, 1);
+    }
+
+    function getAdjustedIntervalDays(task, profile) {
+      return Math.max(14, Math.round((task.intervalDays || 90) * getAdjustmentFactor(task, profile)));
+    }
+
+    function getUserAppliances() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEYS.appliances) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function setUserAppliances(appliances) {
+      localStorage.setItem(STORAGE_KEYS.appliances, JSON.stringify(appliances));
+    }
+
+    function normalizeTask(task, applianceInstalledDate, profile) {
+      const safeTask = { ...task };
+      const baseInterval = Number(safeTask.baseIntervalDays || safeTask.intervalDays || 90);
+
+      const adjustedInterval = safeTask.autoAdjust === false
+        ? Number(safeTask.intervalDays || baseInterval)
+        : getAdjustedIntervalDays({
+            intervalDays: baseInterval,
+            adjustmentTags: safeTask.adjustmentTags || []
+          }, profile);
+
+      safeTask.baseIntervalDays = baseInterval;
+      safeTask.intervalDays = adjustedInterval;
+      safeTask.adjustmentTags = Array.isArray(safeTask.adjustmentTags) ? safeTask.adjustmentTags : [];
+      safeTask.autoAdjust = safeTask.autoAdjust !== false;
+      safeTask.lastCompletedDate = safeTask.lastCompletedDate || applianceInstalledDate || getTodayDate();
+      safeTask.nextDueDate = safeTask.nextDueDate || addDays(safeTask.lastCompletedDate, adjustedInterval);
+      safeTask.history = Array.isArray(safeTask.history) ? safeTask.history : [];
+
+      if (safeTask.autoAdjust !== false) {
+        safeTask.nextDueDate = addDays(safeTask.lastCompletedDate, adjustedInterval);
+      }
+
+      return safeTask;
+    }
+
+    function normalizeAppliance(appliance, profile) {
+      const safe = { ...appliance };
+      safe.installedDate = safe.installedDate || getTodayDate();
+      safe.tasks = Array.isArray(safe.tasks) ? safe.tasks : [];
+      safe.tasks = safe.tasks.map(function(task) {
+        return normalizeTask(task, safe.installedDate, profile);
+      });
+      return safe;
+    }
+
+    function refreshStoredAppliancesWithProfile() {
+      const profile = getStoredHomeProfile();
+      const appliances = getUserAppliances().map(function(appliance) {
+        return normalizeAppliance(appliance, profile);
+      });
+      setUserAppliances(appliances);
+    }
+
+    function getProfileSummaryParts(profile) {
+      const parts = [];
+      if (profile.pets) parts.push('pets');
+      if (profile.allergies) parts.push('air sensitivity');
+      if (profile.hardWater) parts.push('hard water');
+      if (profile.smoker) parts.push('smoker household');
+      if (profile.highUsage) parts.push('high usage');
+      return parts;
+    }
+
+    function getHomeProfileSummary(profile) {
+      const parts = getProfileSummaryParts(profile);
+      if (!parts.length) return 'Standard timing is active.';
+      if (parts.length === 1) return 'Adjusted for ' + parts[0] + '.';
+      return 'Adjusted for ' + parts.slice(0, -1).join(', ') + ' and ' + parts[parts.length - 1] + '.';
+    }
+
+    function loadSettingsIntoUI() {
+      const profile = getStoredHomeProfile();
+      const settings = getStoredSettings();
+
+      document.getElementById('profilePets').checked = profile.pets;
+      document.getElementById('profileAllergies').checked = profile.allergies;
+      document.getElementById('profileHardWater').checked = profile.hardWater;
+      document.getElementById('profileSmoker').checked = profile.smoker;
+      document.getElementById('profileHighUsage').checked = profile.highUsage;
+
+      document.getElementById('notificationsEnabled').checked = settings.notificationsEnabled;
+      document.getElementById('darkModeEnabled').checked = settings.darkModeEnabled;
+
+      updateProfileSummaryText();
+      updateNotificationSummaryText();
+      updateAppearanceSummaryText();
+    }
+
+    function updateProfileSummaryText() {
+      const profile = {
+        pets: document.getElementById('profilePets').checked,
+        allergies: document.getElementById('profileAllergies').checked,
+        hardWater: document.getElementById('profileHardWater').checked,
+        smoker: document.getElementById('profileSmoker').checked,
+        highUsage: document.getElementById('profileHighUsage').checked
+      };
+
+      document.getElementById('profileSummaryText').textContent = getHomeProfileSummary(profile);
+    }
+
+    function updateNotificationSummaryText() {
+      const enabled = document.getElementById('notificationsEnabled').checked;
+      document.getElementById('notificationSummaryText').textContent =
+        enabled ? 'Notifications are enabled.' : 'Notifications are off.';
+    }
+
+    function updateAppearanceSummaryText() {
+      const enabled = document.getElementById('darkModeEnabled').checked;
+      document.getElementById('appearanceSummaryText').textContent =
+        enabled ? 'Dark mode is saved as enabled.' : 'Dark mode is off.';
+    }
+
+    function saveAllSettings() {
+      const profile = {
+        pets: document.getElementById('profilePets').checked,
+        allergies: document.getElementById('profileAllergies').checked,
+        hardWater: document.getElementById('profileHardWater').checked,
+        smoker: document.getElementById('profileSmoker').checked,
+        highUsage: document.getElementById('profileHighUsage').checked
+      };
+
+      const settings = {
+        notificationsEnabled: document.getElementById('notificationsEnabled').checked,
+        darkModeEnabled: document.getElementById('darkModeEnabled').checked
+      };
+
+      setHomeProfile(profile);
+      setStoredSettings(settings);
+      refreshStoredAppliancesWithProfile();
+      showToast('Settings saved');
+    }
+
+    function resetSettings() {
+      document.getElementById('profilePets').checked = DEFAULT_HOME_PROFILE.pets;
+      document.getElementById('profileAllergies').checked = DEFAULT_HOME_PROFILE.allergies;
+      document.getElementById('profileHardWater').checked = DEFAULT_HOME_PROFILE.hardWater;
+      document.getElementById('profileSmoker').checked = DEFAULT_HOME_PROFILE.smoker;
+      document.getElementById('profileHighUsage').checked = DEFAULT_HOME_PROFILE.highUsage;
+
+      document.getElementById('notificationsEnabled').checked = DEFAULT_SETTINGS.notificationsEnabled;
+      document.getElementById('darkModeEnabled').checked = DEFAULT_SETTINGS.darkModeEnabled;
+
+      updateProfileSummaryText();
+      updateNotificationSummaryText();
+      updateAppearanceSummaryText();
+      showToast('Defaults restored on screen');
+    }
+
+    function updateClockStatus() {
+      const el = document.getElementById('pageClock');
+      const now = new Date();
+      el.textContent = now.toLocaleTimeString([], {
+        hour: 'numeric',
+        minute: '2-digit'
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function() {
+        toast.classList.remove('show');
+      }, 2200);
+    }
+
+    function goHome() {
+      window.location.href = 'index.html';
+    }
+
+    function goAppliances() {
+      window.location.href = 'appliances.html';
+    }
+
+    function goBack() {
+      if (document.referrer) {
+        history.back();
+      } else {
+        goHome();
+      }
+    }
+
+    ['profilePets','profileAllergies','profileHardWater','profileSmoker','profileHighUsage'].forEach(function(id) {
+      document.getElementById(id).addEventListener('change', updateProfileSummaryText);
+    });
+
+    document.getElementById('notificationsEnabled').addEventListener('change', updateNotificationSummaryText);
+    document.getElementById('darkModeEnabled').addEventListener('change', updateAppearanceSummaryText);
+
+
+    /* ── Export/Import ── */
+    function exportToFile() {
+      const data = {};
+      const keys = ['homefrontAppliances','homefrontProfile','homefrontSettings',
+                    'homefrontUserName','homefrontSeasonalData','homefrontSystemsData'];
+      keys.forEach(function(k) {
+        const v = localStorage.getItem(k);
+        if (v) data[k] = v;
+      });
+      data._app = 'Homefront';
+      data._exported = new Date().toISOString();
+      const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'homefront-backup-' + new Date().toISOString().split('T')[0] + '.json';
+      a.click();
+    }
+
+    function handleImportFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (data._app !== 'Homefront') { showImportResult('error', 'Not a Homefront backup.'); return; }
+          const keys = ['homefrontAppliances','homefrontProfile','homefrontSettings',
+                        'homefrontUserName','homefrontSeasonalData','homefrontSystemsData'];
+          keys.forEach(function(k) { if (data[k]) localStorage.setItem(k, data[k]); });
+          showImportResult('ok', 'Backup restored successfully.');
+          loadSettingsIntoUI();
+        } catch(e) { showImportResult('error', 'Could not read backup file.'); }
+      };
+      reader.readAsText(file);
+    }
+
+    function showImportResult(type, msg) {
+      const el = document.getElementById('importResult');
+      if (el) { el.textContent = msg; el.style.color = type === 'ok' ? '#2A7A4A' : '#8A3E28'; }
+    }
+
+    /* ── Push notifications ── */
+    async function requestPushPermission() {
+      const btn = document.getElementById('requestPushBtn');
+      const msg = document.getElementById('pushStatusMsg');
+      if (!('Notification' in window)) {
+        if (msg) msg.textContent = 'Install to home screen to enable notifications.';
+        return;
+      }
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          if (btn) btn.style.display = 'none';
+          if (msg) msg.textContent = '✓ Push notifications enabled. You will be reminded when tasks are due.';
+          localStorage.setItem('homefrontPushGranted', 'true');
+          schedulePushReminder();
+          scheduleWeeklyDigest();
+        } else if (permission === 'denied') {
+          if (msg) msg.textContent = 'Notifications blocked. Enable in your browser settings.';
+        } else {
+          if (msg) msg.textContent = 'Tap the button above to enable push notifications.';
+        }
+      } catch(e) {
+        if (msg) msg.textContent = 'Could not request permission.';
+      }
+    }
+
+    function schedulePushReminder() {
+      if (!('caches' in window)) return;
+      try {
+        const apps = JSON.parse(localStorage.getItem('homefrontAppliances') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        const due = [];
+        apps.forEach(function(a) {
+          (a.tasks || []).forEach(function(t) {
+            if (!t.nextDueDate) return;
+            const days = Math.round((new Date(t.nextDueDate) - new Date(today)) / (1000*60*60*24));
+            if (days <= 0) due.push(t.title + ' (' + a.name + ')');
+          });
+        });
+        caches.open('homefront-data').then(function(cache) {
+          cache.put('due-tasks', new Response(JSON.stringify({count:due.length, nextTask:due[0]||null})));
+        });
+      } catch(e) {}
+    }
+
+    function scheduleWeeklyDigest() {
+      if (!('Notification' in window) || Notification.permission !== 'granted') return;
+      try {
+        const now = new Date();
+        const day = now.getDay();
+        const daysUntil = day === 1 ? 7 : (8 - day) % 7 || 7;
+        const next = new Date(now);
+        next.setDate(now.getDate() + daysUntil);
+        next.setHours(8, 0, 0, 0);
+        localStorage.setItem('homefrontNextDigest', next.toISOString());
+        const ms = next - now;
+        if (ms < 86400000) setTimeout(fireWeeklyDigest, ms);
+      } catch(e) {}
+    }
+
+    function fireWeeklyDigest() {
+      try {
+        const apps = JSON.parse(localStorage.getItem('homefrontAppliances') || '[]');
+        const today = new Date().toISOString().split('T')[0];
+        let overdueCt = 0, soonCt = 0;
+        apps.forEach(function(a) {
+          (a.tasks || []).forEach(function(t) {
+            if (!t.nextDueDate) return;
+            const days = Math.round((new Date(t.nextDueDate) - new Date(today)) / (1000*60*60*24));
+            if (days < 0) overdueCt++;
+            else if (days <= 7) soonCt++;
+          });
+        });
+        let body = overdueCt ? overdueCt + ' task' + (overdueCt===1?'':'s') + ' overdue. ' : '';
+        body += soonCt ? soonCt + ' task' + (soonCt===1?'':'s') + ' due this week.' : '';
+        if (!body) body = 'All tasks on track. Your home is in great shape!';
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.ready.then(function(reg) {
+            reg.showNotification('Homefront weekly digest', {
+              body: body, icon: '/icons/icon-192.png',
+              tag: 'homefront-weekly', data: { url: '/home.html' }
+            });
+          });
+        }
+        scheduleWeeklyDigest();
+      } catch(e) {}
+    }
+
+    function checkPushStatus() {
+      const btn = document.getElementById('requestPushBtn');
+      const msg = document.getElementById('pushStatusMsg');
+      if (!('Notification' in window)) {
+        if (msg) msg.textContent = 'Install to home screen to enable notifications.';
+        return;
+      }
+      const perm = Notification.permission;
+      if (perm === 'granted') {
+        if (btn) btn.style.display = 'none';
+        if (msg) msg.textContent = '✓ Push notifications are active.';
+        schedulePushReminder();
+        scheduleWeeklyDigest();
+      } else if (perm === 'denied') {
+        if (btn) btn.style.display = 'none';
+        if (msg) msg.textContent = 'Notifications are blocked in your browser settings.';
+      } else {
+        if (btn) btn.style.display = 'block';
+        if (msg) msg.textContent = 'Tap above to get reminded when tasks are due.';
+      }
+    }
+
+    /* ── Plan status (freemium) ── */
+    function removePremium() {
+      if (confirm('Remove Pro access from this device?')) {
+        localStorage.removeItem('homefrontPremium');
+        renderPlanStatus();
+      }
+    }
+
+    function renderPlanStatus() {
+      const card = document.getElementById('planStatusCard');
+      if (!card) return;
+      const premium = localStorage.getItem('homefrontPremium') === 'true';
+      card.innerHTML = '';
+      card.style.background = premium ? 'linear-gradient(135deg,#1F3D3A,#2A524F)' : 'rgba(90,125,140,0.08)';
+
+      const info = document.createElement('div');
+      const label = document.createElement('div');
+      label.style.cssText = 'font-size:12px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px;';
+      label.style.color = premium ? 'rgba(255,255,255,0.6)' : 'var(--muted)';
+      label.textContent = 'Current plan';
+      const planName = document.createElement('div');
+      planName.style.cssText = 'font-size:18px;font-weight:800;';
+      planName.style.color = premium ? '#E8F0EE' : 'var(--ink)';
+      planName.textContent = premium ? 'Homefront Pro' : 'Free';
+      const sub = document.createElement('div');
+      sub.style.cssText = 'font-size:12px;margin-top:2px;';
+      sub.style.color = premium ? 'rgba(255,255,255,0.65)' : 'var(--muted)';
+      sub.textContent = premium ? 'Unlimited appliances · All features' : 'Up to 2 appliances';
+      info.appendChild(label); info.appendChild(planName); info.appendChild(sub);
+
+      const btn = document.createElement('button');
+      btn.style.cssText = 'flex-shrink:0;border-radius:12px;padding:9px 16px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;';
+      if (premium) {
+        btn.textContent = 'Manage';
+        btn.style.cssText += 'border:1px solid rgba(255,255,255,0.25);background:transparent;color:rgba(255,255,255,0.7);';
+        btn.onclick = removePremium;
+      } else {
+        btn.textContent = 'Upgrade';
+        btn.style.cssText += 'border:none;background:#1F3D3A;color:#E8F0EE;';
+        btn.onclick = function() { location.href = 'appliances.html'; };
+      }
+      card.appendChild(info);
+      card.appendChild(btn);
+    }
+
+    renderPlanStatus();
+    checkPushStatus();
+    loadSettingsIntoUI();
+    updateClockStatus();
+    setInterval(updateClockStatus, 30000);
+  </script>
+</body>
+</html>
