@@ -1,4 +1,4 @@
-const CACHE_NAME = 'homefront-v10';
+const CACHE_NAME = 'homefront-v11';
 const OFFLINE_URLS = [
   './index.html', './home.html', './appliances.html',
   './settings.html', './systems.html', './seasonal.html',
