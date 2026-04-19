@@ -1,14 +1,11 @@
-const CACHE_NAME = 'homefront-v9';
+const CACHE_NAME = 'homefront-v10';
 const OFFLINE_URLS = [
-  '/', '/index.html', '/home.html', '/appliances.html',
-  '/settings.html', '/systems.html', '/seasonal.html',
-  '/history.html', '/savings.html', '/privacy.html',
-  '/report.html',
-  '/timeline.html',
-  '/movein.html',
-  '/moveout.html',
-  '/terms.html',
-  '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png'
+  './index.html', './home.html', './appliances.html',
+  './settings.html', './systems.html', './seasonal.html',
+  './history.html', './savings.html', './privacy.html',
+  './report.html', './timeline.html', './movein.html',
+  './moveout.html', './terms.html',
+  './manifest.json', './icons/icon-192.png', './icons/icon-512.png'
 ];
 
 // ── Install: cache all pages ──
@@ -48,7 +45,7 @@ self.addEventListener('fetch', function(event) {
         caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, clone); });
         return response;
       }).catch(function() {
-        return caches.match('/index.html');
+        return caches.match('./index.html');
       });
     })
   );
@@ -56,16 +53,16 @@ self.addEventListener('fetch', function(event) {
 
 // ── Push notifications ──
 self.addEventListener('push', function(event) {
-  let data = { title: 'Homefront', body: 'You have a maintenance task due.', icon: '/icons/icon-192.png' };
+  let data = { title: 'Homefront', body: 'You have a maintenance task due.', icon: './icons/icon-192.png' };
   try { if (event.data) data = { ...data, ...event.data.json() }; } catch(e) {}
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
-      icon: data.icon || '/icons/icon-192.png',
-      badge: '/icons/icon-192.png',
+      icon: data.icon || './icons/icon-192.png',
+      badge: './icons/icon-192.png',
       tag: 'homefront-reminder',
       renotify: true,
-      data: { url: data.url || '/home.html' }
+      data: { url: data.url || './home.html' }
     })
   );
 });
@@ -73,13 +70,14 @@ self.addEventListener('push', function(event) {
 // ── Notification click: open the app ──
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
-  const url = (event.notification.data && event.notification.data.url) || '/home.html';
+  const url = (event.notification.data && event.notification.data.url) || './home.html';
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(list) {
       for (let c of list) {
-        if (c.url.includes(self.location.origin) && 'focus' in c) return c.focus();
+        if (c.url.includes(self.registration.scope) && 'focus' in c) return c.focus();
       }
-      return clients.openWindow(url);
+      const base = self.registration.scope;
+      return clients.openWindow(base + 'home.html');
     })
   );
 });
@@ -101,9 +99,9 @@ async function checkAndNotify() {
     if (count > 0 && nextTask) {
       await self.registration.showNotification('Homefront reminder', {
         body: nextTask + (count > 1 ? ' and ' + (count-1) + ' more task' + (count > 2 ? 's' : '') + ' are due.' : ' is due.'),
-        icon: '/icons/icon-192.png',
+        icon: './icons/icon-192.png',
         tag: 'homefront-reminder',
-        data: { url: '/home.html' }
+        data: { url: './home.html' }
       });
     }
   } catch(e) {}

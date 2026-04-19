@@ -2,7 +2,7 @@
   "name": "Homefront",
   "short_name": "Homefront",
   "description": "Keep your home protected and well maintained. Smart reminders, task guides, and savings tracking for every homeowner.",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1F3D3A",
   "theme_color": "#1F3D3A",
@@ -58,5 +58,6 @@
         }
       ]
     }
-  ]
+  ],
+  "scope": "./"
 }

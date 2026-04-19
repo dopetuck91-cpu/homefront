@@ -20,7 +20,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Homefront" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
-  <title>Homefront • Savings</title>
+  <title>Homefront • Home Systems</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/bold/style.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -36,7 +36,6 @@
       --card-shadow: rgba(31,61,58,0.06);
       --nav-bg: rgba(255,255,255,0.82);
       --nav-border: rgba(255,255,255,0.76);
-      --progress-track: #EEE8E4;
       --input-bg: rgba(90,125,140,0.06);
     }
 
@@ -48,146 +47,46 @@
       --card-shadow: rgba(0,0,0,0.28);
       --nav-bg: rgba(20,31,30,0.95);
       --nav-border: rgba(255,255,255,0.08);
-      --progress-track: rgba(255,255,255,0.08);
       --input-bg: rgba(255,255,255,0.07);
     }
 
-    /* ── Risk section ── */
-    .risk-header {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 14px;
+    body {
+      margin: 0; font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(227,184,108,0.12), transparent 28%),
+        linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
+      color: var(--ink); min-height: 100dvh;
+      -webkit-font-smoothing: antialiased;
     }
-    .risk-header h2 { font-size: 17px; font-weight: 800; color: var(--ink); margin: 0; }
-    .risk-header .risk-count {
-      background: #C44B28; color: #fff;
-      font-size: 11px; font-weight: 800;
-      padding: 3px 8px; border-radius: 99px;
-    }
-    .risk-card {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 20px; padding: 16px;
-      box-shadow: 0 6px 18px var(--card-shadow);
-      margin-bottom: 10px;
-      border-left: 4px solid #C44B28;
-    }
-    .risk-card.medium { border-left-color: #C47A28; }
-    .risk-card.low    { border-left-color: #7A8A2A; }
-    .risk-card-top {
-      display: flex; justify-content: space-between;
-      align-items: flex-start; gap: 10px; margin-bottom: 8px;
-    }
-    .risk-appliance { font-size: 14px; font-weight: 800; color: var(--ink); }
-    .risk-task      { font-size: 12px; color: var(--muted); margin-top: 2px; }
-    .risk-badge {
-      flex-shrink: 0; font-size: 11px; font-weight: 800;
-      padding: 4px 10px; border-radius: 99px; white-space: nowrap;
-    }
-    .risk-badge.high   { background: rgba(196,75,40,0.14); color: #8A3E28; }
-    .risk-badge.medium { background: rgba(196,122,40,0.14); color: #7A5A18; }
-    .risk-badge.low    { background: rgba(122,138,42,0.12); color: #4A5A10; }
-    .risk-consequence {
-      font-size: 13px; color: var(--ink); line-height: 1.5;
-      background: rgba(196,75,40,0.06); border-radius: 10px;
-      padding: 8px 12px; margin-bottom: 8px;
-    }
-    .risk-consequence.medium { background: rgba(196,122,40,0.07); }
-    .risk-consequence.low    { background: rgba(90,125,140,0.08); }
-    .risk-cost {
-      display: flex; justify-content: space-between;
-      align-items: center; font-size: 12px;
-    }
-    .risk-cost-label { color: var(--muted); }
-    .risk-cost-amount { font-weight: 800; color: #C44B28; font-size: 16px; }
-    .risk-cost-amount.medium { color: #C47A28; }
-    .risk-cost-amount.low    { color: #7A8A2A; }
-    .risk-fix-btn {
-      width: 100%; border: none; border-radius: 12px;
-      padding: 10px; font-family: inherit; font-size: 13px;
-      font-weight: 700; cursor: pointer; margin-top: 10px;
-      background: #2A524F; color: #E8F0EE;
-      transition: background 0.18s ease;
-    }
-    .risk-fix-btn:hover { background: #3A6E6A; }
-    .risk-all-clear {
-      background: rgba(42,122,74,0.10); border-radius: 20px;
-      padding: 20px; text-align: center; margin-bottom: 14px;
-    }
-    .risk-all-clear h3 { font-size: 16px; color: #2A7A4A; margin-bottom: 6px; }
-    .risk-all-clear p  { font-size: 13px; color: #4A8A6A; margin: 0; }
-
-    [data-theme="dark"] .risk-card        { background: rgba(255,255,255,0.05) !important; }
-    [data-theme="dark"] .risk-consequence { background: rgba(196,75,40,0.12) !important; }
-    [data-theme="dark"] .risk-consequence.medium { background: rgba(196,122,40,0.12) !important; }
-    [data-theme="dark"] .risk-consequence.low    { background: rgba(90,125,140,0.10) !important; }
-    [data-theme="dark"] .risk-all-clear { background: rgba(42,122,74,0.14) !important; }
-
-    /* Urgent at-risk total banner */
-    .at-risk-banner {
-      border-radius: 20px; padding: 18px 20px;
-      background: #1F1208; color: #fff;
-      margin-bottom: 14px; position: relative; overflow: hidden;
-    }
-    [data-theme="dark"] .at-risk-banner { background: #2A1A0A !important; }
-    .at-risk-banner::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(196,75,40,0.6), rgba(196,122,40,0.3));
-    }
-    .at-risk-inner { position: relative; z-index: 1; }
-    .at-risk-label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.75; margin-bottom: 4px; }
-    .at-risk-amount { font-size: 36px; font-weight: 900; letter-spacing: -1px; line-height: 1; margin-bottom: 8px; }
-    .at-risk-sub { font-size: 13px; opacity: 0.85; line-height: 1.4; }
 
     [data-theme="dark"] body {
       background:
         radial-gradient(circle at top, rgba(227,184,108,0.07), transparent 28%),
-        linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%) !important;
-    }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(227,184,108,0.12), transparent 28%),
         linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 100%);
-      color: var(--ink);
-      min-height: 100dvh;
-      -webkit-font-smoothing: antialiased;
     }
 
-    .app-shell {
-      max-width: 460px;
-      margin: 0 auto;
-      padding: 14px 20px 110px;
-    }
+    .app-shell { max-width: 460px; margin: 0 auto; padding: 14px 20px 110px; }
 
     .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      position: sticky; top: 0; z-index: 20;
-      padding: 10px 0 12px;
-      backdrop-filter: blur(14px);
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px; position: sticky; top: 0; z-index: 20;
+      padding: 10px 0 12px; backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
 
     .back-btn {
-      width: 42px; height: 42px; border: none;
-      border-radius: 14px; background: rgba(255,255,255,0.5);
-      color: var(--ink); font-size: 18px; cursor: pointer;
-      box-shadow: 0 6px 14px rgba(31,61,58,0.08);
+      width: 42px; height: 42px; border: none; border-radius: 14px;
+      background: rgba(255,255,255,0.5); color: var(--ink); font-size: 18px;
+      cursor: pointer; box-shadow: 0 6px 14px rgba(31,61,58,0.08);
       transition: transform 0.18s ease;
     }
     .back-btn:hover { transform: translateY(-1px); }
 
-    [data-theme="dark"] .back-btn {
-      background: rgba(255,255,255,0.08) !important;
-    }
+    [data-theme="dark"] .back-btn { background: rgba(255,255,255,0.08) !important; }
 
     .app-status {
       font-size: 12px; font-weight: 700; color: var(--muted);
-      margin: 2px 0 10px;
-      display: flex; justify-content: space-between;
+      margin: 2px 0 10px; display: flex; justify-content: space-between;
     }
 
     .eyebrow {
@@ -199,286 +98,296 @@
     .page-title { margin: 0; font-size: 28px; line-height: 1.1; color: var(--ink); }
     .page-sub   { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 
-    /* ── Hero stats ── */
-    .stats-hero {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
+    /* ── Seasonal shortcut ── */
+    .seasonal-shortcut {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-top: 18px;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 20px; padding: 14px 16px;
+      box-shadow: 0 10px 20px var(--card-shadow);
+      cursor: pointer; transition: transform 0.18s ease;
+    }
+    .seasonal-shortcut:hover { transform: translateY(-2px); }
+
+    .seasonal-shortcut-left { display: flex; align-items: center; gap: 12px; }
+    .seasonal-shortcut-icon { font-size: 28px; }
+    .seasonal-shortcut-title { font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 2px; }
+    .seasonal-shortcut-sub   { font-size: 12px; color: var(--muted); margin: 0; }
+    .seasonal-shortcut-arrow { font-size: 18px; color: var(--muted); flex-shrink: 0; }
+
+    /* ── Stats strip ── */
+    .stats-strip {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 10px; margin-top: 16px;
     }
 
-    .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 18px 16px;
-      box-shadow: 0 10px 20px var(--card-shadow);
+    .stat-pill {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 18px; padding: 12px;
+      box-shadow: 0 8px 16px var(--card-shadow);
       text-align: center;
     }
 
-    .stat-card.wide {
-      grid-column: 1 / -1;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
+    .stat-pill-value { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1; }
+    .stat-pill-label { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.3; }
 
-    .stat-value {
-      font-size: 30px;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1;
-      margin-bottom: 4px;
-    }
+    /* ── Category cards ── */
+    .categories { display: grid; gap: 14px; margin-top: 22px; }
 
-    .stat-value.green  { color: #2A7A4A; }
-    .stat-value.amber  { color: #8A6010; }
-
-    [data-theme="dark"] .stat-value.green { color: #6FC98A !important; }
-    [data-theme="dark"] .stat-value.amber { color: #E3B86C !important; }
-
-    .stat-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      line-height: 1.3;
-    }
-
-    /* ── Section ── */
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 24px 0 12px;
-    }
-
-    .section-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin: 0;
-      color: var(--ink);
-    }
-
-    .section-sub {
-      font-size: 13px;
-      color: var(--muted);
-      margin: 0;
-    }
-
-    /* ── Cards ── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 16px;
+    .category-card {
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 24px; overflow: hidden;
       box-shadow: 0 10px 20px var(--card-shadow);
-      margin-bottom: 12px;
     }
 
-    .card-title {
-      font-size: 15px; font-weight: 700;
-      color: var(--ink); margin: 0 0 4px;
+    .category-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; cursor: pointer;
+      transition: background 0.18s ease;
+    }
+    .category-header:hover { background: rgba(90,125,140,0.04); }
+
+    [data-theme="dark"] .category-header:hover {
+      background: rgba(255,255,255,0.04) !important;
     }
 
-    .card-sub {
-      font-size: 13px; color: var(--muted);
-      margin: 0 0 12px; line-height: 1.45;
+    .category-icon-wrap {
+      width: 48px; height: 48px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
     }
 
-    /* ── Savings breakdown rows ── */
-    .breakdown-list { display: grid; gap: 10px; }
+    .category-icon-wrap.safety   { background: rgba(198,90,58,0.14); }
+    .category-icon-wrap.exterior { background: rgba(90,125,140,0.14); }
+    .category-icon-wrap.plumbing { background: rgba(31,61,58,0.10); }
+    .category-icon-wrap.lawn     { background: rgba(42,122,74,0.12); }
 
-    .breakdown-item {
-      background: rgba(90,125,140,0.08);
-      border-radius: 16px;
-      padding: 12px 14px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 8px;
-      align-items: start;
+    .category-title { font-size: 17px; font-weight: 700; color: var(--ink); margin: 0 0 3px; }
+    .category-meta  { font-size: 12px; color: var(--muted); margin: 0; }
+    .category-chevron { margin-left: auto; font-size: 16px; color: var(--muted); transition: transform 0.2s ease; }
+    .category-card.open .category-chevron { transform: rotate(180deg); }
+
+    .category-body { display: none; border-top: 1px solid rgba(90,125,140,0.10); }
+    .category-card.open .category-body { display: block; }
+
+    /* ── Task items ── */
+    .system-task-list { display: grid; gap: 0; }
+
+    .system-task {
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(90,125,140,0.08);
+      cursor: pointer; transition: background 0.18s ease;
+    }
+    .system-task:last-child { border-bottom: none; }
+    .system-task:hover { background: rgba(90,125,140,0.04); }
+
+    [data-theme="dark"] .system-task:hover {
+      background: rgba(255,255,255,0.04) !important;
     }
 
-    [data-theme="dark"] .breakdown-item {
-      background: rgba(255,255,255,0.06) !important;
+    .system-task-top {
+      display: flex; justify-content: space-between;
+      align-items: flex-start; gap: 12px; margin-bottom: 4px;
     }
 
-    .breakdown-task { font-size: 14px; font-weight: 600; color: var(--ink); margin: 0 0 2px; }
-    .breakdown-appliance { font-size: 12px; color: var(--muted); margin: 0; }
-
-    .breakdown-amounts { text-align: right; }
-    .breakdown-saved {
-      font-size: 13px; font-weight: 700;
-      color: #2A7A4A; white-space: nowrap;
-    }
-    [data-theme="dark"] .breakdown-saved { color: #6FC98A !important; }
-
-    .breakdown-spent {
-      font-size: 12px; color: var(--muted); white-space: nowrap;
+    .system-task-title { font-size: 14px; font-weight: 700; color: var(--ink); margin: 0; }
+    .system-task-sub   { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.4; }
+    .system-task-why   {
+      margin-top: 7px; padding: 8px 10px; border-radius: 10px;
+      background: rgba(90,125,140,0.08); font-size: 12px;
+      color: var(--muted); line-height: 1.4;
     }
 
-    /* ── Custom savings editor ── */
-    .savings-edit-section {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 16px;
-      box-shadow: 0 10px 20px var(--card-shadow);
-      margin-bottom: 12px;
+    .system-badge {
+      flex-shrink: 0; padding: 5px 9px; border-radius: 999px;
+      font-size: 11px; font-weight: 700; white-space: nowrap;
+    }
+    .system-badge.due      { background: rgba(198,90,58,0.14); color: #8A3E28; }
+    .system-badge.soon     { background: rgba(227,184,108,0.20); color: #7A5A18; }
+    .system-badge.ok       { background: rgba(90,125,140,0.14); color: #355763; }
+    .system-badge.no-date  { background: rgba(90,125,140,0.10); color: var(--muted); }
+
+    [data-theme="dark"] .system-badge.due  { background: rgba(224,112,85,0.22) !important; color: #F09070 !important; }
+    [data-theme="dark"] .system-badge.soon { background: rgba(227,184,108,0.22) !important; color: #F0C878 !important; }
+    [data-theme="dark"] .system-badge.ok   { background: rgba(255,255,255,0.10) !important; color: #A8C8D4 !important; }
+
+    .system-task-actions {
+      display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
     }
 
-    .savings-edit-section h3 {
-      margin: 0 0 4px; font-size: 15px; color: var(--ink);
+    .system-action-btn {
+      border: none; border-radius: 10px; padding: 7px 12px;
+      font-family: inherit; font-size: 12px; font-weight: 700;
+      cursor: pointer; transition: transform 0.18s ease, background 0.18s ease;
+      background: rgba(90,125,140,0.10); color: var(--ink);
     }
-
-    .savings-edit-section p {
-      margin: 0 0 14px; font-size: 13px; color: var(--muted); line-height: 1.45;
+    .system-action-btn:hover { transform: translateY(-1px); background: rgba(90,125,140,0.18); }
+    .system-action-btn.primary {
+      background: #2A524F; color: #E8F0EE;
     }
+    .system-action-btn.primary:hover { background: #3A6E6A; }
 
-    .savings-edit-list { display: grid; gap: 8px; }
-
-    .savings-edit-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: center;
-      background: rgba(90,125,140,0.08);
-      border-radius: 14px;
-      padding: 10px 12px;
-    }
-
-    [data-theme="dark"] .savings-edit-row {
-      background: rgba(255,255,255,0.06) !important;
-    }
-
-    .savings-edit-label {
-      font-size: 13px; font-weight: 600; color: var(--ink);
-      display: block; margin-bottom: 2px;
-    }
-
-    .savings-edit-hint {
-      font-size: 11px; color: var(--muted);
-    }
-
-    .savings-edit-input {
-      width: 80px;
-      border: 1px solid rgba(90,125,140,0.18);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font: inherit; font-size: 14px; font-weight: 700;
-      background: var(--input-bg);
-      color: var(--ink); outline: none;
-      text-align: right;
-    }
-
-    .savings-edit-input:focus {
-      border-color: rgba(31,61,58,0.35);
-      box-shadow: 0 0 0 3px rgba(227,184,108,0.14);
-    }
-
-    [data-theme="dark"] .savings-edit-input {
-      background: rgba(255,255,255,0.07) !important;
-      border-color: rgba(255,255,255,0.12) !important;
-      color: #E8F0EE !important;
-    }
-
-    .save-estimates-btn {
-      width: 100%; border: none;
-      border-radius: 14px; padding: 13px;
-      font-family: inherit; font-size: 14px; font-weight: 700;
-      cursor: pointer; margin-top: 12px;
-      background: var(--ink); color: #fff;
-      box-shadow: 0 8px 16px rgba(31,61,58,0.10);
-      transition: transform 0.18s ease, background 0.18s ease;
-    }
-    .save-estimates-btn:hover { transform: translateY(-1px); background: #28524F; }
-
-    /* ── Missing cost entry ── */
-    .missing-cost-list { display: grid; gap: 8px; }
-
-    .missing-cost-item {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 10px;
-      align-items: center;
-      background: rgba(90,125,140,0.08);
-      border-radius: 14px;
-      padding: 10px 12px;
-    }
-
-    [data-theme="dark"] .missing-cost-item {
-      background: rgba(255,255,255,0.06) !important;
-    }
-
-    .missing-cost-input {
-      width: 80px;
-      border: 1px solid rgba(90,125,140,0.18);
-      border-radius: 10px;
-      padding: 8px 10px;
-      font: inherit; font-size: 14px; font-weight: 700;
-      background: var(--input-bg);
-      color: var(--ink); outline: none;
-      text-align: right;
-    }
-
-    .missing-cost-input:focus {
-      border-color: rgba(31,61,58,0.35);
-      box-shadow: 0 0 0 3px rgba(227,184,108,0.14);
-    }
-
-    [data-theme="dark"] .missing-cost-input {
-      background: rgba(255,255,255,0.07) !important;
-      border-color: rgba(255,255,255,0.12) !important;
-      color: #E8F0EE !important;
-    }
-
-    .save-costs-btn {
-      width: 100%; border: none;
-      border-radius: 14px; padding: 13px;
-      font-family: inherit; font-size: 14px; font-weight: 700;
-      cursor: pointer; margin-top: 12px;
-      background: rgba(90,125,140,0.14); color: var(--ink);
-      transition: transform 0.18s ease, background 0.18s ease;
-    }
-    .save-costs-btn:hover { transform: translateY(-1px); background: rgba(90,125,140,0.22); }
-
-    /* ── Bottom nav ── */
-    .bottom-nav {
-      position: fixed; left: 50%; bottom: 18px;
-      transform: translateX(-50%);
-      width: min(420px, calc(100% - 24px));
-      background: var(--nav-bg);
-      border: 1px solid var(--nav-border);
-      box-shadow: 0 16px 30px var(--card-shadow);
-      border-radius: 24px;
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      padding: 10px;
-      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    }
-
-    .nav-item {
-      text-align: center; color: var(--muted);
-      font-size: 11px; font-weight: 600;
-      padding: 8px 4px; border-radius: 16px;
-      cursor: pointer;
-      transition: transform 0.18s ease, background 0.18s ease;
-    }
-    .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
-    .nav-item.active { background: rgba(31,61,58,0.08); color: var(--ink); }
-    .nav-item:hover  { transform: translateY(-1px); }
-
-    [data-theme="dark"] .nav-item.active {
+    [data-theme="dark"] .system-action-btn {
       background: rgba(255,255,255,0.08) !important;
+      color: #E8F0EE !important;
+    }
+
+    /* ── Guide modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(31,61,58,0.32);
+      display: none; align-items: flex-end;
+      justify-content: center; padding: 18px;
+      z-index: 55; backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .modal-overlay.open { display: flex; }
+
+    .modal-card {
+      width: min(420px, 100%);
+      max-height: min(88vh, 860px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      background: rgba(255,255,255,0.97);
+      border: 1px solid rgba(255,255,255,0.8);
+      border-radius: 28px; padding: 18px 20px 22px;
+      box-shadow: 0 18px 36px rgba(31,61,58,0.18);
+    }
+
+    [data-theme="dark"] .modal-card {
+      background: rgba(26,40,38,0.98) !important;
+    }
+
+    .modal-head {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; margin-bottom: 6px;
+    }
+
+    .modal-head h2 { margin: 0; font-size: 20px; color: var(--ink); }
+
+    .close-btn {
+      width: 38px; height: 38px; border: none; border-radius: 12px;
+      background: rgba(255,255,255,0.5); color: var(--ink);
+      font-size: 16px; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(31,61,58,0.08);
+      transition: transform 0.18s ease;
+    }
+    .close-btn:hover { transform: translateY(-1px); }
+    [data-theme="dark"] .close-btn { background: rgba(255,255,255,0.08) !important; }
+
+    .modal-sub { margin: 0 0 14px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+
+    .guide-section { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(90,125,140,0.12); }
+    .guide-section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--muted); margin-bottom: 10px;
+    }
+
+    .supplies-list { display: grid; gap: 7px; }
+    .supply-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; background: rgba(90,125,140,0.08);
+      border-radius: 12px; cursor: pointer; border: none; width: 100%;
+      text-align: left; font-family: inherit; color: var(--ink);
+      transition: background 0.18s ease;
+    }
+    .supply-item:hover { background: rgba(90,125,140,0.14); }
+    [data-theme="dark"] .supply-item { background: rgba(255,255,255,0.06) !important; color: #E8F0EE !important; }
+
+    .supply-check {
+      width: 20px; height: 20px; border-radius: 6px;
+      border: 2px solid rgba(90,125,140,0.32);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 11px; font-weight: 700;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .supply-item.checked .supply-check {
+      background: #2A524F; border-color: #2A524F; color: #fff;
+    }
+    .supply-text { font-size: 13px; line-height: 1.4; }
+    .supply-item.checked .supply-text { opacity: 0.45; text-decoration: line-through; }
+
+    .instructions-list { display: grid; gap: 8px; }
+    .instruction-step  { display: flex; gap: 12px; align-items: flex-start; }
+    .step-number {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(90,125,140,0.12); color: var(--muted);
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-text { font-size: 13px; color: var(--ink); line-height: 1.5; margin: 0; }
+
+    [data-theme="dark"] .step-number { background: rgba(255,255,255,0.08) !important; }
+
+    .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+    .action-btn {
+      border: none; border-radius: 16px; padding: 13px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .action-btn.primary   { background: #2A524F; color: #E8F0EE; box-shadow: 0 8px 16px rgba(31,61,58,0.12); }
+    .action-btn.secondary { background: rgba(90,125,140,0.14); color: var(--ink); }
+    .action-btn:hover { transform: translateY(-1px); }
+    .action-btn.primary:hover   { background: #3A6E6A; }
+    .action-btn.secondary:hover { background: rgba(90,125,140,0.22); }
+
+    [data-theme="dark"] .action-btn.secondary {
+      background: rgba(255,255,255,0.08) !important; color: #E8F0EE !important;
+    }
+
+    /* ── Log completion form ── */
+    .log-section-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--muted); margin: 12px 0 6px;
+    }
+
+    .log-form-grid { display: grid; gap: 10px; }
+    .log-form-grid input[type="text"],
+    .log-form-grid input[type="number"],
+    .log-form-grid textarea {
+      width: 100%; border: 1px solid rgba(90,125,140,0.16);
+      border-radius: 14px; padding: 12px 14px;
+      font: inherit; font-size: 14px;
+      background: rgba(90,125,140,0.06); color: var(--ink); outline: none;
+      resize: none; transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .log-form-grid input:focus, .log-form-grid textarea:focus {
+      border-color: rgba(31,61,58,0.35);
+      box-shadow: 0 0 0 4px rgba(227,184,108,0.14);
+    }
+    [data-theme="dark"] .log-form-grid input,
+    [data-theme="dark"] .log-form-grid textarea {
+      background: rgba(255,255,255,0.07) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: #E8F0EE !important;
+    }
+
+    /* ── Date reminder ── */
+    .reminder-input {
+      width: 100%; border: 1px solid rgba(90,125,140,0.16);
+      border-radius: 14px; padding: 12px 14px;
+      font: inherit; font-size: 14px;
+      background: rgba(90,125,140,0.06); color: var(--ink); outline: none;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .reminder-input:focus {
+      border-color: rgba(31,61,58,0.35);
+      box-shadow: 0 0 0 4px rgba(227,184,108,0.14);
+    }
+    [data-theme="dark"] .reminder-input {
+      background: rgba(255,255,255,0.07) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: #E8F0EE !important;
     }
 
     /* ── Toast ── */
     .toast {
       position: fixed; left: 50%; bottom: 104px;
       transform: translateX(-50%) translateY(20px);
-      background: var(--ink); color: #fff;
+      background: #2A524F; color: #E8F0EE;
       padding: 12px 16px; border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(31,61,58,0.18);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.28);
       font-size: 13px; font-weight: 600;
       opacity: 0; pointer-events: none;
       transition: opacity 0.2s ease, transform 0.2s ease;
@@ -486,75 +395,145 @@
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    .empty-state {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 22px; padding: 20px;
-      box-shadow: 0 10px 20px var(--card-shadow);
-      text-align: center;
-    }
-    .empty-state h3 { margin: 0 0 8px; font-size: 16px; color: var(--ink); }
-    .empty-state p  { margin: 0; font-size: 14px; color: var(--muted); line-height: 1.5; }
-
-    @media (max-width: 380px) {
-      .stats-hero { grid-template-columns: 1fr; }
-      .stat-card.wide { flex-direction: column; gap: 16px; }
+    /* ── Bottom nav ── */
+    .bottom-nav {
+      position: fixed; left: 50%; bottom: 18px;
+      transform: translateX(-50%);
+      width: min(420px, calc(100% - 24px));
+      background: var(--nav-bg); border: 1px solid var(--nav-border);
+      box-shadow: 0 16px 30px var(--card-shadow);
+      border-radius: 24px;
+      display: grid; grid-template-columns: repeat(4,1fr);
+      padding: 10px; backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
     }
 
-  /* ── Dark mode button + toast fixes ── */
-  [data-theme="dark"] .action-btn.primary,
-  [data-theme="dark"] .add-appliance-btn,
-  [data-theme="dark"] .save-appliance-btn,
-  [data-theme="dark"] .save-btn.primary,
-  [data-theme="dark"] .save-reminder-btn,
-  [data-theme="dark"] .save-estimates-btn,
-  [data-theme="dark"] .save-costs-btn,
-  [data-theme="dark"] .save-interval-btn,
-  [data-theme="dark"] .onboard-btn.primary,
-  [data-theme="dark"] .export-btn.primary,
-  [data-theme="dark"] .view-guide-btn,
-  [data-theme="dark"] #saveApplianceBtn,
-  [data-theme="dark"] #confirmLogBtn,
-  [data-theme="dark"] #confirmDeleteBtn,
-  [data-theme="dark"] #saveNewTaskBtn,
-  [data-theme="dark"] #taskManagerDoneBtn,
-  [data-theme="dark"] #saveWarrantyBtn,
-  [data-theme="dark"] #taskDetailCompleteBtn,
-  [data-theme="dark"] #saveIntervalBtn {
-    background: #2A524F !important;
-    color: #E8F0EE !important;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.32) !important;
-  }
+    .nav-item {
+      text-align: center; color: var(--muted);
+      font-size: 11px; font-weight: 600;
+      padding: 8px 4px; border-radius: 16px;
+      cursor: pointer; transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .nav-item i { display: block; font-size: 18px; margin-bottom: 5px; }
+    .nav-item.active { background: rgba(31,61,58,0.08); color: var(--ink); }
+    .nav-item:hover  { transform: translateY(-1px); }
 
-  [data-theme="dark"] .action-btn.primary:hover,
-  [data-theme="dark"] .add-appliance-btn:hover,
-  [data-theme="dark"] .save-btn.primary:hover,
-  [data-theme="dark"] .save-reminder-btn:hover,
-  [data-theme="dark"] .save-estimates-btn:hover,
-  [data-theme="dark"] .onboard-btn.primary:hover,
-  [data-theme="dark"] .export-btn.primary:hover {
-    background: #3A6E6A !important;
-  }
+    [data-theme="dark"] .nav-item.active { background: rgba(255,255,255,0.08) !important; }
 
-  /* Toast — was using var(--ink) which goes white in dark mode */
-  [data-theme="dark"] .toast {
-    background: #2A524F !important;
-    color: #E8F0EE !important;
-    box-shadow: 0 12px 24px rgba(0,0,0,0.40) !important;
-  }
+    /* ── Dark mode overrides ── */
+    [data-theme="dark"] .back-btn {
+      background: rgba(255,255,255,0.08) !important;
+      color: #E8F0EE !important;
+    }
 
-  /* Carousel arrows */
-  [data-theme="dark"] .carousel-arrow {
-    background: rgba(255,255,255,0.08) !important;
-    color: #E8F0EE !important;
-  }
+    [data-theme="dark"] .seasonal-shortcut {
+      background: rgba(255,255,255,0.06) !important;
+      border-color: rgba(255,255,255,0.08) !important;
+    }
 
-  /* Archive toggle */
-  [data-theme="dark"] .archive-toggle {
-    background: rgba(255,255,255,0.08) !important;
-    color: #E8F0EE !important;
-  }
+    [data-theme="dark"] .seasonal-shortcut-title { color: #E8F0EE !important; }
+    [data-theme="dark"] .seasonal-shortcut-sub   { color: #A8C8D4 !important; }
+    [data-theme="dark"] .seasonal-shortcut-arrow { color: #A8C8D4 !important; }
 
+    [data-theme="dark"] .stat-pill {
+      background: rgba(255,255,255,0.06) !important;
+      border-color: rgba(255,255,255,0.08) !important;
+    }
+    [data-theme="dark"] .stat-pill-value { color: #E8F0EE !important; }
+    [data-theme="dark"] .stat-pill-label { color: #A8C8D4 !important; }
+
+    [data-theme="dark"] .category-card {
+      background: rgba(255,255,255,0.06) !important;
+      border-color: rgba(255,255,255,0.08) !important;
+    }
+    [data-theme="dark"] .category-header:hover {
+      background: rgba(255,255,255,0.04) !important;
+    }
+    [data-theme="dark"] .category-title  { color: #E8F0EE !important; }
+    [data-theme="dark"] .category-meta   { color: #A8C8D4 !important; }
+    [data-theme="dark"] .category-chevron { color: #A8C8D4 !important; }
+    [data-theme="dark"] .category-body {
+      border-top-color: rgba(255,255,255,0.06) !important;
+    }
+
+    [data-theme="dark"] .system-task:hover {
+      background: rgba(255,255,255,0.04) !important;
+    }
+    [data-theme="dark"] .system-task {
+      border-bottom-color: rgba(255,255,255,0.06) !important;
+    }
+    [data-theme="dark"] .system-task-title { color: #E8F0EE !important; }
+    [data-theme="dark"] .system-task-sub   { color: #A8C8D4 !important; }
+    [data-theme="dark"] .system-task-why   {
+      background: rgba(255,255,255,0.06) !important;
+      color: #A8C8D4 !important;
+    }
+
+    [data-theme="dark"] .system-badge.no-date {
+      background: rgba(255,255,255,0.08) !important;
+      color: #A8C8D4 !important;
+    }
+
+    [data-theme="dark"] .modal-card {
+      background: rgba(26,40,38,0.98) !important;
+      border-color: rgba(255,255,255,0.10) !important;
+    }
+
+    [data-theme="dark"] .modal-head h2  { color: #E8F0EE !important; }
+    [data-theme="dark"] .modal-sub      { color: #A8C8D4 !important; }
+
+    [data-theme="dark"] .close-btn {
+      background: rgba(255,255,255,0.08) !important;
+      color: #E8F0EE !important;
+    }
+
+    [data-theme="dark"] .guide-section {
+      border-top-color: rgba(255,255,255,0.08) !important;
+    }
+    [data-theme="dark"] .guide-section-label { color: #A8C8D4 !important; }
+
+    [data-theme="dark"] .supply-item {
+      background: rgba(255,255,255,0.06) !important;
+      color: #E8F0EE !important;
+    }
+    [data-theme="dark"] .supply-item:hover {
+      background: rgba(255,255,255,0.10) !important;
+    }
+
+    [data-theme="dark"] .step-number {
+      background: rgba(255,255,255,0.08) !important;
+      color: #A8C8D4 !important;
+    }
+    [data-theme="dark"] .step-text { color: #E8F0EE !important; }
+
+    [data-theme="dark"] .action-btn.primary {
+      background: #2A524F !important;
+      color: #E8F0EE !important;
+    }
+    [data-theme="dark"] .action-btn.primary:hover { background: #3A6E6A !important; }
+    [data-theme="dark"] .action-btn.secondary {
+      background: rgba(255,255,255,0.08) !important;
+      color: #E8F0EE !important;
+    }
+
+    [data-theme="dark"] .log-section-label { color: #A8C8D4 !important; }
+
+    [data-theme="dark"] .log-form-grid input,
+    [data-theme="dark"] .log-form-grid textarea,
+    [data-theme="dark"] .reminder-input {
+      background: rgba(255,255,255,0.07) !important;
+      border-color: rgba(255,255,255,0.12) !important;
+      color: #E8F0EE !important;
+    }
+
+    [data-theme="dark"] .category-icon-wrap.safety   { background: rgba(224,112,85,0.20) !important; }
+    [data-theme="dark"] .category-icon-wrap.exterior { background: rgba(90,125,140,0.20) !important; }
+    [data-theme="dark"] .category-icon-wrap.plumbing { background: rgba(168,200,212,0.16) !important; }
+    [data-theme="dark"] .category-icon-wrap.lawn     { background: rgba(111,201,138,0.16) !important; }
+
+    @media (max-width: 420px) {
+      .stats-strip { grid-template-columns: 1fr 1fr; }
+    }
 
   /* Force select dropdowns dark — prevents white popup in dark mode */
   [data-theme="dark"] select {
@@ -586,56 +565,88 @@
 <div class="app-shell">
 
   <div class="top-bar">
-    <button class="back-btn" onclick="goBack()">←</button>
+    <button class="back-btn" onclick="location.href='home.html'">←</button>
   </div>
 
   <div class="app-status"><span id="pageClock">9:41</span><span>• Connected</span></div>
 
-  <div class="eyebrow">Money & Risk</div>
-  <h1 class="page-title">The real cost of your home</h1>
-  <p class="page-sub">What you've spent. What you've protected. And what could go wrong if you stop.</p>
+  <div class="eyebrow">Home Systems</div>
+  <h1 class="page-title">Home maintenance</h1>
+  <p class="page-sub">Safety checks, exterior care, plumbing, and lawn — everything your home needs to stay protected.</p>
 
-  <!-- Hero stats -->
-  <div class="stats-hero" id="statsHero"></div>
-
-  <!-- Risk section -->
-  <div id="riskSection"></div>
-
-  <!-- Breakdown by task -->
-  <div class="section-head" style="margin-top:28px;">
-    <h2 class="section-title">Savings breakdown</h2>
-  </div>
-  <p class="section-sub" style="margin:-8px 0 12px;">Each completed task with its logged cost and estimated repair avoided.</p>
-  <div id="breakdownList"></div>
-
-  <!-- Missing costs entry -->
-  <div class="section-head">
-    <div>
-      <h2 class="section-title">Fill in missing costs</h2>
-      <p class="section-sub">Completions without a logged cost — add them to get a full picture.</p>
+  <!-- Seasonal shortcut -->
+  <div class="seasonal-shortcut" onclick="location.href='seasonal.html'">
+    <div class="seasonal-shortcut-left">
+      <span class="seasonal-shortcut-icon">🍂</span>
+      <div>
+        <p class="seasonal-shortcut-title">Seasonal prep</p>
+        <p class="seasonal-shortcut-sub">Summer &amp; winter checklists</p>
+      </div>
     </div>
+    <span class="seasonal-shortcut-arrow">→</span>
   </div>
-  <div id="missingCostSection"></div>
 
-  <!-- Customise savings estimates -->
-  <div class="section-head">
-    <h2 class="section-title">Customise estimates</h2>
-  </div>
-  <div class="savings-edit-section">
-    <h3>Estimated repair costs avoided</h3>
-    <p>Preset values based on industry averages. Adjust to match your area or appliance age.</p>
-    <div class="savings-edit-list" id="savingsEditList"></div>
-    <button class="save-estimates-btn" onclick="saveCustomEstimates()">Save estimates</button>
-  </div>
+  <!-- Stats -->
+  <div class="stats-strip" id="statsStrip"></div>
+
+  <!-- Categories -->
+  <div class="categories" id="categoriesContainer"></div>
 
 </div>
 
 <nav class="bottom-nav">
   <div class="nav-item" onclick="location.href='home.html'"><i class="ph ph-house"></i>Home</div>
   <div class="nav-item" onclick="location.href='appliances.html'"><i class="ph ph-wrench"></i>Appliances</div>
-  <div class="nav-item" onclick="location.href='systems.html'"><i class="ph ph-buildings"></i>Systems</div>
-  <div class="nav-item active" onclick="location.href='settings.html'"><i class="ph ph-gear"></i>Settings</div>
+  <div class="nav-item active"><i class="ph ph-buildings"></i>Systems</div>
+  <div class="nav-item" onclick="location.href='settings.html'"><i class="ph ph-gear"></i>Settings</div>
 </nav>
+
+<!-- Guide + log modal -->
+<div class="modal-overlay" id="taskModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="taskModalTitle">Task guide</h2>
+      <button class="close-btn" onclick="closeTaskModal()">✕</button>
+    </div>
+    <p class="modal-sub" id="taskModalSub"></p>
+    <div id="taskModalWhy" class="system-task-why" style="margin-bottom:4px; display:none;"></div>
+
+    <div class="guide-section" id="taskModalSuppliesSection" style="display:none;">
+      <div class="guide-section-label">🛒 Supplies needed</div>
+      <div class="supplies-list" id="taskModalSuppliesList"></div>
+    </div>
+
+    <div class="guide-section" id="taskModalStepsSection" style="display:none;">
+      <div class="guide-section-label">📋 Step-by-step</div>
+      <div class="instructions-list" id="taskModalStepsList"></div>
+    </div>
+
+    <!-- Log completion -->
+    <div class="guide-section">
+      <div class="guide-section-label">📅 Next reminder date</div>
+      <input type="date" class="reminder-input" id="taskNextDate" />
+    </div>
+
+    <div class="guide-section">
+      <div class="guide-section-label">📝 Log this completion</div>
+      <div class="log-form-grid">
+        <input type="number" id="logCost" placeholder="Cost (optional, e.g. 25.00)" min="0" step="0.01" />
+        <textarea id="logNote" rows="2" placeholder="Note (optional, e.g. replaced 9V battery in hallway detector)"></textarea>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="action-btn secondary" onclick="closeTaskModal()">Close</button>
+      <button class="action-btn primary" onclick="logTaskComplete()">Mark complete ✓</button>
+    </div>
+
+    <!-- Past completions -->
+    <div class="guide-section" id="taskHistorySection" style="display:none;">
+      <div class="guide-section-label">📋 Past completions</div>
+      <div id="taskHistoryList"></div>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -644,7 +655,7 @@
 function applyDarkMode() {
   try {
     const s = JSON.parse(localStorage.getItem('homefrontSettings') || '{}');
-    if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme', 'dark');
+    if (s.darkModeEnabled) document.documentElement.setAttribute('data-theme','dark');
     else document.documentElement.removeAttribute('data-theme');
   } catch(e) {}
 }
@@ -654,481 +665,708 @@ window.addEventListener('storage', function(e) {
 });
 
 /* ── Storage ── */
-const STORAGE_KEYS = {
-  appliances:       'homefrontAppliances',
-  customEstimates:  'homefrontCustomEstimates',
-  missingCosts:     'homefrontMissingCosts'
-};
+const SYSTEMS_KEY = 'homefrontSystemsData';
 
-function getUserAppliances() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.appliances) || '[]'); }
-  catch { return []; }
-}
-
-function getCustomEstimates() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.customEstimates) || '{}'); }
+function getSystemsData() {
+  try { return JSON.parse(localStorage.getItem(SYSTEMS_KEY) || '{}'); }
   catch { return {}; }
 }
-
-function getMissingCosts() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.missingCosts) || '{}'); }
-  catch { return {}; }
+function setSystemsData(data) {
+  localStorage.setItem(SYSTEMS_KEY, JSON.stringify(data));
 }
 
-/* ── Preset savings estimates per task key ── */
-// Based on real-world average repair/replacement costs when maintenance is skipped
-const PRESET_SAVINGS = {
-  fridge_filter:  { label: 'Fridge water filter',         estimate: 150,  reason: 'Water/ice system repair avg. $100–200' },
-  fridge_coils:   { label: 'Fridge condenser coils',      estimate: 300,  reason: 'Compressor repair avg. $200–400' },
-  fridge_gasket:  { label: 'Fridge door seals',           estimate: 80,   reason: 'Gasket replacement avg. $50–100' },
-  dish_filter:    { label: 'Dishwasher filter',           estimate: 150,  reason: 'Pump repair avg. $150–200' },
-  dish_descale:   { label: 'Dishwasher descale',          estimate: 80,   reason: 'Spray arm replacement avg. $40–80' },
-  dish_seals:     { label: 'Dishwasher seals',            estimate: 250,  reason: 'Water leak + cabinet damage avg. $200–400' },
-  washer_clean:   { label: 'Washer tub clean',            estimate: 100,  reason: 'Mold remediation avg. $75–150' },
-  washer_hoses:   { label: 'Washer hose inspection',      estimate: 1500, reason: 'Burst hose flood damage avg. $1,000–3,000' },
-  washer_inlet:   { label: 'Washer inlet screens',        estimate: 120,  reason: 'Inlet valve replacement avg. $80–150' },
-  dryer_lint:     { label: 'Dryer lint trap',             estimate: 400,  reason: 'Heating element repair avg. $200–400' },
-  dryer_vent:     { label: 'Dryer vent line',             estimate: 600,  reason: 'Motor burnout + fire risk avg. $300–500+' },
-  dryer_seals:    { label: 'Dryer drum seals',            estimate: 200,  reason: 'Seal + bearing repair avg. $150–250' },
-  hvac_filter:    { label: 'HVAC air filter',             estimate: 500,  reason: 'Blower motor + coil freeze avg. $400–600' },
-  hvac_service:   { label: 'HVAC seasonal service',       estimate: 800,  reason: 'Compressor failure avg. $1,200–2,000 (conservative est.)' },
-  hvac_vents:     { label: 'HVAC vents check',            estimate: 100,  reason: 'Efficiency loss and system imbalance' },
-  wh_flush:       { label: 'Water heater flush',          estimate: 400,  reason: 'Element failure avg. $200–400' },
-  wh_valve:       { label: 'Pressure relief valve',       estimate: 800,  reason: 'Tank replacement avg. $800–1,500 (conservative est.)' },
-  wh_leaks:       { label: 'Water heater leak check',     estimate: 2000, reason: 'Water damage remediation avg. $1,500–3,000' },
-  generic_clean:  { label: 'General cleaning',            estimate: 100,  reason: 'Preventing buildup and early wear' },
-  generic_inspect:{ label: 'General inspection',          estimate: 150,  reason: 'Catching problems early' }
-};
-
-/* ── Build flat history rows ── */
-function buildAllHistory() {
-  const appliances = getUserAppliances();
-  const rows = [];
-
-  appliances.forEach(function(appliance) {
-    (appliance.tasks || []).forEach(function(task) {
-      (task.history || []).forEach(function(entry, entryIdx) {
-        rows.push({
-          applianceId:   appliance.id,
-          applianceName: appliance.name,
-          applianceType: appliance.type,
-          taskId:        task.id,
-          taskKey:       task.key || null,
-          taskTitle:     task.title,
-          taskCategory:  task.category || 'maintenance',
-          completedAt:   entry.completedAt || '',
-          cost:          entry.cost != null ? Number(entry.cost) : null,
-          entryIdx:      entryIdx
-        });
-      });
-    });
-  });
-
-  rows.sort(function(a,b) { return (b.completedAt||'').localeCompare(a.completedAt||''); });
-  return rows;
-}
-
-/* ── Get effective estimate for a task ── */
-function getEstimate(taskKey) {
-  const custom = getCustomEstimates();
-  if (taskKey && custom[taskKey] != null) return Number(custom[taskKey]);
-  if (taskKey && PRESET_SAVINGS[taskKey]) return PRESET_SAVINGS[taskKey].estimate;
-  return 0;
-}
-
-/* ── Format currency ── */
-function fmt(n) {
-  if (n == null || isNaN(n)) return '—';
-  return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-}
-
-/* ── Render hero stats ── */
-function renderStats(rows) {
-  const missing = getMissingCosts();
-
-  const totalSpent = rows.reduce(function(s, r) {
-    const cost = r.cost != null ? r.cost : (missing[r.taskId + '_' + r.entryIdx] != null ? Number(missing[r.taskId + '_' + r.entryIdx]) : null);
-    return s + (cost || 0);
-  }, 0);
-
-  const totalSaved = rows.reduce(function(s, r) {
-    return s + getEstimate(r.taskKey);
-  }, 0);
-
-  const tasksLogged = rows.length;
-  const roi = totalSpent > 0 ? Math.round((totalSaved - totalSpent) / totalSpent * 100) : null;
-  const multiplier = totalSpent > 0 ? (totalSaved / totalSpent).toFixed(1) : null;
-
-  // Protection ratio message
-  let protectionMsg = '';
-  if (multiplier && parseFloat(multiplier) >= 2) {
-    protectionMsg = `<div style="background:rgba(42,122,74,0.12);border-radius:14px;padding:12px 16px;margin-top:12px;font-size:13px;line-height:1.5;color:#1A4A2A;">
-      <strong>Every $1 you spent on maintenance protected $${multiplier} in potential repairs.</strong>
-      That ratio keeps growing the longer you stay on top of it.
-    </div>`;
-  } else if (!rows.length) {
-    protectionMsg = `<div style="background:rgba(196,75,40,0.08);border:1px solid rgba(196,75,40,0.2);border-radius:14px;padding:12px 16px;margin-top:0;font-size:13px;line-height:1.5;color:#8A3E28;">
-      <strong>You have not logged any maintenance yet.</strong>
-      Homeowners who skip regular maintenance spend an average of 3-5x more on emergency repairs than those who stay on top of it.
-    </div>`;
+/* ── System task definitions ── */
+const SYSTEM_CATEGORIES = [
+  {
+    id: 'safety',
+    label: 'Safety',
+    icon: '🔥',
+    colorClass: 'safety',
+    tasks: [
+      {
+        id: 'smoke_battery',
+        title: 'Smoke detector batteries',
+        intervalDays: 180,
+        why: 'Dead batteries are the #1 reason smoke alarms fail during fires. Replace every 6 months.',
+        supplies: ['9V batteries (check how many detectors you have)', 'Ladder if ceiling mounted'],
+        steps: [
+          'Count how many smoke detectors you have in your home.',
+          'Press the test button on each — if it chirps weakly or not at all, replace immediately.',
+          'Remove the detector from its mount and open the battery compartment.',
+          'Replace with a fresh 9V battery.',
+          'Reinstall and press the test button — it should give a loud, clear alarm.',
+          'Write the replacement date on a piece of tape inside the compartment.',
+          'Repeat for every detector in the home.'
+        ]
+      },
+      {
+        id: 'smoke_test',
+        title: 'Test all smoke detectors',
+        intervalDays: 30,
+        why: 'Monthly testing ensures every detector is functional before an emergency.',
+        supplies: ['None needed'],
+        steps: [
+          'Stand beneath each smoke detector.',
+          'Press and hold the test button for 3–5 seconds.',
+          'The alarm should sound loudly and clearly.',
+          'If any detector fails to sound, replace the battery first, then retest.',
+          'If it still fails after a new battery, replace the unit — detectors over 10 years old should be replaced regardless.'
+        ]
+      },
+      {
+        id: 'co_test',
+        title: 'Test CO detectors',
+        intervalDays: 30,
+        why: 'Carbon monoxide is odorless and deadly. Monthly testing is your only warning system.',
+        supplies: ['None needed'],
+        steps: [
+          'Press and hold the test/silence button on each CO detector.',
+          'The alarm should sound and the display should flash.',
+          'Release the button — the detector should stop alarming.',
+          'If it fails the test, replace the batteries first.',
+          'Note: CO detectors have a 5–7 year lifespan. Check the manufacture date on the back.',
+          'Replace any unit older than 7 years regardless of test results.'
+        ]
+      },
+      {
+        id: 'co_replace',
+        title: 'Replace CO detectors (7-year cycle)',
+        intervalDays: 2555,
+        why: 'CO detector sensors degrade over time. After 7 years the sensor may not reliably detect CO.',
+        supplies: ['New CO detector (combination smoke/CO units recommended)', 'Screwdriver'],
+        steps: [
+          'Check the manufacture date on the back of each CO detector.',
+          'Any unit 7 or more years old should be replaced — this is a safety requirement, not just a recommendation.',
+          'Choose a replacement that covers the same area and matches your power source (battery vs. hardwired).',
+          'Install at knee height (CO is slightly heavier than air) or per manufacturer instructions.',
+          'Register the new unit with the manufacturer for warranty purposes.',
+          'Test the new unit immediately after installation.'
+        ]
+      },
+      {
+        id: 'fire_extinguisher',
+        title: 'Inspect fire extinguisher',
+        intervalDays: 365,
+        why: 'Extinguishers can lose pressure over time. An annual check ensures it works when you need it.',
+        supplies: ['None needed — visual inspection only'],
+        steps: [
+          'Locate all fire extinguishers in your home (kitchen, garage, workshop).',
+          'Check the pressure gauge — the needle should be in the green zone.',
+          'Inspect the pin and tamper seal — both should be intact.',
+          'Look for dents, rust, or corrosion on the cylinder.',
+          'Check that the nozzle is clear and unobstructed.',
+          'Verify the label is legible and you can read the instructions.',
+          'If pressure is low or the unit shows damage, take it to a fire equipment service center.',
+          'Replace any extinguisher older than 12 years.'
+        ]
+      },
+      {
+        id: 'gfci_test',
+        title: 'Test GFCI outlets',
+        intervalDays: 90,
+        why: 'GFCI outlets protect against electrocution near water. They can fail without warning.',
+        supplies: ['None — press the buttons on the outlet itself'],
+        steps: [
+          'Locate all GFCI outlets — typically in bathrooms, kitchen, garage, and outdoor areas.',
+          'Press the TEST button on the outlet — a correctly working outlet will click and power will shut off.',
+          'Plug a lamp or phone charger in to confirm power is actually off.',
+          'Press RESET — power should restore immediately.',
+          'If the outlet does not trip when tested, or does not reset, it needs replacing.',
+          'Call a licensed electrician to replace any faulty GFCI outlet.'
+        ]
+      },
+      {
+        id: 'electrical_panel',
+        title: 'Inspect electrical panel',
+        intervalDays: 365,
+        why: 'Tripped breakers or signs of overheating caught early prevent house fires.',
+        supplies: ['Flashlight'],
+        steps: [
+          'Open the electrical panel door.',
+          'Look for any breakers in the tripped (middle) position — reset any that are tripped by switching fully OFF then ON.',
+          'Look for scorch marks, burning smell, or rust inside the panel.',
+          'Check that all breakers are labeled — unlabeled breakers are a safety hazard.',
+          'Listen for unusual buzzing or crackling sounds.',
+          'If you see scorching, smell burning, or hear crackling, call a licensed electrician immediately — do not ignore this.',
+          'Schedule a professional inspection every 10 years or if the panel is over 25 years old.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'exterior',
+    label: 'Exterior',
+    icon: '🏡',
+    colorClass: 'exterior',
+    tasks: [
+      {
+        id: 'gutters_clean',
+        title: 'Clean gutters',
+        intervalDays: 180,
+        why: 'Clogged gutters cause water to back up under shingles and rot fascia boards.',
+        supplies: ['Ladder', 'Work gloves', 'Garden trowel or gutter scoop', 'Garden hose', 'Bucket'],
+        steps: [
+          'Set up a ladder safely — use a standoff to avoid leaning on the gutter.',
+          'Wear gloves — gutters collect sharp debris and may have wasp nests.',
+          'Scoop debris starting from the downspout end, working away from it.',
+          'Place debris in a bucket rather than dropping it on landscaping.',
+          'After clearing debris, flush with a garden hose toward the downspout.',
+          'Check that water flows freely from the downspout and drains away from the foundation.',
+          'Inspect for sagging sections, loose hangers, or holes — repair or replace as needed.'
+        ]
+      },
+      {
+        id: 'roof_inspect',
+        title: 'Roof inspection',
+        intervalDays: 365,
+        why: 'Small roof issues caught early cost hundreds to fix. Left alone they cost thousands.',
+        supplies: ['Binoculars (ground inspection) or ladder for closer look', 'Flashlight for attic check'],
+        steps: [
+          'From the ground or safely from a ladder, inspect shingles for curling, cracking, or missing sections.',
+          'Look for dark stains or moss — this indicates moisture retention and potential damage.',
+          'Inspect flashing around chimneys, skylights, and vents for lifting or rust.',
+          'Check the ridge line — it should be straight and even.',
+          'From inside the attic, look for daylight coming through the roof deck or water stain marks.',
+          'After heavy rain, check the attic for any dripping or new staining.',
+          'If you see significant damage, hire a licensed roofing contractor for an assessment — do not walk on the roof yourself unless you are experienced.'
+        ]
+      },
+      {
+        id: 'deck_inspect',
+        title: 'Inspect and seal deck / patio',
+        intervalDays: 365,
+        why: 'UV exposure and moisture cause decks to rot and splinter. Annual sealing extends life by years.',
+        supplies: ['Deck cleaner', 'Stiff brush or pressure washer', 'Deck stain/sealer', 'Paint roller or brush', 'Drop cloth'],
+        steps: [
+          'Inspect all boards for soft spots, rot, or loose fasteners by pressing firmly with your foot.',
+          'Check railings and posts — they should not wobble.',
+          'Look for any boards that are cracking, splitting, or severely discolored.',
+          'Replace any damaged boards before sealing.',
+          'Clean the deck with deck cleaner and scrub or pressure wash — let dry completely (48 hours).',
+          'Apply deck stain or sealer with a brush or roller, working with the grain.',
+          'Allow to cure fully before placing furniture back (typically 24–48 hours).'
+        ]
+      },
+      {
+        id: 'driveway_inspect',
+        title: 'Driveway crack inspection and sealing',
+        intervalDays: 365,
+        why: 'Water gets into cracks, freezes, and expands — turning small cracks into large ones.',
+        supplies: ['Concrete/asphalt crack filler', 'Driveway sealer (asphalt only)', 'Caulk gun', 'Broom', 'Painter\'s tape'],
+        steps: [
+          'Sweep the driveway clean of all debris.',
+          'Inspect for cracks wider than 1/4 inch or any heaving sections.',
+          'Fill cracks with appropriate filler — use asphalt crack filler for asphalt, concrete crack filler for concrete.',
+          'Allow filler to cure per manufacturer instructions.',
+          'For asphalt driveways: apply driveway sealer every 3–5 years using a brush or squeegee applicator.',
+          'Keep vehicles off the sealed driveway for 24–48 hours.',
+          'Cracks wider than 1 inch or significant heaving should be assessed by a contractor.'
+        ]
+      },
+      {
+        id: 'exterior_caulk',
+        title: 'Inspect and recaulk exterior',
+        intervalDays: 365,
+        why: 'Failed caulk lets water into walls, causing rot and mold. It also drives up energy bills.',
+        supplies: ['Exterior silicone or polyurethane caulk', 'Caulk gun', 'Putty knife or caulk removal tool', 'Isopropyl alcohol', 'Painter\'s tape'],
+        steps: [
+          'Walk the perimeter of your home and inspect all caulk joints around windows, doors, and where siding meets trim.',
+          'Press on the caulk — if it cracks, crumbles, or pulls away, it needs replacing.',
+          'Use a putty knife or caulk removal tool to strip out old failed caulk.',
+          'Wipe the surface with isopropyl alcohol to remove residue.',
+          'Apply painter\'s tape for a clean line.',
+          'Load the caulk gun and apply a smooth, continuous bead.',
+          'Smooth with a wet finger or caulk tool.',
+          'Remove tape while caulk is still wet.',
+          'Allow to cure 24 hours before rain exposure.'
+        ]
+      },
+      {
+        id: 'foundation_inspect',
+        title: 'Foundation visual inspection',
+        intervalDays: 365,
+        why: 'Foundation cracks caught early are manageable. Ignored, they become structurally dangerous.',
+        supplies: ['Flashlight', 'Tape measure (to track crack width over time)'],
+        steps: [
+          'Walk the entire perimeter of your home and inspect the foundation from outside.',
+          'Look for cracks — note their length, width, and direction (horizontal, vertical, diagonal).',
+          'Small vertical hairline cracks are usually caused by normal settling and are less concerning.',
+          'Horizontal cracks or stair-step cracks in brick foundations are more serious — call a structural engineer.',
+          'Inside the basement or crawlspace, look for water staining, efflorescence (white powder), or active dampness.',
+          'Measure and photograph any cracks so you can track if they are growing.',
+          'If you notice new or growing cracks, consult a structural engineer — not just a contractor.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'plumbing',
+    label: 'Plumbing',
+    icon: '💧',
+    colorClass: 'plumbing',
+    tasks: [
+      {
+        id: 'water_main',
+        title: 'Locate and test water main shutoff',
+        intervalDays: 365,
+        why: 'In a plumbing emergency, every minute matters. Know where your shutoff is before you need it.',
+        supplies: ['Nothing needed — just locate and test'],
+        steps: [
+          'Locate your main water shutoff valve — typically in the basement, crawlspace, utility room, or outside near the foundation.',
+          'Turn the valve fully clockwise (off) and then fully counterclockwise (on) to ensure it moves freely.',
+          'If the valve is stiff and won\'t budge, apply penetrating oil and try again — do not force it.',
+          'Confirm every adult and older child in the household knows where the shutoff is.',
+          'Consider labeling the valve with a bright tag for emergencies.',
+          'If the valve is a gate valve (round wheel) rather than a ball valve (lever), consider asking a plumber to upgrade it — gate valves fail more often.'
+        ]
+      },
+      {
+        id: 'water_pressure',
+        title: 'Check water pressure',
+        intervalDays: 365,
+        why: 'Pressure over 80 PSI damages pipes, appliances, and fixtures over time.',
+        supplies: ['Water pressure gauge (attaches to a hose bib, ~$10 at hardware stores)'],
+        steps: [
+          'Attach the pressure gauge to an outdoor hose bib or laundry faucet.',
+          'Make sure no water is running anywhere in the house.',
+          'Turn on the faucet fully and read the gauge.',
+          'Normal residential pressure is 40–80 PSI. Ideal is 50–70 PSI.',
+          'If pressure is over 80 PSI, install a pressure reducing valve (PRV) — call a plumber.',
+          'If pressure is under 40 PSI, check with your water utility or have a plumber inspect for blockages or PRV issues.',
+          'Low pressure in just one area usually indicates a localized blockage or partially closed valve.'
+        ]
+      },
+      {
+        id: 'drain_maintain',
+        title: 'Monthly drain maintenance',
+        intervalDays: 30,
+        why: 'Regular flushing prevents buildup that causes slow drains and clogs.',
+        supplies: ['1 cup baking soda', '1 cup white vinegar', 'Boiling water (kettle)'],
+        steps: [
+          'Start with the kitchen sink drain.',
+          'Pour 1 cup of baking soda down the drain.',
+          'Follow immediately with 1 cup of white vinegar.',
+          'Let it fizz for 15 minutes — this breaks up grease and soap buildup.',
+          'Flush with a full kettle of boiling water.',
+          'Repeat for bathroom sinks and the shower/tub drain.',
+          'For the shower, remove the drain cover and pull out any hair buildup first.',
+          'Do NOT use this method if you have already used a chemical drain cleaner — the reaction can be dangerous.'
+        ]
+      },
+      {
+        id: 'hose_bibs',
+        title: 'Inspect outdoor hose bibs',
+        intervalDays: 180,
+        why: 'Dripping hose bibs waste hundreds of gallons a year and can freeze and burst in winter.',
+        supplies: ['Adjustable wrench', 'Replacement washers if needed ($2 at hardware stores)'],
+        steps: [
+          'Turn on each outdoor hose bib and check for drips from the spout.',
+          'Check for drips from the packing nut (the nut just behind the handle) — tighten slightly if dripping.',
+          'Turn off and check that the dripping stops completely.',
+          'If the spout continues to drip after shutting off, the washer likely needs replacing.',
+          'To replace the washer: shut off the interior supply valve, open the bib to drain pressure, unscrew the packing nut, pull the stem out, and replace the rubber washer at the end.',
+          'Reassemble and test.',
+          'Before winter: disconnect hoses, shut off interior supply valves, and open the bib slightly to drain.'
+        ]
+      },
+      {
+        id: 'toilet_inspect',
+        title: 'Inspect toilets for leaks',
+        intervalDays: 90,
+        why: 'A running toilet can waste 200 gallons per day without being obvious.',
+        supplies: ['Food coloring or dye tablet (hardware stores)', 'Toilet flapper if needed (~$10)'],
+        steps: [
+          'Remove the tank lid and place 5–10 drops of food coloring in the tank.',
+          'Do not flush for 15 minutes.',
+          'Check the bowl — if color appears, the flapper is leaking and needs replacing.',
+          'Listen for the fill valve cycling on and off when no one has flushed — this indicates a leak.',
+          'To replace the flapper: shut off the water supply valve at the wall, flush to empty the tank, unhook the old flapper from the overflow tube and chain, and snap on the new one.',
+          'Check that the chain has a little slack but is not so long it gets under the flapper.',
+          'Turn the water back on and test.'
+        ]
+      },
+      {
+        id: 'sump_pump',
+        title: 'Test sump pump',
+        intervalDays: 90,
+        why: 'Sump pumps sit idle for months then need to work in a storm. Testing prevents flood damage.',
+        supplies: ['Bucket of water'],
+        steps: [
+          'Locate the sump pump pit in the basement or crawlspace.',
+          'Pour a full bucket of water slowly into the pit.',
+          'The pump float should rise and trigger the pump to activate.',
+          'Confirm water is being pumped out through the discharge pipe.',
+          'The pump should shut off automatically once the water level drops.',
+          'If the pump does not activate, check the power supply first — then check that the float is not stuck.',
+          'Test the backup battery (if equipped) by unplugging the main power and pouring water in again.',
+          'Clean debris from the pit and check the discharge line for obstructions.'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'lawn',
+    label: 'Lawn & Exterior',
+    icon: '🌿',
+    colorClass: 'lawn',
+    tasks: [
+      {
+        id: 'lawn_aerate',
+        title: 'Aerate lawn',
+        intervalDays: 365,
+        why: 'Aeration breaks up compacted soil, helping water and nutrients reach grass roots.',
+        supplies: ['Core aerator (rent from hardware store for ~$75/day)', 'Lawn fertilizer (optional, apply right after aeration)'],
+        steps: [
+          'Aerate in the fall for cool-season grasses (fescue, bluegrass) or late spring for warm-season grasses (Bermuda, zoysia).',
+          'Water the lawn 1–2 days before aerating so the soil is moist but not muddy.',
+          'Make two passes with the aerator — run perpendicular to each other.',
+          'Leave the soil plugs on the lawn — they will break down and return nutrients.',
+          'Immediately after aerating is the best time to overseed and apply fertilizer.',
+          'Water well after the process.'
+        ]
+      },
+      {
+        id: 'irrigation_startup',
+        title: 'Start up irrigation system',
+        intervalDays: 365,
+        why: 'Checking the system before summer reveals broken heads and leaks before they waste water all season.',
+        supplies: ['Nothing needed — visual inspection', 'Irrigation head key if adjustments needed'],
+        steps: [
+          'Turn on the main irrigation supply valve slowly.',
+          'Activate each zone from the controller one at a time.',
+          'Walk each zone and check every head — look for heads that are not popping up, spraying in the wrong direction, or not rotating.',
+          'Check for broken heads or visible leaks at head connections.',
+          'Adjust head direction as needed to avoid watering paved surfaces.',
+          'Check the controller schedule and update for the new season.',
+          'Note: if the system was professionally winterized, check with your irrigation company about spring startup as well.'
+        ]
+      },
+      {
+        id: 'pest_control',
+        title: 'Perimeter pest treatment',
+        intervalDays: 90,
+        why: 'Quarterly perimeter treatment keeps insects and spiders from establishing inside the home.',
+        supplies: ['Outdoor perimeter spray (available at hardware stores)', 'Sprayer', 'Gloves'],
+        steps: [
+          'Choose a dry day with no rain forecast for 24 hours.',
+          'Wear gloves and follow all label safety instructions.',
+          'Spray a 3-foot band around the base of your home\'s exterior, focusing on entry points (gaps, cracks, door/window frames).',
+          'Also treat around the garage door threshold.',
+          'For ant problems, treat along ant trails and around any visible ant mounds.',
+          'Keep children and pets away from treated areas until dry (typically 30 minutes).',
+          'For severe infestations or termites, always use a licensed pest control professional.'
+        ]
+      },
+      {
+        id: 'tree_inspect',
+        title: 'Tree and shrub inspection',
+        intervalDays: 365,
+        why: 'Dead branches fall in storms. Trees too close to the home or power lines are a serious hazard.',
+        supplies: ['Nothing needed — visual inspection', 'Binoculars for taller trees'],
+        steps: [
+          'Walk your property and inspect all trees and large shrubs.',
+          'Look for dead or dying branches — they will be leafless, brittle, or have peeling bark.',
+          'Check for branches hanging over the roof, near power lines, or over parked vehicles.',
+          'Look for signs of disease: unusual spots on leaves, fungal growth at the base, or hollow sections in the trunk.',
+          'Any tree leaning toward the house should be assessed by a certified arborist.',
+          'Small dead branches can be pruned yourself. Anything large, near power lines, or requiring climbing should be handled by a professional tree service.',
+          'Check local utility company — many will trim branches near power lines for free.'
+        ]
+      },
+      {
+        id: 'mulch_refresh',
+        title: 'Refresh garden bed mulch',
+        intervalDays: 365,
+        why: 'Fresh mulch suppresses weeds, retains soil moisture, and regulates temperature around plants.',
+        supplies: ['Mulch (2–3 cubic feet per 10 sq ft of bed)', 'Wheelbarrow', 'Garden rake'],
+        steps: [
+          'Rake existing mulch and check depth — you want 2–3 inches total.',
+          'Remove any weeds from the bed before adding mulch.',
+          'If existing mulch is matted or decomposed, rake it out before adding fresh.',
+          'Add fresh mulch to bring the depth up to 2–3 inches.',
+          'Keep mulch at least 6 inches away from tree trunks and plant stems — contact causes rot.',
+          'Water the mulch lightly after application to help it settle.'
+        ]
+      }
+    ]
   }
+];
 
-  document.getElementById('statsHero').innerHTML = (rows.length ? `
-    <div class="stat-card">
-      <div class="stat-value amber">${fmt(totalSpent)}</div>
-      <div class="stat-label">Spent on maintenance</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value green">${fmt(totalSaved)}</div>
-      <div class="stat-label">Potential repairs prevented</div>
-    </div>
-    <div class="stat-card wide">
-      <div>
-        <div class="stat-value">${tasksLogged}</div>
-        <div class="stat-label">Tasks completed</div>
-      </div>
-      <div>
-        <div class="stat-value green">${fmt(totalSaved - totalSpent)}</div>
-        <div class="stat-label">Net protection</div>
-      </div>
-      ${roi != null ? `<div>
-        <div class="stat-value green">${roi}%</div>
-        <div class="stat-label">Return on maintenance</div>
-      </div>` : ''}
-    </div>` : '') + protectionMsg;
-}
-
-/* ── Render breakdown list ── */
-function renderBreakdown(rows) {
-  const container = document.getElementById('breakdownList');
-  const missing   = getMissingCosts();
-
-  if (!rows.length) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <h3>Nothing tracked yet</h3>
-        <p>Start logging your maintenance and this page builds your home's financial record — what you spent, what you prevented, and what you're currently risking. Homeowners who track nothing average $3,200 more in unexpected repairs per year.</p>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = `<div class="breakdown-list">` +
-    rows.map(function(r) {
-      const cost = r.cost != null
-        ? r.cost
-        : (missing[r.taskId + '_' + r.entryIdx] != null ? Number(missing[r.taskId + '_' + r.entryIdx]) : null);
-      const estimate = getEstimate(r.taskKey);
-      const dateStr  = r.completedAt
-        ? new Date(r.completedAt + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-        : '';
-
-      return `
-        <div class="breakdown-item">
-          <div>
-            <p class="breakdown-task">${escHtml(r.taskTitle)}</p>
-            <p class="breakdown-appliance">${escHtml(r.applianceName)} • ${dateStr}</p>
-          </div>
-          <div class="breakdown-amounts">
-            ${estimate > 0 ? `<div class="breakdown-saved">~${fmt(estimate)} saved</div>` : ''}
-            <div class="breakdown-spent">${cost != null ? fmt(cost) + ' spent' : 'Cost not logged'}</div>
-          </div>
-        </div>
-      `;
-    }).join('') + `</div>`;
-}
-
-/* ── Render missing cost entry ── */
-function renderMissingCosts(rows) {
-  const container = document.getElementById('missingCostSection');
-  const missing   = getMissingCosts();
-
-  const noLog = rows.filter(function(r) {
-    return r.cost == null && missing[r.taskId + '_' + r.entryIdx] == null;
-  });
-
-  if (!noLog.length) {
-    container.innerHTML = `
-      <div class="card">
-        <p style="margin:0; font-size:13px; color:var(--muted);">✓ All completions have a cost logged. Great record keeping!</p>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="card">
-      <h3 class="card-title">Missing costs</h3>
-      <p class="card-sub">${noLog.length} completion${noLog.length === 1 ? '' : 's'} without a cost. Enter what you spent to get accurate totals.</p>
-      <div class="missing-cost-list">
-        ${noLog.map(function(r) {
-          const key = r.taskId + '_' + r.entryIdx;
-          const dateStr = r.completedAt
-            ? new Date(r.completedAt + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
-            : '';
-          return `
-            <div class="missing-cost-item">
-              <div>
-                <span style="font-size:13px; font-weight:600; color:var(--ink); display:block; margin-bottom:2px;">${escHtml(r.taskTitle)}</span>
-                <span style="font-size:11px; color:var(--muted);">${escHtml(r.applianceName)} • ${dateStr}</span>
-              </div>
-              <input class="missing-cost-input" type="number" min="0" step="0.01"
-                     placeholder="$0" data-key="${key}"
-                     value="${missing[key] != null ? missing[key] : ''}" />
-            </div>
-          `;
-        }).join('')}
-      </div>
-      <button class="save-costs-btn" onclick="saveMissingCosts()">Save costs</button>
-    </div>`;
-}
-
-function saveMissingCosts() {
-  const missing = getMissingCosts();
-  document.querySelectorAll('.missing-cost-input').forEach(function(input) {
-    const key = input.dataset.key;
-    const val = input.value.trim();
-    if (val !== '' && !isNaN(Number(val))) {
-      missing[key] = Number(val);
-    }
-  });
-  localStorage.setItem(STORAGE_KEYS.missingCosts, JSON.stringify(missing));
-  showToast('Costs saved ✓');
-  renderAll();
-}
-
-/* ── Render custom estimates editor ── */
-function renderEstimatesEditor() {
-  const custom = getCustomEstimates();
-  const list   = document.getElementById('savingsEditList');
-
-  list.innerHTML = Object.entries(PRESET_SAVINGS).map(function(entry) {
-    const key  = entry[0];
-    const data = entry[1];
-    const val  = custom[key] != null ? custom[key] : data.estimate;
-
-    return `
-      <div class="savings-edit-row">
-        <div>
-          <span class="savings-edit-label">${escHtml(data.label)}</span>
-          <span class="savings-edit-hint">${escHtml(data.reason)}</span>
-        </div>
-        <input class="savings-edit-input" type="number" min="0" step="1"
-               value="${val}" data-key="${key}" />
-      </div>
-    `;
-  }).join('');
-}
-
-function saveCustomEstimates() {
-  const custom = {};
-  document.querySelectorAll('.savings-edit-input').forEach(function(input) {
-    const val = Number(input.value);
-    if (!isNaN(val) && val >= 0) {
-      custom[input.dataset.key] = val;
-    }
-  });
-  localStorage.setItem(STORAGE_KEYS.customEstimates, JSON.stringify(custom));
-  showToast('Estimates saved ✓');
-  renderAll();
-}
+/* ── State ── */
+let activeTaskId   = null;
+let activeCatId    = null;
+let supplyChecks   = {};
+let toastTimer     = null;
 
 /* ── Helpers ── */
+function getTodayDate() { return new Date().toISOString().split('T')[0]; }
+
+function formatDate(ds) {
+  if (!ds) return 'Not set';
+  return new Date(ds + 'T00:00:00').toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function daysBetween(a, b) {
+  return Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
+}
+
+function getTaskBadge(taskId) {
+  const data = getSystemsData();
+  const record = data[taskId] || {};
+  if (!record.nextDate) return { text: 'Set reminder', className: 'no-date' };
+  const days = daysBetween(getTodayDate(), record.nextDate);
+  if (days < 0)  return { text: 'Overdue',       className: 'due' };
+  if (days === 0) return { text: 'Due today',     className: 'due' };
+  if (days <= 7) return { text: 'Due in ' + days + 'd', className: 'soon' };
+  return { text: 'Due ' + formatDate(record.nextDate), className: 'ok' };
+}
+
+function getTaskLastDone(taskId) {
+  const data = getSystemsData();
+  const record = data[taskId] || {};
+  return record.lastDone || null;
+}
+
 function escHtml(v) {
-  return String(v ?? '')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+  return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
     .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
 
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(window._toastTimer);
-  window._toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2400);
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function() { t.classList.remove('show'); }, 2400);
 }
 
+/* ── Stats ── */
+function renderStats() {
+  const data = getSystemsData();
+  const allTasks = SYSTEM_CATEGORIES.flatMap(function(c) { return c.tasks; });
+  const overdue  = allTasks.filter(function(t) {
+    const r = data[t.id] || {};
+    return r.nextDate && daysBetween(getTodayDate(), r.nextDate) < 0;
+  }).length;
+  const tracked  = allTasks.filter(function(t) { return (data[t.id] || {}).lastDone; }).length;
+  const total    = allTasks.length;
+
+  document.getElementById('statsStrip').innerHTML = `
+    <div class="stat-pill">
+      <div class="stat-pill-value">${total}</div>
+      <div class="stat-pill-label">Total tasks</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-pill-value">${tracked}</div>
+      <div class="stat-pill-label">Tracked</div>
+    </div>
+    <div class="stat-pill" style="${overdue > 0 ? 'border-color:rgba(198,90,58,0.3);' : ''}">
+      <div class="stat-pill-value" style="${overdue > 0 ? 'color:#8A3E28;' : ''}">${overdue}</div>
+      <div class="stat-pill-label">Overdue</div>
+    </div>
+  `;
+}
+
+/* ── Render categories ── */
+function renderCategories() {
+  const container = document.getElementById('categoriesContainer');
+  const data = getSystemsData();
+
+  container.innerHTML = SYSTEM_CATEGORIES.map(function(cat) {
+    const tasks = cat.tasks;
+    const overdueCount = tasks.filter(function(t) {
+      const r = data[t.id] || {};
+      return r.nextDate && daysBetween(getTodayDate(), r.nextDate) < 0;
+    }).length;
+    const trackedCount = tasks.filter(function(t) { return (data[t.id] || {}).lastDone; }).length;
+    const meta = overdueCount > 0
+      ? overdueCount + ' overdue'
+      : trackedCount + ' of ' + tasks.length + ' tracked';
+
+    const taskRows = tasks.map(function(task) {
+      const badge   = getTaskBadge(task.id);
+      const lastDone = getTaskLastDone(task.id);
+
+      return `
+        <div class="system-task" onclick="openTaskModal('${cat.id}','${task.id}')">
+          <div class="system-task-top">
+            <div>
+              <p class="system-task-title">${escHtml(task.title)}</p>
+              <p class="system-task-sub">
+                Every ${task.intervalDays >= 365 ? Math.round(task.intervalDays/365) + ' year' + (task.intervalDays >= 730 ? 's' : '') : task.intervalDays >= 30 ? Math.round(task.intervalDays/30) + ' month' + (task.intervalDays >= 60 ? 's' : '') : task.intervalDays + ' days'}
+                ${lastDone ? ' • Last: ' + formatDate(lastDone) : ''}
+              </p>
+            </div>
+            <span class="system-badge ${badge.className}">${badge.text}</span>
+          </div>
+          ${task.why ? '<p class="system-task-why">' + escHtml(task.why) + '</p>' : ''}
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="category-card" id="cat_${cat.id}">
+        <div class="category-header" onclick="toggleCategory('${cat.id}')">
+          <div class="category-icon-wrap ${cat.colorClass}">${cat.icon}</div>
+          <div>
+            <p class="category-title">${escHtml(cat.label)}</p>
+            <p class="category-meta">${meta}</p>
+          </div>
+          <div class="category-chevron">⌄</div>
+        </div>
+        <div class="category-body">
+          <div class="system-task-list">${taskRows}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleCategory(catId) {
+  document.getElementById('cat_' + catId).classList.toggle('open');
+}
+
+/* ── Task modal ── */
+function openTaskModal(catId, taskId) {
+  const cat  = SYSTEM_CATEGORIES.find(function(c) { return c.id === catId; });
+  const task = cat ? cat.tasks.find(function(t) { return t.id === taskId; }) : null;
+  if (!task) return;
+
+  activeTaskId = taskId;
+  activeCatId  = catId;
+  supplyChecks = {};
+
+  document.getElementById('taskModalTitle').textContent = task.title;
+  document.getElementById('taskModalSub').textContent   = cat.label + ' • Every ' +
+    (task.intervalDays >= 365 ? Math.round(task.intervalDays/365) + ' year(s)' :
+     task.intervalDays >= 30  ? Math.round(task.intervalDays/30) + ' month(s)' :
+     task.intervalDays + ' days');
+
+  const whyEl = document.getElementById('taskModalWhy');
+  if (task.why) { whyEl.textContent = task.why; whyEl.style.display = 'block'; }
+  else           { whyEl.style.display = 'none'; }
+
+  // Supplies
+  const suppliesSection = document.getElementById('taskModalSuppliesSection');
+  const suppliesList    = document.getElementById('taskModalSuppliesList');
+  if (task.supplies && task.supplies.length) {
+    suppliesList.innerHTML = task.supplies.map(function(item, idx) {
+      return `
+        <button class="supply-item" onclick="toggleSupply(${idx}, this)">
+          <div class="supply-check" id="sCheck_${idx}"></div>
+          <span class="supply-text">${escHtml(item)}</span>
+        </button>`;
+    }).join('');
+    suppliesSection.style.display = 'block';
+  } else {
+    suppliesSection.style.display = 'none';
+  }
+
+  // Steps
+  const stepsSection = document.getElementById('taskModalStepsSection');
+  const stepsList    = document.getElementById('taskModalStepsList');
+  if (task.steps && task.steps.length) {
+    stepsList.innerHTML = task.steps.map(function(step, idx) {
+      return `
+        <div class="instruction-step">
+          <div class="step-number">${idx+1}</div>
+          <p class="step-text">${escHtml(step)}</p>
+        </div>`;
+    }).join('');
+    stepsSection.style.display = 'block';
+  } else {
+    stepsSection.style.display = 'none';
+  }
+
+  // Pre-fill next date
+  const data   = getSystemsData();
+  const record = data[taskId] || {};
+  const defaultNext = record.nextDate || addDays(getTodayDate(), task.intervalDays);
+  document.getElementById('taskNextDate').value = defaultNext;
+  document.getElementById('logCost').value  = '';
+  document.getElementById('logNote').value  = '';
+
+  // Render past completions
+  const history = record.history || [];
+  const histSection = document.getElementById('taskHistorySection');
+  const histList    = document.getElementById('taskHistoryList');
+  if (history.length) {
+    histList.innerHTML = history.slice(0, 5).map(function(h) {
+      return `
+        <div style="padding:8px 10px; border-radius:10px; background:rgba(90,125,140,0.08); margin-bottom:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            <span style="font-size:13px; font-weight:600; color:var(--ink);">${formatDate(h.completedAt)}</span>
+            ${h.cost != null ? `<span style="font-size:12px; color:var(--muted);">$${Number(h.cost).toFixed(2)}</span>` : ''}
+          </div>
+          ${h.note ? `<p style="font-size:12px; color:var(--muted); margin:4px 0 0; line-height:1.4;">${escHtml(h.note)}</p>` : ''}
+        </div>
+      `;
+    }).join('');
+    histSection.style.display = 'block';
+  } else {
+    histSection.style.display = 'none';
+  }
+
+  document.getElementById('taskModal').classList.add('open');
+}
+
+function addDays(dateStr, days) {
+  const d = new Date(dateStr + 'T00:00:00');
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0];
+}
+
+function closeTaskModal() {
+  activeTaskId = null; activeCatId = null; supplyChecks = {};
+  document.getElementById('taskModal').classList.remove('open');
+}
+
+function toggleSupply(idx, btn) {
+  supplyChecks[idx] = !supplyChecks[idx];
+  btn.classList.toggle('checked', !!supplyChecks[idx]);
+  document.getElementById('sCheck_' + idx).textContent = supplyChecks[idx] ? '✓' : '';
+}
+
+function logTaskComplete() {
+  if (!activeTaskId) return;
+
+  const nextDate = document.getElementById('taskNextDate').value || getTodayDate();
+  const cost     = document.getElementById('logCost').value.trim();
+  const note     = document.getElementById('logNote').value.trim();
+
+  const data   = getSystemsData();
+  const record = data[activeTaskId] || {};
+  const entry  = {
+    completedAt: getTodayDate(),
+    nextDate,
+    cost:  cost ? parseFloat(cost) : null,
+    note:  note || ''
+  };
+
+  record.lastDone = getTodayDate();
+  record.nextDate = nextDate;
+  record.history  = [entry, ...(record.history || [])].slice(0, 24);
+  data[activeTaskId] = record;
+  setSystemsData(data);
+
+  closeTaskModal();
+  renderAll();
+  showToast('Task logged ✓');
+}
+
+document.getElementById('taskModal').addEventListener('click', function(e) {
+  if (e.target === this) closeTaskModal();
+});
+
+/* ── Clock ── */
 function updateClock() {
   const el = document.getElementById('pageClock');
-  if (el) el.textContent = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-}
-
-function goBack() {
-  if (document.referrer) { history.back(); } else { location.href = 'home.html'; }
+  if (el) el.textContent = new Date().toLocaleTimeString([], { hour:'numeric', minute:'2-digit' });
 }
 
 /* ── Main render ── */
-/* ── Risk consequence data ── */
-const RISK_DATA = {
-  // Key: task key → { level, consequence, avgRepair, urgency }
-  washer_hoses:   { level:'high',   consequence: 'A burst washing machine hose is one of the most common causes of catastrophic home flooding. Water pours at full mains pressure — typically 50+ gallons before anyone notices.', avgRepair: 3500,  urgency: 'Can happen without warning. Hoses over 5 years old should be replaced now.' },
-  wh_leaks:       { level:'high',   consequence: 'A failing water heater can crack, corrode, or burst — releasing 40-80 gallons of water into your home instantly. Drywall, flooring, and structural damage follows.', avgRepair: 4500,  urgency: 'Units over 10 years old are in the danger zone. No warning signs required.' },
-  dryer_vent:     { level:'high',   consequence: 'Clogged dryer vents are the #1 cause of home appliance fires in the US — 15,000+ per year. Lint is highly flammable and accumulates invisibly inside the duct.', avgRepair: 8000,  urgency: 'Fire risk increases with every load. No smoke alarm will help if it starts in the wall.' },
-  hvac_service:   { level:'high',   consequence: 'A skipped annual service leaves refrigerant leaks, cracked heat exchangers, and failing capacitors undetected. Compressor failure means full system replacement.', avgRepair: 5500,  urgency: 'One missed season can turn a $150 repair into a $6,000 replacement.' },
-  wh_valve:       { level:'high',   consequence: 'The pressure relief valve is the only safety device preventing your water heater from building dangerous pressure. A failed valve can cause tank rupture.', avgRepair: 1500,  urgency: 'If this valve has never been tested, it may be seized. Test it now.' },
-  hvac_filter:    { level:'medium', consequence: 'A completely blocked filter causes the evaporator coil to freeze solid, restricting all airflow. The blower motor then overheats trying to push air through — burning out the motor.', avgRepair: 800,   urgency: 'Happens within weeks of a completely blocked filter in summer.' },
-  dish_seals:     { level:'medium', consequence: 'Failed door gaskets allow water to escape under the dishwasher on every cycle — invisibly rotting the cabinet floor and subfloor underneath.', avgRepair: 900,   urgency: 'Silent damage. By the time you see it, the floor may already need replacing.' },
-  dryer_lint:     { level:'medium', consequence: 'A clogged lint trap makes the dryer overheat, burning out the heating element and thermostats. More critically, it increases fire risk in the drum itself.', avgRepair: 350,   urgency: 'Should be cleared after every load. If you have not in months, do it today.' },
-  fridge_coils:   { level:'medium', consequence: 'Dust-covered condenser coils cannot release heat — the compressor runs constantly trying to compensate. Compressors that run hot fail early and cost more to replace than the fridge.', avgRepair: 700,   urgency: 'Most people never clean these. Your fridge lifespan depends on it.' },
-  washer_clean:   { level:'medium', consequence: 'Mold and bacteria grow in the drum seal and tub — getting on your clothes with every wash. Severe mold infestations require professional remediation.', avgRepair: 400,   urgency: 'Front-loaders are especially prone. If it smells musty, the mold is already there.' },
-  wh_flush:       { level:'medium', consequence: 'Sediment builds up in the tank insulating the heating element from water. The element has to work harder, consumes more energy, and eventually burns out.', avgRepair: 600,   urgency: 'Hard water areas can accumulate inches of sediment in just a few years.' },
-  fridge_filter:  { level:'low',    consequence: 'An expired water filter stops removing contaminants and can actually release trapped bacteria back into your water. Ice and water quality degrades significantly.', avgRepair: 200,   urgency: 'Easy fix — but most people forget until they notice the taste.' },
-  dish_filter:    { level:'low',    consequence: 'A clogged filter recirculates dirty water over your dishes, leaving residue and breeding bacteria. The pump works harder and wears out faster.', avgRepair: 250,   urgency: 'Monthly clean takes 2 minutes. Ignoring it for a year risks the pump.' },
-  generic_inspect:{ level:'low',    consequence: 'Small problems caught early are cheap. The same problem found 6 months later — after a freeze, a leak, or another season of wear — is almost always 5-10x more expensive.', avgRepair: 400, urgency: 'Inspection is free. Finding nothing is still worth it.' },
-};
-
-function getOverdueRiskTasks() {
-  const appliances = getUserAppliances();
-  const today = new Date().toISOString().split('T')[0];
-  const risks = [];
-
-  appliances.forEach(function(appliance) {
-    (appliance.tasks || []).forEach(function(task) {
-      if (!task.nextDueDate) return;
-      const daysOverdue = Math.round((new Date(today) - new Date(task.nextDueDate)) / (1000*60*60*24));
-      if (daysOverdue < -7) return; // only show tasks due within a week or already overdue
-      const riskInfo = RISK_DATA[task.key];
-      if (!riskInfo) return;
-      risks.push({
-        appliance: appliance.name,
-        applianceId: appliance.id,
-        task: task.title,
-        taskKey: task.key,
-        daysOverdue,
-        riskInfo
-      });
-    });
-  });
-
-  // Sort: high risk first, then by days overdue
-  const levelOrder = { high: 0, medium: 1, low: 2 };
-  risks.sort(function(a, b) {
-    const lvlDiff = levelOrder[a.riskInfo.level] - levelOrder[b.riskInfo.level];
-    return lvlDiff !== 0 ? lvlDiff : b.daysOverdue - a.daysOverdue;
-  });
-
-  return risks;
-}
-
-function renderRiskSection() {
-  const container = document.getElementById('riskSection');
-  if (!container) return;
-
-  const risks = getOverdueRiskTasks();
-  const allAppliances = getUserAppliances();
-
-  if (!allAppliances.length) {
-    container.innerHTML = '';
-    return;
-  }
-
-  // Calculate total at-risk dollars from high+medium overdue tasks
-  const atRisk = risks
-    .filter(function(r) { return r.daysOverdue >= 0 && (r.riskInfo.level === 'high' || r.riskInfo.level === 'medium'); })
-    .reduce(function(sum, r) { return sum + r.riskInfo.avgRepair; }, 0);
-
-  const highCount = risks.filter(function(r) { return r.riskInfo.level === 'high' && r.daysOverdue >= 0; }).length;
-
-  let html = '';
-
-  // At-risk banner — only show if real overdue risks exist
-  if (atRisk > 0) {
-    const overdueCount = risks.filter(function(r){return r.daysOverdue>=0;}).length;
-    const highRisks = risks.filter(function(r){return r.riskInfo.level==='high' && r.daysOverdue>=0;});
-    html += `
-      <div class="at-risk-banner">
-        <div class="at-risk-inner">
-          <div class="at-risk-label">&#9888; POTENTIAL COST OF INACTION</div>
-          <div class="at-risk-amount">$${atRisk.toLocaleString('en-US')}</div>
-          <div class="at-risk-sub" style="margin-bottom:10px;">${overdueCount} overdue task${overdueCount===1?'':'s'} currently putting your home at risk. These are real average repair costs — not estimates.</div>
-          ${highRisks.length > 0 ? `<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:8px 12px;font-size:12px;line-height:1.5;">
-            <strong>&#128293; ${highRisks.length} HIGH RISK:</strong> ${highRisks.map(function(r){return r.appliance+' &mdash; '+r.task;}).join(' &bull; ')}
-          </div>` : ''}
-        </div>
-      </div>`;
-  } else if (allAppliances.length > 0) {
-    // Show what they WOULD be at risk for if they stop — proactive warning
-    const wouldBeAtRisk = Object.values(RISK_DATA)
-      .filter(function(r){return r.level==='high';})
-      .reduce(function(s,r){return s+r.avgRepair;},0);
-    html += `
-      <div style="background:rgba(196,75,40,0.06);border:1px solid rgba(196,75,40,0.18);border-radius:20px;padding:16px 20px;margin-bottom:14px;">
-        <div style="font-size:12px;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#8A3E28;margin-bottom:6px;">What stops protecting you if you stop</div>
-        <div style="font-size:28px;font-weight:900;color:#C44B28;letter-spacing:-1px;margin-bottom:6px;">$${wouldBeAtRisk.toLocaleString('en-US')}+</div>
-        <div style="font-size:13px;color:#8A3E28;line-height:1.5;">in high-risk repairs that regular maintenance is actively preventing. Homeowners who stop tracking for 6+ months report emergency repair bills averaging $2,800.</div>
-      </div>`;
-  }
-
-  const overdueNow = risks.filter(function(r){return r.daysOverdue>=0;}).length;
-  html += `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
-    <h2 style="font-size:17px;font-weight:800;color:var(--ink);margin:0;">Risk monitor</h2>
-    ${overdueNow > 0 
-      ? '<span style="background:#C44B28;color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;">' + overdueNow + ' overdue</span>'
-      : '<span style="background:rgba(42,122,74,0.14);color:#2A7A4A;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;">&#10003; Protected</span>'}
-  </div>`;
-
-  if (!risks.length) {
-    html += `<div class="risk-all-clear">
-      <h3>&#10003; All high-risk tasks are current</h3>
-      <p>Your home is protected right now. The moment any of these tasks go overdue, they will appear here with real repair cost consequences.</p>
-    </div>
-    <div style="background:rgba(90,125,140,0.06);border-radius:16px;padding:14px 16px;font-size:13px;color:var(--muted);line-height:1.6;">
-      <strong style="color:var(--ink);display:block;margin-bottom:6px;">Stay protected by staying current.</strong>
-      The homeowners who end up with $5,000+ emergency repair bills aren't unlucky — they're the ones who thought "I'll do it next month" for 18 months in a row.
-    </div>`;
-  } else {
-    html += risks.map(function(r) {
-      const lvl = r.riskInfo.level;
-      const overdueTxt = r.daysOverdue > 0
-        ? r.daysOverdue + ' day' + (r.daysOverdue === 1 ? '' : 's') + ' overdue'
-        : r.daysOverdue === 0 ? 'Due today' : 'Due in ' + Math.abs(r.daysOverdue) + ' day' + (Math.abs(r.daysOverdue) === 1 ? '' : 's');
-      const badgeLabel = lvl === 'high' ? 'High risk' : lvl === 'medium' ? 'Medium risk' : 'Low risk';
-
-      return `<div class="risk-card ${lvl === 'medium' ? 'medium' : lvl === 'low' ? 'low' : ''}">
-        <div class="risk-card-top">
-          <div>
-            <div class="risk-appliance">${escapeHtml(r.appliance)}</div>
-            <div class="risk-task">${escapeHtml(r.task)} &middot; ${overdueTxt}</div>
-          </div>
-          <span class="risk-badge ${lvl}">${badgeLabel}</span>
-        </div>
-        <div class="risk-consequence ${lvl === 'medium' ? 'medium' : lvl === 'low' ? 'low' : ''}">
-          <strong>${lvl === 'high' ? '&#128293; If skipped:' : lvl === 'medium' ? '&#9888; If skipped:' : 'If skipped:'}</strong> ${r.riskInfo.consequence}
-        </div>
-        <div style="font-size:12px;font-weight:700;color:${lvl==='high'?'#8A3E28':lvl==='medium'?'#7A5A18':'var(--muted)'};line-height:1.4;margin-bottom:10px;padding:4px 0;">
-          ${r.riskInfo.urgency}
-        </div>
-        <div class="risk-cost" style="background:rgba(196,75,40,0.06);border-radius:10px;padding:10px 12px;">
-          <div>
-            <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">Avg repair cost if this fails</div>
-            <div class="risk-cost-amount ${lvl}" style="font-size:22px;margin-top:2px;">$${r.riskInfo.avgRepair.toLocaleString('en-US')}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.04em;">vs cost to prevent</div>
-            <div style="font-size:22px;font-weight:800;color:#2A7A4A;margin-top:2px;">~$${Math.round(r.riskInfo.avgRepair * 0.02 / 5) * 5 || 15}</div>
-          </div>
-        </div>
-        <button class="risk-fix-btn" onclick="location.href='appliances.html?focus=${encodeURIComponent(r.applianceId)}'">
-          Fix this now &mdash; before it costs you &rarr;
-        </button>
-      </div>`;
-    }).join('');
-  }
-
-  // Disclaimer at the bottom — not blocking the urgency
-  html += `<p style="font-size:11px;color:var(--muted);line-height:1.5;padding:10px 12px;background:rgba(90,125,140,0.06);border-radius:10px;margin-top:4px;">
-    Repair costs are US averages based on contractor data. Actual costs vary by region and severity. 
-    Homefront does not guarantee outcomes &mdash; but the consequence descriptions above are real failure modes, not hypotheticals.
-  </p>`;
-
-  container.innerHTML = html;
-}
-
 function renderAll() {
-  const rows = buildAllHistory();
-  renderStats(rows);
-  renderRiskSection();
-  renderBreakdown(rows);
-  renderMissingCosts(rows);
-  renderEstimatesEditor();
+  renderStats();
+  renderCategories();
 }
 
 renderAll();
@@ -1139,7 +1377,7 @@ setInterval(updateClock, 30000);
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js');
+        navigator.serviceWorker.register('./sw.js');
       });
     }
   </script>
