@@ -36,6 +36,7 @@
       --danger: #8A3E28;
     }
 
+    html { height: 100%; }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
@@ -45,7 +46,6 @@
       color: var(--ink);
       min-height: 100dvh;
       -webkit-font-smoothing: antialiased;
-      overscroll-behavior-y: none;
     }
 
     .app-shell {
@@ -53,6 +53,7 @@
       margin: 0 auto;
       padding: 14px 20px 110px;
       min-height: 100dvh;
+      -webkit-overflow-scrolling: touch;
     }
 
     .top-bar {
